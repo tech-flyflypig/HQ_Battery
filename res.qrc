@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/about.png</file>
+        <file>image/about_hover.png</file>
+        <file>image/close.png</file>
+        <file>image/close_hover.png</file>
+        <file>image/max.png</file>
+        <file>image/max_hover.png</file>
+        <file>image/min.png</file>
+        <file>image/min_hover.png</file>
+        <file>image/normal.png</file>
+        <file>image/normal_hover.png</file>
+        <file>image/battery.png</file>
+        <file>image/logo_battery.png</file>
+        <file>image/icon_battery.png</file>
+    </qresource>
+</RCC>
