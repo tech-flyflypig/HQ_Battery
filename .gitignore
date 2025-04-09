@@ -46,3 +46,5 @@ Makefile*
 .directory
 .Trash-*
 Thumbs.db
+
+/build
