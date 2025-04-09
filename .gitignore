@@ -1,0 +1,48 @@
+# Qt-specific
+*.pro.user
+*.pro.user.*
+*.qmake.stash
+*.moc
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+Makefile*
+*build-*
+*.qm
+*.prl
+
+# IDE-specific
+.qmake.cache
+.qmake.stash
+*.autosave
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Debug files
+*.pdb
+
+# Executables
+*.exe
+*.out
+*.app
+
+# OS-specific
+.DS_Store
+.directory
+.Trash-*
+Thumbs.db
