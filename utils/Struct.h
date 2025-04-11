@@ -28,62 +28,48 @@ struct battery_info
     float bcwd = 50; //标称温度
     float bcsysj = 2500;
 };
-struct JHJ_Param
+struct BMS_1
 {
     battery_info battery_info;
-    int dclxbh; //电池类型编号
-    float bcdy; //标称电压
-    float bcrl; //标称容量
-    float zddy; //主电电压
-    float fddy; //辅电电压
-    int cdzt = 0; //充电状态
-    int fdzt = 0; //放电状态
-    int cw1 = 0; // 电池异常状态 防爆腔内超温
-    int cw2 = 0; // 电源模块超温
-    int cw3 = 0; // 电池组超温
-    int cw4 = 0; // 主设备超温
-    int cw5 = 0; // 变压器超温
-    int ljsysjcx = 0 ; // 累计使用时间超限
-    int cfdcscx = 0; // 累计充放电次数超限
-    int zdygy6 = 0; // 主电电压过高
-    int zdydy6 = 0; // 主电电压过低
-    int dycged = 0; // 电池电压过高
-    int dydbd = 0; // 电池充电异常
-    int cddlx = 0; // 充电电流小
-    int jlzt = 0; // 交流状态
-    float dy ;  // 电池组电压
-    float dl ;  // 充放电电流
-    float dymkzdy ;  // 主电电压
-    float dymkfdy ;  // 辅助电压
-    float wd1 ;  // 防爆腔内温度
-    float wd2 ;  // 电源模块温度
-    float wd3 ;  // 电池组温度
-    float wd4 ;  // 主设备温度
-    float wd5 ;  // 变压器温度
-    int cfdcs ;// 充放电次数
-    int ljsy_hour ;// 累计使用时间(小时)
-    float dcrl ;// 电池实际容量 可能有损耗
-    float dliang;//电池电量 百分比
-    int bcfdsj ;//本次放电时间
-    int year ;//年
-    int month ;//  月
-    int day ; // 日
-    int hour ; // 小时
-    int minute ; // 分钟
-    int second ; // 秒
-    int ljsy_day ;  // 累计使用时间(天)
-    int scfdsj ; // 上次放电时间，EPOCH时间.单位为秒
-    int fdsjjg_zd ; // 放电时间间隔
-    int fdsk_h_zd ;  // 放电时刻（小时）
-    int zdfd ;  // 自动放电
-    int fdsk_m_zd ;  // 放电时刻（分钟）
-    float jldy ;  // 交流电压
-    int jldyd = 0; // 交流电压过低
-    int jldyg = 0; // 交流电压过高
-    int fzdygd = 0; // 辅助电压过低
-    int fzdygg = 0; // 辅助电压过高
-    float jldyedz; // 交流额定电压
-};
+    int16_t current;            // 电流, 0.01A, 充电为正，放电为负
+    uint16_t voltage;           // 电池组电压, 0.01V
+    uint16_t soc;               // SOC, %, State of Charge
+    uint16_t soh;               // SOH, %, State of Health
+    uint16_t remainCapacity;    // 剩余容量, 0.01Ah
+    uint16_t fullChargeCapacity; // 满充容量, 0.01Ah
+    uint16_t ratedCapacity;     // 额定容量, 0.01Ah
+    uint16_t cycleCount;        // 循环次数, Cycles
+
+    uint16_t alarmStatus;       // 告警状态, Hex, 见附表1
+    uint16_t protectStatus;     // 保护状态, Hex, 见附表2
+    uint16_t faultStatus;       // 故障状态, Hex, 见附表3
+    uint16_t systemStatus;      // 系统状态, Hex, 见附表4
+    uint16_t functionSwitchStatus; // 功能开关状态, Hex, 见附表5
+
+    uint16_t cellCount;         // 电池组串数
+    uint16_t cellVoltageMax;    // 单体最大值, mV
+    uint16_t cellVoltageMin;    // 单体最小值, mV
+    uint16_t tempSensorCount;   // 电芯温度个数
+    int16_t tempMax;            // 电芯温度最大值, 0.1°C
+    int16_t tempMin;            // 电芯温度最小值, 0.1°C
+    int16_t powerTempValue;     // 功率管温度, 0.1°C, 未检测上传0x8000
+    int16_t ambientTemp;        // 环境温度, 0.1°C, 未检测上传0x8000
+
+    //电芯单体电压
+    QList<uint16_t> cellVoltage;
+    //电芯温度
+    QList<int16_t> cellTemp;
+
+
+    uint16_t balanceStatus;     // 均衡状态
+    //BMS版本信息
+    uint16_t bmsVersion;        // BMS版本号
+    //BMS生产信息
+    uint16_t bmsProductionInfo; // BMS生产信息
+    //PACK生产信息
+    uint16_t packProductionInfo; // PACK生产信息    
+
+};  
 #if 0
 struct UPS1_YC
 {
