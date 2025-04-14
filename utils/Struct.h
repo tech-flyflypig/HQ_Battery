@@ -67,9 +67,89 @@ struct BMS_1
     //BMS生产信息
     uint16_t bmsProductionInfo; // BMS生产信息
     //PACK生产信息
-    uint16_t packProductionInfo; // PACK生产信息    
+    uint16_t packProductionInfo; // PACK生产信息
 
-};  
+};
+
+struct BMS_1_Protection
+{
+    // 总体电压告警和保护参数
+    uint16_t totalVoltageOverAlarm;          // 总体过压告警, 0.01V
+    uint16_t totalVoltageOverProtect;        // 总体过压保护, 0.01V
+    uint16_t totalVoltageOverProtectRelease; // 总体过压保护恢复, 0.01V
+    uint16_t totalVoltageOverProtectDelay;   // 总体过压保护延时, 0.1S
+    uint16_t totalVoltageLowAlarm;           // 总体欠压告警, mV
+    uint16_t totalVoltageLowProtect;         // 总体欠压保护, mV
+    uint16_t totalVoltageLowProtectRelease;  // 总体欠压保护恢复, mV
+    uint16_t totalVoltageLowProtectDelay;    // 总体欠压保护延时, 0.1S
+    
+    // 单体电压告警和保护参数
+    uint16_t cellVoltageOverAlarm;           // 单体过压告警, 0.01V
+    uint16_t cellVoltageOverProtect;         // 单体过压保护, 0.01V
+    uint16_t cellVoltageOverProtectRelease;  // 单体过压保护恢复, 0.01V
+    uint16_t cellVoltageOverProtectDelay;    // 单体过压保护延时, 0.1S
+    uint16_t cellVoltageLowAlarm;            // 单体欠压告警, mV
+    uint16_t cellVoltageLowProtect;          // 单体欠压保护, mV
+    uint16_t cellVoltageLowProtectRelease;   // 单体欠压保护恢复, mV
+    uint16_t cellVoltageLowProtectDelay;     // 单体欠压保护延时, 0.1S
+    
+    // 充电电流告警和保护参数
+    uint16_t chargeCurrentOverAlarm;         // 充电过流告警, A
+    uint16_t chargeCurrentOverProtect;       // 充电过流保护, A
+    uint16_t chargeCurrentOverProtectDelay;  // 充电过流保护延时, 0.1S
+    uint16_t chargeCurrentProtectRelease;    // 充电过流—恢复保护, A
+    uint16_t chargeCurrentProtectReleaseDelay; // 充电过流—恢复保护延时, 0.01S
+    uint16_t dischargeCurrentOverAlarm;      // 放电过流告警, A
+    uint16_t dischargeCurrentOverProtect;    // 放电过流保护, A
+    uint16_t dischargeCurrentOverProtectDelay; // 放电过流保护延时, 0.1S
+    uint16_t dischargeCurrentProtectRelease; // 放电过流—恢复保护, A
+    uint16_t dischargeCurrentProtectReleaseDelay; // 放电过流—恢复保护延时, 0.01S
+    
+    // 短路保护参数
+    uint16_t shortCircuitProtect;            // 短路保护电流, A
+    uint16_t shortCircuitProtectDelay;       // 短路保护延时, 0.01ms
+    
+    // 温度保护参数
+    int16_t chargeTempHighAlarm;            // 充电高温告警, 0.1°C
+    int16_t chargeTempHighProtect;          // 充电高温保护, 0.1°C
+    int16_t chargeTempHighProtectRelease;   // 充电高温保护恢复, 0.1°C
+    int16_t chargeTempLowAlarm;             // 充电低温告警, 0.1°C
+    int16_t chargeTempLowProtect;           // 充电低温保护, 0.1°C
+    int16_t chargeTempLowProtectRelease;    // 充电低温保护恢复, 0.1°C
+    int16_t dischargeTempHighAlarm;         // 放电高温告警, 0.1°C
+    int16_t dischargeTempHighProtect;       // 放电高温保护, 0.1°C
+    int16_t dischargeTempHighProtectRelease; // 放电高温保护恢复, 0.1°C
+    int16_t dischargeTempLowAlarm;          // 放电低温告警, 0.1°C
+    int16_t dischargeTempLowProtect;        // 放电低温保护, 0.1°C
+    int16_t dischargeTempLowProtectRelease; // 放电低温保护恢复, 0.1°C
+    
+    // 功率管温度保护参数
+    int16_t powerTempHighAlarm;             // 功率管高温告警, 0.1°C
+    int16_t powerTempHighProtect;           // 功率管高温保护, 0.1°C
+    int16_t powerTempHighProtectRelease;    // 功率管高温保护恢复, 0.1°C
+    
+    // 环境温度保护参数
+    int16_t environmentTempHighAlarm;       // 环境高温告警, 0.1°C
+    int16_t environmentTempHighProtect;     // 环境高温保护, 0.1°C
+    int16_t environmentTempHighProtectRelease; // 环境高温保护恢复, 0.1°C
+    int16_t environmentTempLowAlarm;        // 环境低温告警, 0.1°C
+    int16_t environmentTempLowProtect;      // 环境低温保护, 0.1°C
+    int16_t environmentTempLowProtectRelease; // 环境低温保护恢复, 0.1°C
+    
+    // 均衡参数
+    uint16_t balanceStartVoltage;           // 均衡开启电压, mV
+    uint16_t balanceStartDeltaVoltage;      // 均衡开启压差, mV
+    uint16_t fullChargeVoltage;             // 充满判断电压, 0.01V
+    uint16_t fullChargeCurrent;             // 充满判断电流, mA
+    uint16_t cellVoltageSleepValue;         // 单体低压休眠电压, mV
+    uint16_t cellVoltageSleepTime;          // 单体低压休眠时间, min
+    uint16_t staticBalanceTimeout;          // 待机休眠时间, 0.1hr
+    uint16_t lowPowerWarning;               // 低电量警告值, %
+    uint16_t overDischargeRecoveryDelta;    // 过压保护容量比例恢复, %
+    int16_t powerOnTemperature;            // 加热膜开启温度, 0.1°C
+    int16_t powerOffTemperature;           // 加热膜关闭温度, 0.1°C
+};
+
 #if 0
 struct UPS1_YC
 {

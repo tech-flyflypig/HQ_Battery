@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,13 +13,23 @@ INCLUDEPATH +=\
 
 
 SOURCES += \
+    component/layoutbatterywidget.cpp \
     component/mytreewidget.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    protocols/productprocessors.cpp \
+    protocols/protocol.cpp \
+    protocols/serialdataprocessor.cpp \
+    protocols/serialworker.cpp
 
 HEADERS += \
+    component/layoutbatterywidget.h \
     component/mytreewidget.h \
     mainwindow.h \
+    protocols/productprocessors.h \
+    protocols/protocol.h \
+    protocols/serialdataprocessor.h \
+    protocols/serialworker.h \
     utils/Struct.h
 
 FORMS += \
