@@ -5,6 +5,8 @@
 #include <QPainter>
 #include <QAction>
 #include <QDebug>
+#include <QMessageBox>
+#include "batteryport.h"
 LayoutBatteryWidget::LayoutBatteryWidget(QWidget *parent)
     : QWidget{parent}
 {

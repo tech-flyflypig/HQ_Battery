@@ -9,7 +9,8 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 INCLUDEPATH +=\
     component \
-    utils
+    utils \
+    protocols
 
 
 SOURCES += \
@@ -17,18 +18,23 @@ SOURCES += \
     component/mytreewidget.cpp \
     main.cpp \
     mainwindow.cpp \
-    protocols/productprocessors.cpp \
+    protocols/batteryport.cpp \
+    protocols/bms1processor.cpp \
     protocols/protocol.cpp \
     protocols/serialdataprocessor.cpp \
+    protocols/serialdataprocessorfactory.cpp \
     protocols/serialworker.cpp
 
 HEADERS += \
     component/layoutbatterywidget.h \
     component/mytreewidget.h \
     mainwindow.h \
-    protocols/productprocessors.h \
+    protocols/battery.h \
+    protocols/batteryport.h \
+    protocols/bms1processor.h \
     protocols/protocol.h \
     protocols/serialdataprocessor.h \
+    protocols/serialdataprocessorfactory.h \
     protocols/serialworker.h \
     utils/Struct.h
 

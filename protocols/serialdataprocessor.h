@@ -1,11 +1,14 @@
 #ifndef SERIALDATAPROCESSOR_H
 #define SERIALDATAPROCESSOR_H
 
-#include <QString>
+#include <QtCore/QString>
+#include <QtCore/QObject>
+#include "../utils/Struct.h"
 
-
-class SerialDataProcessor
+class SerialDataProcessor : public QObject
 {
+    Q_OBJECT
+
 public:
     virtual ~SerialDataProcessor() = default;
 
@@ -17,6 +20,9 @@ public:
 
     // 获取处理器名称
     virtual QString getProcessorName() const = 0;
+
+signals:
+    void batteryDataProcessed(const BMS_1 &batteryData);
 };
 
 #endif // SERIALDATAPROCESSOR_H
