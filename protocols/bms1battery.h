@@ -1,10 +1,10 @@
-#ifndef BMS1INTERFACE_H
-#define BMS1INTERFACE_H
+#ifndef BMS1BATTERY_H
+#define BMS1BATTERY_H
 
 #include "batteryinterface.h"
 #include <QtCore/QString>
 
-class BMS1Interface : public BatteryInterface
+class BMS1Battery : public BatteryInterface
 {
     Q_OBJECT
 
@@ -38,12 +38,7 @@ private:
     static const uint16_t COMMAND_ENABLE = 0xaaaa;
     static const uint16_t COMMAND_DISABLE = 0x5555;
 
-    // Modbus协议工具函数
-    QByteArray createModbusCommand(uint8_t slave, uint8_t func, 
-                                  uint16_t addr, uint16_t value) const;
-    quint16 calculateCRC16(const QByteArray& data) const;
-
     BMS_1 batteryData;
 };
 
-#endif // BMS1INTERFACE_H
+#endif // BMS1BATTERY_H

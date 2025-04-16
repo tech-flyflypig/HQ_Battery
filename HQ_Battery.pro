@@ -19,23 +19,25 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     protocols/batteryport.cpp \
+    protocols/bms1battery.cpp \
     protocols/bms1processor.cpp \
     protocols/protocol.cpp \
-    protocols/serialdataprocessor.cpp \
-    protocols/serialdataprocessorfactory.cpp \
-    protocols/serialworker.cpp
+    protocols/serialworker.cpp \
+    utils/ModbusHelper.cpp
 
 HEADERS += \
     component/layoutbatterywidget.h \
     component/mytreewidget.h \
     mainwindow.h \
     protocols/battery.h \
+    protocols/batteryinterface.h \
+    protocols/batteryinterfacefactory.h \
     protocols/batteryport.h \
+    protocols/bms1battery.h \
     protocols/bms1processor.h \
     protocols/protocol.h \
-    protocols/serialdataprocessor.h \
-    protocols/serialdataprocessorfactory.h \
     protocols/serialworker.h \
+    utils/ModbusHelper.h \
     utils/Struct.h
 
 FORMS += \

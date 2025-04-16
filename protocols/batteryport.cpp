@@ -65,20 +65,22 @@ void BatteryPort::initThread()
             m_battery->setValue(bmsData.soc);
         }
     });
+    // TODO : 电池的打开和关闭 用于一键开启监控功能
+    //connect(this, &BatteryPort::sig_start_stop, m_serial, &SerialWorker::start_or_stop);
+    // TODO : 控制功能
+    //connect(QSingleton::instance().get(), &QSingleton::sig_control, m_serial, &SerialWorker::on_cfd_data);
+    //connect(QSingleton::instance().get(), &QSingleton::sig_serial_send, m_serial, &SerialWorker::on_send_data);
 
-    connect(this, &BatteryPort::sig_start_stop, m_serial, &SerialWorker::start_or_stop);
-    connect(QSingleton::instance().get(), &QSingleton::sig_control, m_serial, &SerialWorker::on_cfd_data);
-    connect(QSingleton::instance().get(), &QSingleton::sig_serial_send, m_serial, &SerialWorker::on_send_data);
-
-    if(!m_serial->get_status())
-    {
-        this->delete_action();
-    }
-
-    connect(m_serial, &SerialWorker::sig_fd, this, [ = ](bool status, QDateTime start_time)
-    {
-        QSingleton::instance().get()->cfd_record(m_batteryInfo.power_id, m_batteryInfo.site, status, start_time);
-    });
+    // TODO : 如果开启失败，则删除本电池
+    // if(!m_serial->get_status())
+    // {
+    //     this->delete_action();
+    // }
+    // // TODO : 放电记录
+    // connect(m_serial, &SerialWorker::sig_fd, this, [ = ](bool status, QDateTime start_time)
+    // {
+    //     QSingleton::instance().get()->cfd_record(m_batteryInfo.power_id, m_batteryInfo.site, status, start_time);
+    // });
 }
 
 void BatteryPort::mousePressEvent(QMouseEvent *e)
