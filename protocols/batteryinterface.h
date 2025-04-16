@@ -1,9 +1,8 @@
 #ifndef BATTERYINTERFACE_H
 #define BATTERYINTERFACE_H
-
 #include <QObject>
 #include <QString>
-#include "../utils/Struct.h"
+#include "Struct.h"
 
 class BatteryInterface : public QObject
 {

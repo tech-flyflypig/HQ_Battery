@@ -39,7 +39,7 @@ private:
     QString m_portName;
     bool m_running;
     QMutex m_mutex;
-    BatteryInterface *m_processor;  // 使用新的BatteryInterface
+    BatteryInterface *m_batteryInterface;  // 电池接口处理器
     QTimer* m_queryTimer;          // 定时查询定时器
 };
 

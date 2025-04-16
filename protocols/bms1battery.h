@@ -3,6 +3,7 @@
 
 #include "batteryinterface.h"
 #include <QtCore/QString>
+#include "Struct.h"
 
 class BMS1Battery : public BatteryInterface
 {
@@ -39,6 +40,8 @@ private:
     static const uint16_t COMMAND_DISABLE = 0x5555;
 
     BMS_1 batteryData;
+signals:
+    void batteryDataProcessed(const BMS_1 &batteryData);    
 };
 
 #endif // BMS1BATTERY_H

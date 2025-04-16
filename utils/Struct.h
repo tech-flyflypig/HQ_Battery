@@ -56,18 +56,17 @@ struct BMS_1
     int16_t ambientTemp;        // 环境温度, 0.1°C, 未检测上传0x8000
 
     //电芯单体电压
-    QList<uint16_t> cellVoltage;
+    uint16_t cellVoltage[32];  // 固定占用32位
     //电芯温度
-    QList<int16_t> cellTemp;
+    int16_t cellTemp[8];  // 固定占用8位
 
 
     uint16_t balanceStatus;     // 均衡状态
-    //BMS版本信息
-    uint16_t bmsVersion;        // BMS版本号
-    //BMS生产信息
-    uint16_t bmsProductionInfo; // BMS生产信息
+    uint8_t bmsVersionInfo[20]; // BMS版本信息占用20byte
+
+    uint8_t bmsProductionInfo[20]; // BMS生产信息
     //PACK生产信息
-    uint16_t packProductionInfo; // PACK生产信息
+    uint8_t packProductionInfo[20]; // PACK生产信息
 
 };
 

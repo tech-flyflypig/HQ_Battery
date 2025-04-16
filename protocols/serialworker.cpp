@@ -6,7 +6,7 @@ SerialWorker::SerialWorker(QObject *parent)
     : QThread(parent)
     , serialPort(nullptr)
     , m_running(false)
-    , m_processor(nullptr)
+    , m_batteryInterface(nullptr)
     , m_queryTimer(nullptr)
 {
     m_queryTimer = new QTimer(this);
@@ -15,10 +15,10 @@ SerialWorker::SerialWorker(QObject *parent)
 
 void SerialWorker::setupProcessorConnections()
 {
-    if (!m_processor) return;
+    if (!m_batteryInterface) return;
 
     // 连接电池数据信号
-    connect(m_processor, &BatteryInterface::batteryDataProcessed,
+    connect(m_batteryInterface, &BatteryInterface::batteryDataProcessed,
             this, &SerialWorker::forwardBatteryData);
 }
 
@@ -39,7 +39,7 @@ SerialWorker::~SerialWorker()
         delete m_queryTimer;
     }
     
-    delete m_processor;
+    delete m_batteryInterface;
 }
 
 void SerialWorker::startReading(const QString &portName, const QString &productType)
@@ -48,19 +48,19 @@ void SerialWorker::startReading(const QString &portName, const QString &productT
     m_portName = portName;
     
     // 使用工厂创建对应的电池接口
-    if (m_processor) {
-        delete m_processor;
-        m_processor = nullptr;
+    if (m_batteryInterface) {
+        delete m_batteryInterface;
+        m_batteryInterface = nullptr;
     }
-    m_processor = BatteryInterfaceFactory::createBattery(productType);
+    m_batteryInterface = BatteryInterfaceFactory::createBattery(productType);
     
-    if (!m_processor) {
+    if (!m_batteryInterface) {
         emit error(tr("不支持的产品类型: %1").arg(productType));
         return;
     }
     
     // 配置处理器并设置连接
-    m_processor->configure();
+    m_batteryInterface->configure();
     setupProcessorConnections();
     
     if (!isRunning()) {
@@ -120,16 +120,16 @@ void SerialWorker::run()
 
 void SerialWorker::processData(const QByteArray &data)
 {
-    if (m_processor) {
-        m_processor->processSerialData(data);
+    if (m_batteryInterface) {
+        m_batteryInterface->processSerialData(data);
     }
 }
 
 void SerialWorker::sendQuery()
 {
-    if (!m_processor) return;
+    if (!m_batteryInterface) return;
     
-    QByteArray cmd = m_processor->getQueryCommand();
+    QByteArray cmd = m_batteryInterface->getQueryCommand();
     if (!cmd.isEmpty()) {
         sendCommand(cmd);
     }
@@ -150,14 +150,14 @@ bool SerialWorker::sendCommand(const QByteArray& cmd)
 
 bool SerialWorker::sendControlCommand(uint16_t reg, uint16_t value)
 {
-    if (!m_processor || !m_processor->supportsControl()) return false;
+    if (!m_batteryInterface || !m_batteryInterface->supportsControl()) return false;
     
-    if (!m_processor->isValidControlValue(reg, value)) {
+    if (!m_batteryInterface->isValidControlValue(reg, value)) {
         emit error(tr("Invalid control command"));
         return false;
     }
     
-    QByteArray cmd = m_processor->getControlCommand(reg, value);
+    QByteArray cmd = m_batteryInterface->getControlCommand(reg, value);
     if (cmd.isEmpty()) {
         emit error(tr("Failed to create control command"));
         return false;

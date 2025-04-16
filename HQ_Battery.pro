@@ -20,7 +20,6 @@ SOURCES += \
     mainwindow.cpp \
     protocols/batteryport.cpp \
     protocols/bms1battery.cpp \
-    protocols/bms1processor.cpp \
     protocols/protocol.cpp \
     protocols/serialworker.cpp \
     utils/ModbusHelper.cpp
@@ -34,7 +33,6 @@ HEADERS += \
     protocols/batteryinterfacefactory.h \
     protocols/batteryport.h \
     protocols/bms1battery.h \
-    protocols/bms1processor.h \
     protocols/protocol.h \
     protocols/serialworker.h \
     utils/ModbusHelper.h \
