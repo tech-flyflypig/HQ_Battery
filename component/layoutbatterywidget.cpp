@@ -1,4 +1,4 @@
-#include "layoutbatterywidget.h"
+﻿#include "layoutbatterywidget.h"
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QStyleOption>
@@ -6,10 +6,14 @@
 #include <QAction>
 #include <QDebug>
 #include <QMessageBox>
+#include <myapp.h>
+#include <QFileDialog>
+#include <QCoreApplication>
 #include "batteryport.h"
 LayoutBatteryWidget::LayoutBatteryWidget(QWidget *parent)
     : QWidget{parent}
 {
+    this->setAcceptDrops(true);
     setContextMenuPolicy(Qt::ActionsContextMenu);
     lab = new QLabel(this);
     m_contextMenu = new QMenu;
@@ -32,15 +36,15 @@ LayoutBatteryWidget::LayoutBatteryWidget(QWidget *parent)
     {
         this->on_back_up();
     });
-    m_contextMenu->addAction("一键开启监控", [ = ]
-    {
-        QList<BatteryPort *> list_batteryport = this->findChildren<BatteryPort *>();
-        for (BatteryPort *bport : list_batteryport )
-        {
-            //循环开启监控
-            emit bport->sig_start_stop(true);
-        }
-    });
+    // m_contextMenu->addAction("一键开启监控", [ = ]
+    // {
+    //     QList<BatteryPort *> list_batteryport = this->findChildren<BatteryPort *>();
+    //     for (BatteryPort *bport : list_batteryport )
+    //     {
+    //         //循环开启监控
+    //         emit bport->sig_start_stop(true);
+    //     }
+    // });
 
 }
 void LayoutBatteryWidget::paintEvent(QPaintEvent *)
@@ -81,15 +85,9 @@ void LayoutBatteryWidget::dropEvent(QDropEvent *event)
         connect(b, &BatteryPort::out_data, this, &LayoutBatteryWidget::out_data);
         connect(b, &BatteryPort::show_data, this, &LayoutBatteryWidget::on_info_show);
         b->resize(80, 40);
-        b->setValue(15);
+        b->setBatteryValue(15);
         b->move(event->pos());
         b->show();
-
-        //        Battery* b1 = new Battery(this);
-        //        b1->resize(200, 100);
-        //        b1->setValue(15);
-        //        b1->move(0, 0);
-        //        b1->show();
         event->setDropAction(Qt::MoveAction);
         event->accept();
 
@@ -99,40 +97,20 @@ void LayoutBatteryWidget::dropEvent(QDropEvent *event)
         event->ignore();
     }
 }
-void LayoutBatteryWidget::on_info_show(const QVariant &data, battery_info battery, bool show)
+/// @brief 鼠标悬停显示电池信息
+/// @param bms_1
+/// @param battery
+/// @param show
+void LayoutBatteryWidget::on_info_show(const BMS_1 &bms_1, battery_info battery, bool show)
 {
     //lab->setText("测试");
     if(show)
     {
-        if(battery.type == "JHJ")
+        if(battery.type == "BMS1")
         {
-            JHJ_Param jhj_param = data.value<JHJ_Param>();
             QString str = QString("设备编号：%1\n安装地点：%2\n电池类型：%3\n电量：%4%").arg(battery.power_id).arg(battery.site)
-                          .arg(battery.type).arg(jhj_param.dliang);
+                          .arg(battery.type).arg(bms_1.soc);
             lab->setText(str);
-
-        }
-        else if (battery.type == "UPS1")
-        {
-
-            UPS1 ups1 = data.value<UPS1>();
-            QString str = QString("设备编号：%1\n安装地点：%2\n电池类型：%3\n电量：%4%").arg(battery.power_id).arg(battery.site)
-                          .arg(battery.type).arg(ups1.ups1_yc.BatterySurplus / ups1.ups1_yc.BatteryCapacity * 100);
-            lab->setText(str);
-            //float percentage = ups1.ups1_yc.BatterySurplus / ups1.ups1_yc.BatteryCapacity * 100;
-
-        }
-        else if (battery.type == "UPS2")
-        {
-            if(data.isNull())
-            {
-                return;
-            }
-            UPS2 ups2 = data.value<UPS2>();
-            QString str = QString("设备编号：%1\n安装地点：%2\n电池类型：%3\n电量：%4%").arg(battery.power_id).arg(battery.site)
-                          .arg(battery.type).arg(ups2.AbsoluteStateofCharge);
-            lab->setText(str);
-            //float percentage = ups1.ups1_yc.BatterySurplus / ups1.ups1_yc.BatteryCapacity * 100;
 
         }
         else
@@ -175,10 +153,10 @@ void LayoutBatteryWidget::on_recovery()
             connect(b, &BatteryPort::out_data, this, &LayoutBatteryWidget::out_data);
             connect(b, &BatteryPort::show_data, this, &LayoutBatteryWidget::on_info_show);
             b->resize(80, 40);
-            b->setValue(15);
+            b->setBatteryValue(15);
             b->move(item.pos);
             b->show();
-            myHelper::Sleep(500);
+            myApp::Sleep(500);
         }
         if(QMessageBox::question(nullptr, "请求", "是否一键开启监控") == QMessageBox::Yes)
         {
@@ -242,8 +220,7 @@ void LayoutBatteryWidget::mousePressEvent(QMouseEvent *e)
 
 void LayoutBatteryWidget::reviseAction()
 {
-    QString filepath = FileHelper::GetFileName("Images (*.png *.xpm *.jpg)");
-    qDebug() << filepath;
+    QString filepath = QFileDialog::getOpenFileName(NULL, tr("选择文件"), QCoreApplication::applicationDirPath(), "Images (*.png *.xpm *.jpg)");
     this->setStyleSheet(QString("border-image: url(%1);").arg(filepath));
     myApp::BackGroundPath = filepath;
     myApp::WriteConfig();

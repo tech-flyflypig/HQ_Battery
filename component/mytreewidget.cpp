@@ -4,13 +4,13 @@
 #include <QMimeData>
 #include "Struct.h"
 #include <QDebug>
-MyTreeWidget::MyTreeWidget( QWidget* parent) : QTreeWidget(parent)
+MyTreeWidget::MyTreeWidget( QWidget *parent) : QTreeWidget(parent)
 {
     setDragEnabled(true);
 
 }
 
-void MyTreeWidget::dragMoveEvent(QDragMoveEvent* event)
+void MyTreeWidget::dragMoveEvent(QDragMoveEvent *event)
 {
     if (event->mimeData()->hasFormat("battery_info"))
     {
@@ -24,17 +24,25 @@ void MyTreeWidget::dragMoveEvent(QDragMoveEvent* event)
 }
 void MyTreeWidget::startDrag(Qt::DropActions /*supportedActions*/)
 {
-    QTreeWidgetItem* item = currentItem();
+    QTreeWidgetItem *item = currentItem();
     QByteArray itemData;
     battery_info battery = item->data(0, Qt::UserRole).value<battery_info>();
-    itemData.append((char*)&battery, sizeof(battery));
-    QMimeData* mimeData = new QMimeData;
+    itemData.append((char *)&battery, sizeof(battery));
+    QMimeData *mimeData = new QMimeData;
     mimeData->setData("battery_info", itemData);
-    QDrag* drag = new QDrag(this);
+    QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
-    QPixmap pixmap(":/image/icons8_charging_battery_32.png");
-    drag->setHotSpot(QPoint(pixmap.width() / 2, pixmap.height() / 2));
-    drag->setPixmap(pixmap);
+    QPixmap pix;
+    if(battery.type == "BMS_1")
+    {
+        pix.load(":/image/BMS_1.png");
+    }
+    else
+    {
+        pix.load(":/image/BMS_2.png");
+    }
+    drag->setHotSpot(QPoint(pix.width() / 2, pix.height() / 2));
+    drag->setPixmap(pix);
     drag->exec(Qt::MoveAction);
 //    if (drag->exec(Qt::MoveAction) == Qt::MoveAction)
 //        delete takeItem(row(item));

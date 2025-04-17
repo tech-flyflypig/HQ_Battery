@@ -3,11 +3,11 @@
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QMouseEvent>
-#include "showinfoform.h"
-#include "ups1form.h"
-#include "ups2form.h"
-#include "qsingleton.h"
-#include "myapp.h"
+// #include "showinfoform.h"
+// #include "ups1form.h"
+// #include "ups2form.h"
+// #include "qsingleton.h"
+// #include "myapp.h"
 
 BatteryPort::BatteryPort(const battery_info batteryInfo, QWidget *parent)
     : QWidget(parent)
@@ -17,6 +17,8 @@ BatteryPort::BatteryPort(const battery_info batteryInfo, QWidget *parent)
     initThread();
     initContextMenu();
 }
+
+
 
 void BatteryPort::initUI()
 {
@@ -111,37 +113,40 @@ void BatteryPort::mouseDoubleClickEvent(QMouseEvent *event)
     {
         if(m_batteryInfo.type == "BMS1")
         {
-            ShowInfoForm *show = new ShowInfoForm(m_batteryInfo.power_id);
-            connect(m_serial, &SerialWorker::out_data, show, &ShowInfoForm::on_showinfo);
-            show->resize(829, 662);
-            show->move(500, 300);
-            show->show();
+            // TODO : 电池信息详情
+            // ShowInfoForm *show = new ShowInfoForm(m_batteryInfo.power_id);
+            // connect(m_serial, &SerialWorker::out_data, show, &ShowInfoForm::on_showinfo);
+            // show->resize(829, 662);
+            // show->move(500, 300);
+            // show->show();
         }
     }
 }
 
 void BatteryPort::enterEvent(QEvent *e)
 {
-    if(!m_data.isNull())
-    {
-        emit show_data(m_data, m_batteryInfo, true);
-    }
+    emit show_data(bms_1, m_batteryInfo, true);
 }
 
 void BatteryPort::leaveEvent(QEvent *e)
 {
-    emit show_data(QVariant(), m_batteryInfo, false);
+    emit show_data(bms_1, m_batteryInfo, false);
 }
 
 void BatteryPort::contextMenuEvent(QContextMenuEvent *event)
 {
     m_contextMenu->exec(event->globalPos());
 }
-
+// TODO : 删除电池操作
 void BatteryPort::delete_action()
 {
-    QSingleton::instance().get()->set_delete_power(m_batteryInfo.power_id);
-    m_serial->deleteLater();
-    this->deleteLater();
-    QSingleton::instance().get()->table_clear();
+    // QSingleton::instance().get()->set_delete_power(m_batteryInfo.power_id);
+    // m_serial->deleteLater();
+    // this->deleteLater();
+    // QSingleton::instance().get()->table_clear();
+}
+
+void BatteryPort::setBatteryValue(const int &value)
+{
+    m_battery->setValue(value);
 }

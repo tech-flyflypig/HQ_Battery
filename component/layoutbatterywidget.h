@@ -12,7 +12,7 @@ class LayoutBatteryWidget : public QWidget
 public:
     explicit LayoutBatteryWidget(QWidget *parent = nullptr);
     void reviseAction();
-    void on_info_show(const QVariant &, battery_info, bool);
+    void on_info_show(const BMS_1 &, battery_info, bool);
     void on_recovery();//备份恢复
     void on_back_up();//备份
 protected:

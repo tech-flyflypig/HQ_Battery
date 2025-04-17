@@ -47,7 +47,6 @@ Makefile*
 .Trash-*
 Thumbs.db
 
-# Ignore all files in the image directory
-image/*
+
 
 /build

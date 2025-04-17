@@ -267,7 +267,7 @@ color: rgb(255, 255, 255);
      </property>
     </column>
    </widget>
-   <widget class="QWidget" name="widget_2" native="true">
+   <widget class="LayoutBatteryWidget" name="widget_right" native="true">
     <property name="geometry">
      <rect>
       <x>190</x>
@@ -288,6 +288,12 @@ color: rgb(255, 255, 255);
    <class>MyTreeWidget</class>
    <extends>QTreeWidget</extends>
    <header>mytreewidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>LayoutBatteryWidget</class>
+   <extends>QWidget</extends>
+   <header>layoutbatterywidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

@@ -13,5 +13,8 @@
         <file>image/battery.png</file>
         <file>image/logo_battery.png</file>
         <file>image/icon_battery.png</file>
+        <file>image/BMS_1.png</file>
+        <file>image/BMS_2.png</file>
+        <file>image/BMS_3.png</file>
     </qresource>
 </RCC>

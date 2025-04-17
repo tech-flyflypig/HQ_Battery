@@ -1,4 +1,4 @@
-QT       += core gui serialport
+QT       += core gui serialport sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -7,6 +7,20 @@ CONFIG += c++17
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+msvc {
+QMAKE_CFLAGS += /utf-8
+QMAKE_CXXFLAGS += /utf-8
+}
+
+CONFIG(release, debug|release){
+LIBS += -L$$PWD/lib -llwdesigner
+}else
+{
+LIBS += -L$$PWD/lib -llwdesignerd
+}
+
+
+
 INCLUDEPATH +=\
     component \
     utils \
@@ -22,7 +36,8 @@ SOURCES += \
     protocols/bms1battery.cpp \
     protocols/protocol.cpp \
     protocols/serialworker.cpp \
-    utils/ModbusHelper.cpp
+    utils/ModbusHelper.cpp \
+    utils/myapp.cpp
 
 HEADERS += \
     component/layoutbatterywidget.h \
@@ -36,7 +51,8 @@ HEADERS += \
     protocols/protocol.h \
     protocols/serialworker.h \
     utils/ModbusHelper.h \
-    utils/Struct.h
+    utils/Struct.h \
+    utils/myapp.h
 
 FORMS += \
     mainwindow.ui
