@@ -1,16 +1,19 @@
 #include "serialworker.h"
 #include "batteryinterfacefactory.h"
 #include <QDebug>
+#include <QElapsedTimer>
 
 SerialWorker::SerialWorker(QObject *parent)
     : QThread(parent)
     , serialPort(nullptr)
     , m_running(false)
     , m_batteryInterface(nullptr)
-    , m_queryTimer(nullptr)
+    , m_queryInterval(1000)  // 默认1秒查询一次
+    , m_communicationTimeout(5000)  // 默认5秒超时
+    , m_lastDataTime(0)
+    , m_isCommunicationTimeout(false)
 {
-    m_queryTimer = new QTimer(this);
-    connect(m_queryTimer, &QTimer::timeout, this, &SerialWorker::sendQuery);
+    // 不再需要创建和连接QTimer
 }
 
 void SerialWorker::setupProcessorConnections()
@@ -32,11 +35,6 @@ SerialWorker::~SerialWorker()
             serialPort->close();
         }
         delete serialPort;
-    }
-    
-    if (m_queryTimer) {
-        m_queryTimer->stop();
-        delete m_queryTimer;
     }
     
     delete m_batteryInterface;
@@ -73,14 +71,17 @@ void SerialWorker::stopReading()
 {
     QMutexLocker locker(&m_mutex);
     m_running = false;
-    if (m_queryTimer) {
-        m_queryTimer->stop();
-    }
 }
 
 void SerialWorker::run()
 {
     serialPort = new QSerialPort();
+    QElapsedTimer queryTimer;  // 局部定时器，用于记录时间
+    queryTimer.start();        // 开始计时
+    
+    QElapsedTimer communicationTimer; // 用于检测通信超时
+    communicationTimer.start();       // 开始计时
+    m_lastDataTime = communicationTimer.elapsed(); // 初始化最后数据时间
     
     while (m_running) {
         if (!serialPort->isOpen()) {
@@ -98,13 +99,42 @@ void SerialWorker::run()
             
             qDebug() << "Serial port opened:" << m_portName;
             
-            // 启动定时查询
-            m_queryTimer->start(1000); // 每秒查询一次
+            // 不再使用QTimer启动定时查询
+            queryTimer.restart();  // 重置定时器
+            communicationTimer.restart(); // 重置通信计时器
+            m_lastDataTime = communicationTimer.elapsed(); // 重置最后数据时间
+            m_isCommunicationTimeout = false; // 重置超时状态
+        }
+        
+        // 检查是否需要发送查询命令
+        if (queryTimer.elapsed() >= m_queryInterval) {
+            sendQuery();
+            queryTimer.restart();
+        }
+        
+        // 检查通信是否超时
+        qint64 currentTime = communicationTimer.elapsed();
+        if (currentTime - m_lastDataTime > m_communicationTimeout) {
+            if (!m_isCommunicationTimeout) {
+                m_isCommunicationTimeout = true;
+                emit communicationTimeout();
+                qDebug() << "Communication timeout: No data received for more than" 
+                         << m_communicationTimeout/1000.0 << "seconds";
+            }
         }
         
         if (serialPort->waitForReadyRead(100)) {
             QByteArray data = serialPort->readAll();
             if (!data.isEmpty()) {
+                // 更新最后一次接收数据时间
+                m_lastDataTime = communicationTimer.elapsed();
+                
+                // 如果之前是超时状态，恢复正常
+                if (m_isCommunicationTimeout) {
+                    m_isCommunicationTimeout = false;
+                    qDebug() << "Communication restored";
+                }
+                
                 processData(data);
                 emit dataReceived(data);
             }

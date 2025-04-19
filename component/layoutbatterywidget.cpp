@@ -106,7 +106,7 @@ void LayoutBatteryWidget::on_info_show(const BMS_1 &bms_1, battery_info battery,
     //lab->setText("测试");
     if(show)
     {
-        if(battery.type == "BMS1")
+        if(battery.type == "BMS_1")
         {
             QString str = QString("设备编号：%1\n安装地点：%2\n电池类型：%3\n电量：%4%").arg(battery.power_id).arg(battery.site)
                           .arg(battery.type).arg(bms_1.soc);
