@@ -221,6 +221,45 @@ QPushButton:hover{
       <string/>
      </property>
     </widget>
+    <widget class="QPushButton" name="btn_menu">
+     <property name="geometry">
+      <rect>
+       <x>785</x>
+       <y>10</y>
+       <width>20</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	border-image: url(:/image/menu.png);
+}
+QPushButton:hover{
+	border-image: url(:/image/menu_hover.png);
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>11</width>
+       <height>11</height>
+      </size>
+     </property>
+    </widget>
    </widget>
    <widget class="MyTreeWidget" name="treeWidget">
     <property name="geometry">

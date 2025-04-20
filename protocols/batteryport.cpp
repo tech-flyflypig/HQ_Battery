@@ -119,7 +119,7 @@ void BatteryPort::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)
     {
-        if(m_batteryInfo.type == "BMS1")
+        if(m_batteryInfo.type == "BMS_1")
         {
             // TODO : 电池信息详情
             // ShowInfoForm *show = new ShowInfoForm(m_batteryInfo.power_id);

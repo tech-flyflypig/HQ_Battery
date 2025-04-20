@@ -1,4 +1,4 @@
-QT       += core gui serialport sql
+QT       += core gui serialport sql xlsx
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -28,8 +28,15 @@ INCLUDEPATH +=\
 
 
 SOURCES += \
+    component/addpowerform.cpp \
+    component/adduser.cpp \
+    component/adduserform.cpp \
+    component/cfdrecordform.cpp \
+    component/exceptionform.cpp \
     component/layoutbatterywidget.cpp \
     component/mytreewidget.cpp \
+    component/queryform.cpp \
+    component/revisepowerform.cpp \
     main.cpp \
     mainwindow.cpp \
     protocols/batteryport.cpp \
@@ -40,8 +47,15 @@ SOURCES += \
     utils/myapp.cpp
 
 HEADERS += \
+    component/addpowerform.h \
+    component/adduser.h \
+    component/adduserform.h \
+    component/cfdrecordform.h \
+    component/exceptionform.h \
     component/layoutbatterywidget.h \
     component/mytreewidget.h \
+    component/queryform.h \
+    component/revisepowerform.h \
     mainwindow.h \
     protocols/battery.h \
     protocols/batteryinterface.h \
@@ -55,6 +69,13 @@ HEADERS += \
     utils/myapp.h
 
 FORMS += \
+    component/addpowerform.ui \
+    component/adduser.ui \
+    component/adduserform.ui \
+    component/cfdrecordform.ui \
+    component/exceptionform.ui \
+    component/queryform.ui \
+    component/revisepowerform.ui \
     mainwindow.ui
 
 # Default rules for deployment.
@@ -64,3 +85,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     res.qrc
+
+VERSION=1.0.0

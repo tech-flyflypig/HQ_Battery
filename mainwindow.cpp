@@ -4,18 +4,74 @@
 #include <QSqlQuery>
 #include <QDebug>
 #include <myapp.h>
+#include <QDesktopServices>
+#include <QMessageBox>
+#include <QProcess>
+#include "cfdrecordform.h"
+#include "exceptionform.h"
+#include "adduserform.h"
+#include "queryform.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     this->setWindowTitle("HQ_Battery");
+    this->initUI();
     this->init_sql();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::initUI()
+{
+    QMenu *data_manage = new QMenu("数据管理", this);
+    QAction *cfd_record = new QAction("充放电记录", this);
+    QAction *abnormal_record = new QAction("异常记录", this);
+    data_manage->addAction(cfd_record);
+    data_manage->addAction(abnormal_record);
+    connect(cfd_record, &QAction::triggered, this, &MainWindow::cfd_record_action);
+    connect(abnormal_record, &QAction::triggered, this, &MainWindow::abnormal_record_action);
+
+    QMenu *system_manage = new QMenu("系统管理", this);
+    QAction *device_manage = new QAction("设备管理", this);
+    QAction *user_manage = new QAction("用户管理", this);
+
+    QAction *user_book = new QAction("用户手册", this);
+    connect(user_book, &QAction::triggered, []
+    {
+        QString pdfFile = QApplication::applicationDirPath() + "/后备电池电量管理软件客户端-操作手册-V2.0.pdf";
+        QDesktopServices::openUrl(QUrl::fromLocalFile(pdfFile));
+    });
+    system_manage->addAction(device_manage);
+    system_manage->addAction(user_manage);
+
+    connect(device_manage, &QAction::triggered, this, &MainWindow::device_manage_action);
+    connect(user_manage, &QAction::triggered, this, &MainWindow::user_manage_action);
+    menu_list = new QMenu();
+    menu_list->addMenu(data_manage);
+    menu_list->addMenu(system_manage);
+    menu_list->addAction(user_book);
+
+    menu_about = new QMenu();
+    QString version = QApplication::applicationVersion();
+    version = "版本号 " + version.mid(0, version.lastIndexOf('.'));
+    menu_about->addSeparator();
+    menu_about->addAction(version);
+    menu_about->addAction("检查更新", [ = ]
+    {
+        if(QMessageBox::question(nullptr, "请求", "升级时需关闭软件，是否立即关闭软件？") == QMessageBox::Yes)
+        {
+            QProcess process;
+            QString str = "\"" + QApplication::applicationDirPath() + "/updater.exe" + "\"";
+            process.startDetached(str);
+            this->close();
+        }
+    });
+
 }
 
 void MainWindow::init_sql()
@@ -92,3 +148,42 @@ void MainWindow::init_sql()
         this->statusBar()->setToolTip("数据库未打开");
     }
 }
+
+void MainWindow::cfd_record_action()
+{
+    CfdRecordForm *cfd_form = new CfdRecordForm();
+    cfd_form->show();
+}
+
+void MainWindow::abnormal_record_action()
+{
+    ExceptionForm *exceptionform = new ExceptionForm();
+    exceptionform->show();
+}
+
+void MainWindow::device_manage_action()
+{
+    QueryForm *queryform = new QueryForm();
+    connect(queryform, &QueryForm::init_sql, this, &MainWindow::init_sql);
+    queryform->show();
+}
+
+void MainWindow::user_manage_action()
+{
+    AddUserForm *userform = new AddUserForm();
+    userform->show();
+}
+
+void MainWindow::on_btn_menu_clicked()
+{
+    menu_list->move(QCursor::pos());
+    menu_list->show();
+}
+
+
+void MainWindow::on_btn_about_clicked()
+{
+    menu_about->move(QCursor::pos());
+    menu_about->show();
+}
+
