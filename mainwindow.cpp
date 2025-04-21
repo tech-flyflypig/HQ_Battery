@@ -11,6 +11,8 @@
 #include "exceptionform.h"
 #include "adduserform.h"
 #include "queryform.h"
+#include "component/BlueGlowWidget.h"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -72,6 +74,23 @@ void MainWindow::initUI()
         }
     });
 
+    // 创建蓝色发光组件示例
+    BlueGlowWidget *paramWidget = new BlueGlowWidget(this);
+    paramWidget->setTitleText("保存参数");
+    
+    // 添加单选按钮组
+    QStringList settingOptions = {"过充电压", "过放电压", "输出电源", "内部温度"};
+    paramWidget->addRadioGroup("", settingOptions);
+    
+    QStringList moreOptions = {"环境温度", "均衡管理器"};
+    paramWidget->addRadioGroup("", moreOptions);
+    
+    // 将组件添加到UI中的某个位置
+    // 例如，如果你有一个名为parameterContainer的QWidget容器
+    // ui->parameterContainer->layout()->addWidget(paramWidget);
+    
+    // 或者，如果你想添加到主布局中
+    // centralWidget()->layout()->addWidget(paramWidget);
 }
 
 void MainWindow::init_sql()

@@ -28,9 +28,13 @@ INCLUDEPATH +=\
 
 
 SOURCES += \
+    bms1infoshowform.cpp \
+    component/BlueGlowWidget.cpp \
+    component/ParameterSettingWidget.cpp \
     component/addpowerform.cpp \
     component/adduser.cpp \
     component/adduserform.cpp \
+    component/bms1infoshowform.cpp \
     component/cfdrecordform.cpp \
     component/exceptionform.cpp \
     component/layoutbatterywidget.cpp \
@@ -47,9 +51,13 @@ SOURCES += \
     utils/myapp.cpp
 
 HEADERS += \
+    bms1infoshowform.h \
+    component/BlueGlowWidget.h \
+    component/ParameterSettingWidget.h \
     component/addpowerform.h \
     component/adduser.h \
     component/adduserform.h \
+    component/bms1infoshowform.h \
     component/cfdrecordform.h \
     component/exceptionform.h \
     component/layoutbatterywidget.h \
@@ -69,9 +77,11 @@ HEADERS += \
     utils/myapp.h
 
 FORMS += \
+    bms1infoshowform.ui \
     component/addpowerform.ui \
     component/adduser.ui \
     component/adduserform.ui \
+    component/bms1infoshowform.ui \
     component/cfdrecordform.ui \
     component/exceptionform.ui \
     component/queryform.ui \
