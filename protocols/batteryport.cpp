@@ -54,19 +54,26 @@ void BatteryPort::initContextMenu()
 void BatteryPort::initThread()
 {
     m_serial = new SerialWorker();
-    connect(m_serial, &SerialWorker::forwardBatteryData, this, [this](const BMS_1 & bmsData)
+    connect(m_serial, &SerialWorker::forwardBatteryData, this, [=](const BMS_1 & bmsData)
     {
         /*
         m_data = data;
         emit out_data(data, m_batteryInfo.type);
         */
         // 更新电池显示
-        if(m_batteryInfo.type == "BMS1")
+        if(m_batteryInfo.type == "BMS_1")
         {
             m_battery->setAlarmValue(30);
             m_battery->setValue(bmsData.soc);
         }
     });
+    connect(m_serial,&SerialWorker::error,this,[=](const QString &err){
+        // TODO : 串口打开失败具体原因
+    });
+    connect(m_serial,&SerialWorker::communicationTimeout,this,[=]{
+    // TODO : 电池通信超时问题
+    });
+    qDebug()<<m_batteryInfo.port_name;
     // TODO : 电池的打开和关闭 用于一键开启监控功能
     //connect(this, &BatteryPort::sig_start_stop, m_serial, &SerialWorker::start_or_stop);
     // TODO : 控制功能
@@ -83,6 +90,7 @@ void BatteryPort::initThread()
     // {
     //     QSingleton::instance().get()->cfd_record(m_batteryInfo.power_id, m_batteryInfo.site, status, start_time);
     // });
+    m_serial->startReading(m_batteryInfo.port_name,m_batteryInfo.type);
 }
 
 void BatteryPort::mousePressEvent(QMouseEvent *e)
@@ -111,7 +119,7 @@ void BatteryPort::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)
     {
-        if(m_batteryInfo.type == "BMS1")
+        if(m_batteryInfo.type == "BMS_1")
         {
             // TODO : 电池信息详情
             // ShowInfoForm *show = new ShowInfoForm(m_batteryInfo.power_id);
@@ -144,6 +152,8 @@ void BatteryPort::delete_action()
     // m_serial->deleteLater();
     // this->deleteLater();
     // QSingleton::instance().get()->table_clear();
+    this->deleteLater();
+    qDebug()<<"删除电池操作";
 }
 
 void BatteryPort::setBatteryValue(const int &value)

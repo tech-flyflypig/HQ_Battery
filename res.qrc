@@ -16,5 +16,7 @@
         <file>image/BMS_1.png</file>
         <file>image/BMS_2.png</file>
         <file>image/BMS_3.png</file>
+        <file>image/menu.png</file>
+        <file>image/menu_hover.png</file>
     </qresource>
 </RCC>

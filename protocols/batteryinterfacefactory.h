@@ -10,7 +10,7 @@ class BatteryInterfaceFactory
 public:
     static BatteryInterface *createBattery(const QString &productType)
     {
-        if (productType == "BMS1")
+        if (productType == "BMS_1")
         {
             return new BMS1Battery();
         }

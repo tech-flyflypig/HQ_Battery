@@ -18,10 +18,21 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private slots:
+    void on_btn_menu_clicked();
+
+    void on_btn_about_clicked();
+
 private:
+    void initUI();
     void init_sql();
+    void cfd_record_action();
+    void abnormal_record_action();
+    void device_manage_action();
+    void user_manage_action();
 
 private:
     Ui::MainWindow *ui;
+    QMenu *menu_list, *menu_about;
 };
 #endif // MAINWINDOW_H 
