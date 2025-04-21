@@ -309,8 +309,8 @@ color: rgb(255, 255, 255);
    <widget class="LayoutBatteryWidget" name="widget_right" native="true">
     <property name="geometry">
      <rect>
-      <x>150</x>
-      <y>90</y>
+      <x>190</x>
+      <y>100</y>
       <width>381</width>
       <height>251</height>
      </rect>
@@ -340,16 +340,16 @@ color: rgb(255, 255, 255);
         );
     }</string>
     </property>
-   </widget>
-   <widget class="ParameterSettingWidget" name="widget_3" native="true">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>160</y>
-      <width>471</width>
-      <height>441</height>
-     </rect>
-    </property>
+    <widget class="ParameterSettingWidget" name="widget_3" native="true">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>471</width>
+       <height>441</height>
+      </rect>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
