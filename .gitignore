@@ -15,6 +15,7 @@ Makefile*
 .qmake.cache
 .qmake.stash
 *.autosave
+.qtc_clangd/
 
 # Compiled Object files
 *.slo
@@ -46,7 +47,6 @@ Makefile*
 .directory
 .Trash-*
 Thumbs.db
-
 
 
 /build
