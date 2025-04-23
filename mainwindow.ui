@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1098</width>
-    <height>687</height>
+    <width>1200</width>
+    <height>1038</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,14 +20,14 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
-    <string notr="true">background-color: #1f2227;
+    <string notr="true">background-color:#0f1228;
 color: rgb(255, 255, 255);</string>
    </property>
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>0</y>
+      <x>190</x>
+      <y>400</y>
       <width>911</width>
       <height>41</height>
      </rect>
@@ -322,34 +322,15 @@ color: rgb(255, 255, 255);
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>80</y>
-      <width>431</width>
-      <height>281</height>
+      <x>0</x>
+      <y>0</y>
+      <width>1200</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">QLabel {
-        background: black;
-        border: 5px solid;
-        border-image: linear-gradient(
-            to right,
-            rgba(0, 255, 255, 50),
-            rgba(0, 255, 255, 20),
-            transparent
-        );
-    }</string>
+     <string notr="true">border-image: url(:/image/top_title.png);</string>
     </property>
-    <widget class="ParameterSettingWidget" name="widget_3" native="true">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>100</y>
-       <width>471</width>
-       <height>441</height>
-      </rect>
-     </property>
-    </widget>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -364,12 +345,6 @@ color: rgb(255, 255, 255);
    <class>LayoutBatteryWidget</class>
    <extends>QWidget</extends>
    <header>layoutbatterywidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ParameterSettingWidget</class>
-   <extends>QWidget</extends>
-   <header>parametersettingwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

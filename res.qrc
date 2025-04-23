@@ -18,5 +18,6 @@
         <file>image/BMS_3.png</file>
         <file>image/menu.png</file>
         <file>image/menu_hover.png</file>
+        <file>image/top_title.png</file>
     </qresource>
 </RCC>
