@@ -19,5 +19,12 @@
         <file>image/menu.png</file>
         <file>image/menu_hover.png</file>
         <file>image/top_title.png</file>
+        <file>image/主页_保护状态.png</file>
+        <file>image/主页_电源.png</file>
+        <file>image/主页_电源数量.png</file>
+        <file>image/主页_故障报警.png</file>
+        <file>image/主页_设备信息.png</file>
+        <file>image/主页_运行参数.png</file>
+        <file>image/主页_中间.png</file>
     </qresource>
 </RCC>
