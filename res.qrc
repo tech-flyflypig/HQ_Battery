@@ -26,5 +26,20 @@
         <file>image/主页_设备信息.png</file>
         <file>image/主页_运行参数.png</file>
         <file>image/主页_中间.png</file>
+        <file>image/采集信号失败.png</file>
+        <file>image/采集信号失败_A.png</file>
+        <file>image/低电压警告.png</file>
+        <file>image/低电压警告_A.png</file>
+        <file>image/电源.png</file>
+        <file>image/电源_A.png</file>
+        <file>image/电源_框.png</file>
+        <file>image/过充电压.png</file>
+        <file>image/过充电压_A.png</file>
+        <file>image/过充电压保护失效.png</file>
+        <file>image/过充电压保护失效_A.png</file>
+        <file>image/输出短路.png</file>
+        <file>image/输出短路_A.png</file>
+        <file>image/输出短路保护失效.png</file>
+        <file>image/输出短路保护失效_A.png</file>
     </qresource>
 </RCC>

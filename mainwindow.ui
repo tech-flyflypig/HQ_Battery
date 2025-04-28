@@ -217,20 +217,157 @@ background:#a0d7da;width:10px;border-radius:5px;
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="widget_3" native="true">
+   <widget class="QWidget" name="protect_status" native="true">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>320</y>
+      <y>310</y>
       <width>181</width>
-      <height>231</height>
+      <height>241</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/image/主页_保护状态.png);</string>
+     <string notr="true">#protect_status{
+border-image: url(:/image/主页_保护状态.png);
+}
+QLabel{
+background:transparent;
+}
+#label_totalVoltageOverProtect{
+border-image: url(:/image/过充电压.png);
+}
+#widget_battery_bak,#widget_battery_bak_2,#widget_battery_bak_3
+{
+	border-image: url(:/image/电源.png);
+	background:transparent;
+}
+#label_totalVoltageLowProtect{
+	border-image: url(:/image/低电压警告.png);
+}
+#label_shortCircuitProtect{
+	border-image: url(:/image/输出短路.png);
+}
+</string>
     </property>
+    <widget class="QLabel" name="label_totalVoltageOverProtect">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>68</y>
+       <width>91</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_totalVoltageLowProtect">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>128</y>
+       <width>91</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_shortCircuitProtect">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>188</y>
+       <width>101</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QWidget" name="widget_battery_bak" native="true">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>58</y>
+       <width>41</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <widget class="QLabel" name="label_totalVoltageOverProtect_num">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>21</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>5</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="widget_battery_bak_2" native="true">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>118</y>
+       <width>41</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <widget class="QLabel" name="label_totalVoltageLowProtect_num">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>21</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>5</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="widget_battery_bak_3" native="true">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>178</y>
+       <width>41</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <widget class="QLabel" name="label_label_shortCircuitProtect_num">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>21</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>5</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
    </widget>
-   <widget class="QWidget" name="widget_4" native="true">
+   <widget class="QWidget" name="fault_alarm" native="true">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -240,8 +377,140 @@ background:#a0d7da;width:10px;border-radius:5px;
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/image/主页_故障报警.png);</string>
+     <string notr="true">#fault_alarm{
+border-image: url(:/image/主页_故障报警.png);
+}
+#widget_batery_square,#widget_batery_square_2,#widget_batery_square_3{
+	border-image: url(:/image/电源_框.png);	
+	background-color:transparent;
+}
+QLabel{
+background:transparent;
+	color: rgb(0, 194, 223);
+	font: 700 12pt &quot;Microsoft YaHei UI&quot;;
+}
+#label_7,#label_8,#label_9{
+	border-image: url(:/image/输出短路保护失效_A.png);
+}
+</string>
     </property>
+    <widget class="QWidget" name="widget_batery_square" native="true">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>60</y>
+       <width>41</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>10</y>
+        <width>31</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>1</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="widget_batery_square_2" native="true">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>110</y>
+       <width>41</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>10</y>
+        <width>31</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>2</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="widget_batery_square_3" native="true">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>160</y>
+       <width>41</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>5</x>
+        <y>10</y>
+        <width>31</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>3</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>77</y>
+       <width>101</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>125</y>
+       <width>111</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>174</y>
+       <width>111</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="widget_5" native="true">
     <property name="geometry">
