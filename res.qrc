@@ -41,5 +41,9 @@
         <file>image/输出短路_A.png</file>
         <file>image/输出短路保护失效.png</file>
         <file>image/输出短路保护失效_A.png</file>
+        <file>image/电源箱.png</file>
+        <file>image/停止.png</file>
+        <file>image/运行.png</file>
+        <file>image/单个电池模块背景.png</file>
     </qresource>
 </RCC>
