@@ -34,6 +34,7 @@ SOURCES += \
     component/adduser.cpp \
     component/adduserform.cpp \
     component/batterylistform.cpp \
+    component/batterygridwidget.cpp \
     component/bms1infoshowform.cpp \
     component/cfdrecordform.cpp \
     component/exceptionform.cpp \
@@ -57,6 +58,7 @@ HEADERS += \
     component/adduser.h \
     component/adduserform.h \
     component/batterylistform.h \
+    component/batterygridwidget.h \
     component/bms1infoshowform.h \
     component/cfdrecordform.h \
     component/exceptionform.h \

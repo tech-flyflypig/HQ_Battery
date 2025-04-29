@@ -45,5 +45,6 @@
         <file>image/停止.png</file>
         <file>image/运行.png</file>
         <file>image/单个电池模块背景.png</file>
+        <file>image/单个电池模块背景_选中.png</file>
     </qresource>
 </RCC>

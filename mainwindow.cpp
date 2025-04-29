@@ -12,6 +12,13 @@
 #include "adduserform.h"
 #include "queryform.h"
 #include "component/BlueGlowWidget.h"
+#include <QScrollArea>
+#include <QGridLayout>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QLabel>
+#include "batterylistform.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -30,69 +37,29 @@ MainWindow::~MainWindow()
 
 void MainWindow::initUI()
 {
-#if 0
-    QMenu *data_manage = new QMenu("数据管理", this);
-    QAction *cfd_record = new QAction("充放电记录", this);
-    QAction *abnormal_record = new QAction("异常记录", this);
-    data_manage->addAction(cfd_record);
-    data_manage->addAction(abnormal_record);
-    connect(cfd_record, &QAction::triggered, this, &MainWindow::cfd_record_action);
-    connect(abnormal_record, &QAction::triggered, this, &MainWindow::abnormal_record_action);
+    // 创建电池网格组件
+    batteryGrid = new BatteryGridWidget(ui->widget_center);
 
-    QMenu *system_manage = new QMenu("系统管理", this);
-    QAction *device_manage = new QAction("设备管理", this);
-    QAction *user_manage = new QAction("用户管理", this);
+    // 设置网格大小和总电池数量
+    batteryGrid->setGridSize(5, 5); // 5行5列
+    batteryGrid->setTotalItems(49); // 设置50个电池
 
-    QAction *user_book = new QAction("用户手册", this);
-    connect(user_book, &QAction::triggered, []
+    // 设置底部空间和分页控件自动隐藏
+    batteryGrid->setBottomMargin(20);  // 设置50像素的底部间距
+    batteryGrid->setAutoHidePagination(true);  // 当电池数量不足一页时自动隐藏分页控件
+
+    // 将电池网格添加到 widget_center
+    QVBoxLayout *layout = new QVBoxLayout(ui->widget_center);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(batteryGrid);
+
+    // 连接电池选择信号
+    connect(batteryGrid, &BatteryGridWidget::batterySelected, this, [this](BatteryListForm * battery)
     {
-        QString pdfFile = QApplication::applicationDirPath() + "/后备电池电量管理软件客户端-操作手册-V2.0.pdf";
-        QDesktopServices::openUrl(QUrl::fromLocalFile(pdfFile));
+        // 处理电池选择事件
+        qDebug() << "Battery selected";
+        // 这里可以添加其他处理逻辑
     });
-    system_manage->addAction(device_manage);
-    system_manage->addAction(user_manage);
-
-    connect(device_manage, &QAction::triggered, this, &MainWindow::device_manage_action);
-    connect(user_manage, &QAction::triggered, this, &MainWindow::user_manage_action);
-    menu_list = new QMenu();
-    menu_list->addMenu(data_manage);
-    menu_list->addMenu(system_manage);
-    menu_list->addAction(user_book);
-
-    menu_about = new QMenu();
-    QString version = QApplication::applicationVersion();
-    version = "版本号 " + version.mid(0, version.lastIndexOf('.'));
-    menu_about->addSeparator();
-    menu_about->addAction(version);
-    menu_about->addAction("检查更新", [ = ]
-    {
-        if(QMessageBox::question(nullptr, "请求", "升级时需关闭软件，是否立即关闭软件？") == QMessageBox::Yes)
-        {
-            QProcess process;
-            QString str = "\"" + QApplication::applicationDirPath() + "/updater.exe" + "\"";
-            process.startDetached(str);
-            this->close();
-        }
-    });
-
-    // 创建蓝色发光组件示例
-    BlueGlowWidget *paramWidget = new BlueGlowWidget(this);
-    paramWidget->setTitleText("保存参数");
-
-    // 添加单选按钮组
-    QStringList settingOptions = {"过充电压", "过放电压", "输出电源", "内部温度"};
-    paramWidget->addRadioGroup("", settingOptions);
-
-    QStringList moreOptions = {"环境温度", "均衡管理器"};
-    paramWidget->addRadioGroup("", moreOptions);
-
-    // 将组件添加到UI中的某个位置
-    // 例如，如果你有一个名为parameterContainer的QWidget容器
-    // ui->parameterContainer->layout()->addWidget(paramWidget);
-
-    // 或者，如果你想添加到主布局中
-    // centralWidget()->layout()->addWidget(paramWidget);
-#endif
 }
 
 void MainWindow::init_sql()

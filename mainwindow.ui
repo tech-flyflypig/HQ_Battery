@@ -527,59 +527,6 @@ border-image: url(:/image/主页_中间.png);
 }
 </string>
     </property>
-    <widget class="BatteryListForm" name="widget" native="true">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>40</y>
-       <width>167</width>
-       <height>101</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border-image: url(:/image/单个电池模块背景.png);</string>
-     </property>
-    </widget>
-    <widget class="BatteryListForm" name="widget_3" native="true">
-     <property name="geometry">
-      <rect>
-       <x>220</x>
-       <y>40</y>
-       <width>167</width>
-       <height>101</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="BatteryListForm" name="widget_4" native="true">
-     <property name="geometry">
-      <rect>
-       <x>400</x>
-       <y>40</y>
-       <width>167</width>
-       <height>101</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="BatteryListForm" name="widget_5" native="true">
-     <property name="geometry">
-      <rect>
-       <x>580</x>
-       <y>40</y>
-       <width>167</width>
-       <height>101</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="BatteryListForm" name="widget_9" native="true">
-     <property name="geometry">
-      <rect>
-       <x>770</x>
-       <y>40</y>
-       <width>167</width>
-       <height>101</height>
-      </rect>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="widget_6" native="true">
     <property name="geometry">
@@ -622,14 +569,6 @@ border-image: url(:/image/主页_中间.png);
    </widget>
   </widget>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>BatteryListForm</class>
-   <extends>QWidget</extends>
-   <header>batterylistform.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
