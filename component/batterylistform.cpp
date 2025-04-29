@@ -4,11 +4,14 @@
 #include <QPainter>
 #include <QStyleOption>
 #include <QMouseEvent>
+#include <QDebug>
 
 BatteryListForm::BatteryListForm(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::BatteryListForm)
     , m_selected(false)
+    , m_serialWorker(nullptr)
+    , m_isRunning(false)
 {
     ui->setupUi(this);
 
@@ -18,6 +21,7 @@ BatteryListForm::BatteryListForm(QWidget *parent)
 
 BatteryListForm::~BatteryListForm()
 {
+    stopCommunication();
     delete ui;
 }
 
@@ -32,6 +36,107 @@ void BatteryListForm::setSelected(bool selected)
     }
 }
 
+// 设置电池信息
+void BatteryListForm::setBatteryInfo(const battery_info &info)
+{
+    m_batteryInfo = info;
+    
+    // 更新UI显示基本信息
+    ui->label_6->setText(m_batteryInfo.site); // 显示电池位置
+    
+    // 如果串口已经在运行，需要先停止
+    if (m_isRunning) {
+        stopCommunication();
+    }
+    
+    // 初始化串口通信
+    initSerialCommunication();
+}
+
+battery_info BatteryListForm::getBatteryInfo() const
+{
+    return m_batteryInfo;
+}
+
+// 开始串口通信
+void BatteryListForm::startCommunication()
+{
+    if (!m_serialWorker || m_isRunning) {
+        return;
+    }
+    
+    // 设置为运行状态图标
+    ui->label_battery_status->setStyleSheet("border-image: url(:/image/运行.png);");
+    
+    // 启动串口通信
+    m_serialWorker->startReading(m_batteryInfo.port_name, m_batteryInfo.type);
+    m_isRunning = true;
+}
+
+// 停止串口通信
+void BatteryListForm::stopCommunication()
+{
+    if (!m_serialWorker || !m_isRunning) {
+        return;
+    }
+    
+    // 设置为停止状态图标
+    ui->label_battery_status->setStyleSheet("border-image: url(:/image/停止.png);");
+    
+    // 停止串口通信
+    m_serialWorker->stopReading();
+    m_isRunning = false;
+}
+
+// 初始化串口通信
+void BatteryListForm::initSerialCommunication()
+{
+    // 如果已存在，先删除
+    if (m_serialWorker) {
+        delete m_serialWorker;
+    }
+    
+    // 创建SerialWorker
+    m_serialWorker = new SerialWorker(this);
+    
+    // 连接信号和槽
+    connect(m_serialWorker, &SerialWorker::forwardBatteryData, 
+            this, &BatteryListForm::onBatteryDataReceived);
+    connect(m_serialWorker, &SerialWorker::error, 
+            this, &BatteryListForm::onCommunicationError);
+    connect(m_serialWorker, &SerialWorker::communicationTimeout, 
+            this, &BatteryListForm::onCommunicationTimeout);
+}
+
+// 更新UI显示
+void BatteryListForm::updateDisplay(const BMS_1 &data)
+{
+    // 更新电量显示
+    QString socStr = QString::number(data.soc) + "%";
+    
+    // 更新温度显示
+    QString tempStr = QString::number(data.tempMax / 10.0, 'f', 1) + "℃";
+    
+    // 更新容量显示
+    QString capacityStr = QString::number(data.ratedCapacity / 100.0, 'f', 1) + "AH";
+    
+    // 更新UI标签
+    ui->label_7->setText(capacityStr);
+    ui->label_5->setText(tempStr);
+    
+    // 根据状态更新图标
+    if (data.alarmStatus > 0) {
+        // 告警状态
+        ui->label_battery_status->setStyleSheet("border-image: url(:/image/告警.png);");
+    } else if (data.protectStatus > 0) {
+        // 保护状态
+        ui->label_battery_status->setStyleSheet("border-image: url(:/image/保护.png);");
+    } else if (m_isRunning) {
+        // 正常运行状态
+        ui->label_battery_status->setStyleSheet("border-image: url(:/image/运行.png);");
+    }
+}
+
 // 鼠标点击事件处理
 void BatteryListForm::mousePressEvent(QMouseEvent *event)
 {
@@ -43,6 +148,30 @@ void BatteryListForm::mousePressEvent(QMouseEvent *event)
         emit clicked(this);
     }
     QWidget::mousePressEvent(event);
+}
+
+// 处理电池数据接收
+void BatteryListForm::onBatteryDataReceived(const BMS_1 &data)
+{
+    m_lastData = data;
+    updateDisplay(data);
+    emit dataReceived(this, data);
+}
+
+// 处理通信错误
+void BatteryListForm::onCommunicationError(const QString &errorMessage)
+{
+    qDebug() << "Battery communication error: " << errorMessage;
+    emit communicationError(this, errorMessage);
+}
+
+// 处理通信超时
+void BatteryListForm::onCommunicationTimeout()
+{
+    qDebug() << "Battery communication timeout";
+    // 设置超时状态图标
+    ui->label_battery_status->setStyleSheet("border-image: url(:/image/断开连接.png);");
+    emit communicationTimeout(this);
 }
 
 // 更新组件样式

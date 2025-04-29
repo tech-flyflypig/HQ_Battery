@@ -30,6 +30,9 @@ public:
     // 获取当前选中的电池
     BatteryListForm* getSelectedBattery() const;
     
+    // 获取所有电池组件
+    QList<BatteryListForm*> getBatteryWidgets() const;
+    
     // 设置底部空间
     void setBottomMargin(int margin);
     

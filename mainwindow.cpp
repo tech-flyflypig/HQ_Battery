@@ -11,13 +11,13 @@
 #include "exceptionform.h"
 #include "adduserform.h"
 #include "queryform.h"
-#include "component/BlueGlowWidget.h"
 #include <QScrollArea>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QMenu>
 #include "batterylistform.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -58,7 +58,82 @@ void MainWindow::initUI()
     {
         // 处理电池选择事件
         qDebug() << "Battery selected";
-        // 这里可以添加其他处理逻辑
+        
+        // 显示选中电池的详细信息
+        battery_info info = battery->getBatteryInfo();
+        //ui->statusbar->showMessage(QString("选中电池: %1, 位置: %2").arg(info.power_id).arg(info.site));
+    });
+
+    // 为每个电池添加右键菜单
+    for (BatteryListForm *battery : batteryGrid->getBatteryWidgets())
+    {
+        // 添加右键菜单
+        battery->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(battery, &BatteryListForm::customContextMenuRequested, this, [this, battery](const QPoint &pos)
+        {
+            // 创建右键菜单
+            QMenu menu(this);
+            QAction *startAction = new QAction("开始监控", this);
+            QAction *stopAction = new QAction("停止监控", this);
+            QAction *detailAction = new QAction("详细信息", this);
+            
+            // 连接菜单动作
+            connect(startAction, &QAction::triggered, this, [battery]()
+            {
+                battery->startCommunication();
+            });
+            
+            connect(stopAction, &QAction::triggered, this, [battery]()
+            {
+                battery->stopCommunication();
+            });
+            
+            connect(detailAction, &QAction::triggered, this, [this, battery]()
+            {
+                // 显示详细信息表单
+                // TODO: 实现详细信息显示
+            });
+            
+            menu.addAction(startAction);
+            menu.addAction(stopAction);
+            menu.addAction(detailAction);
+            
+            // 显示菜单
+            menu.exec(battery->mapToGlobal(pos));
+        });
+        
+        connectBatterySignals(battery);
+    }
+}
+
+void MainWindow::connectBatterySignals(BatteryListForm *battery)
+{
+    // 连接数据接收信号
+    connect(battery, &BatteryListForm::dataReceived, this, [this](BatteryListForm * battery, const BMS_1 & data)
+    {
+        // 更新状态栏或处理数据
+        //ui->statusbar->showMessage(QString("电池: %1, SOC: %2%, 温度: %3°C")
+        // .arg(battery->getBatteryInfo().site)
+        // .arg(data.soc)
+        // .arg(data.tempMax / 10.0));
+    });
+
+    // 连接通信错误信号
+    connect(battery, &BatteryListForm::communicationError, this, [this](BatteryListForm * battery, const QString & error)
+    {
+        // 显示错误信息
+        QMessageBox::warning(this, "通信错误",
+                             QString("电池 %1 通信错误: %2")
+                             .arg(battery->getBatteryInfo().site)
+                             .arg(error));
+    });
+
+    // 连接通信超时信号
+    connect(battery, &BatteryListForm::communicationTimeout, this, [this](BatteryListForm * battery)
+    {
+        // 显示超时信息
+        // ui->statusbar->showMessage(QString("电池: %1 通信超时")
+        //                            .arg(battery->getBatteryInfo().site));
     });
 }
 

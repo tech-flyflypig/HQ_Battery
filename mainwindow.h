@@ -31,6 +31,7 @@ private:
     void abnormal_record_action();
     void device_manage_action();
     void user_manage_action();
+    void connectBatterySignals(BatteryListForm* battery);
 
 private:
     Ui::MainWindow *ui;

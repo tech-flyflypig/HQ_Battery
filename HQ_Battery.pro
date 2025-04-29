@@ -28,8 +28,6 @@ INCLUDEPATH +=\
 
 
 SOURCES += \
-    component/BlueGlowWidget.cpp \
-    component/ParameterSettingWidget.cpp \
     component/addpowerform.cpp \
     component/adduser.cpp \
     component/adduserform.cpp \
@@ -52,8 +50,6 @@ SOURCES += \
     utils/myapp.cpp
 
 HEADERS += \
-    component/BlueGlowWidget.h \
-    component/ParameterSettingWidget.h \
     component/addpowerform.h \
     component/adduser.h \
     component/adduserform.h \

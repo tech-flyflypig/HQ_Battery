@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1407</width>
-    <height>800</height>
+    <width>1920</width>
+    <height>1038</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,20 +16,29 @@
   <property name="styleSheet">
    <string notr="true">#statusbar{
 	background-color: rgb(36, 39, 46);
-}</string>
+}
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
-    <string notr="true">background-color:#0f1228;
-color: rgb(255, 255, 255);</string>
+    <string notr="true">#centralwidget{
+background-color:#0f1228;
+color: rgb(255, 255, 255);
+}
+Line{
+	background-color: rgb(23, 54, 133);
+}
+QLabel{
+	color: rgb(255, 255, 255);
+}</string>
    </property>
    <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1365</width>
-      <height>51</height>
+      <width>1881</width>
+      <height>71</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -40,9 +49,9 @@ color: rgb(255, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>70</y>
-      <width>181</width>
-      <height>231</height>
+      <y>100</y>
+      <width>211</width>
+      <height>291</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -72,9 +81,9 @@ background:#a0d7da;width:10px;border-radius:5px;
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>69</y>
+       <y>90</y>
        <width>36</width>
-       <height>121</height>
+       <height>151</height>
       </rect>
      </property>
      <property name="value">
@@ -88,9 +97,9 @@ background:#a0d7da;width:10px;border-radius:5px;
      <property name="geometry">
       <rect>
        <x>70</x>
-       <y>69</y>
+       <y>90</y>
        <width>36</width>
-       <height>121</height>
+       <height>151</height>
       </rect>
      </property>
      <property name="value">
@@ -104,9 +113,9 @@ background:#a0d7da;width:10px;border-radius:5px;
      <property name="geometry">
       <rect>
        <x>120</x>
-       <y>69</y>
+       <y>90</y>
        <width>36</width>
-       <height>121</height>
+       <height>151</height>
       </rect>
      </property>
      <property name="value">
@@ -120,7 +129,7 @@ background:#a0d7da;width:10px;border-radius:5px;
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>50</y>
+       <y>63</y>
        <width>16</width>
        <height>16</height>
       </rect>
@@ -136,7 +145,7 @@ background:#a0d7da;width:10px;border-radius:5px;
      <property name="geometry">
       <rect>
        <x>80</x>
-       <y>49</y>
+       <y>62</y>
        <width>16</width>
        <height>16</height>
       </rect>
@@ -152,7 +161,7 @@ background:#a0d7da;width:10px;border-radius:5px;
      <property name="geometry">
       <rect>
        <x>128</x>
-       <y>50</y>
+       <y>60</y>
        <width>21</width>
        <height>16</height>
       </rect>
@@ -168,7 +177,7 @@ background:#a0d7da;width:10px;border-radius:5px;
      <property name="geometry">
       <rect>
        <x>27</x>
-       <y>199</y>
+       <y>250</y>
        <width>31</width>
        <height>16</height>
       </rect>
@@ -181,7 +190,7 @@ background:#a0d7da;width:10px;border-radius:5px;
      <property name="geometry">
       <rect>
        <x>75</x>
-       <y>199</y>
+       <y>250</y>
        <width>31</width>
        <height>16</height>
       </rect>
@@ -194,7 +203,7 @@ background:#a0d7da;width:10px;border-radius:5px;
      <property name="geometry">
       <rect>
        <x>125</x>
-       <y>199</y>
+       <y>250</y>
        <width>31</width>
        <height>16</height>
       </rect>
@@ -221,9 +230,9 @@ background:#a0d7da;width:10px;border-radius:5px;
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>310</y>
-      <width>181</width>
-      <height>241</height>
+      <y>430</y>
+      <width>211</width>
+      <height>281</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -247,6 +256,8 @@ border-image: url(:/image/过充电压.png);
 #label_shortCircuitProtect{
 	border-image: url(:/image/输出短路.png);
 }
+
+
 </string>
     </property>
     <widget class="QLabel" name="label_totalVoltageOverProtect">
@@ -266,7 +277,7 @@ border-image: url(:/image/过充电压.png);
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>128</y>
+       <y>140</y>
        <width>91</width>
        <height>21</height>
       </rect>
@@ -279,7 +290,7 @@ border-image: url(:/image/过充电压.png);
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>188</y>
+       <y>210</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -293,8 +304,8 @@ border-image: url(:/image/过充电压.png);
       <rect>
        <x>120</x>
        <y>58</y>
-       <width>41</width>
-       <height>41</height>
+       <width>45</width>
+       <height>45</height>
       </rect>
      </property>
      <widget class="QLabel" name="label_totalVoltageOverProtect_num">
@@ -318,9 +329,9 @@ border-image: url(:/image/过充电压.png);
      <property name="geometry">
       <rect>
        <x>120</x>
-       <y>118</y>
-       <width>41</width>
-       <height>41</height>
+       <y>130</y>
+       <width>45</width>
+       <height>45</height>
       </rect>
      </property>
      <widget class="QLabel" name="label_totalVoltageLowProtect_num">
@@ -344,9 +355,9 @@ border-image: url(:/image/过充电压.png);
      <property name="geometry">
       <rect>
        <x>120</x>
-       <y>178</y>
-       <width>41</width>
-       <height>41</height>
+       <y>200</y>
+       <width>45</width>
+       <height>45</height>
       </rect>
      </property>
      <widget class="QLabel" name="label_label_shortCircuitProtect_num">
@@ -366,14 +377,40 @@ border-image: url(:/image/过充电压.png);
       </property>
      </widget>
     </widget>
+    <widget class="Line" name="line">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>110</y>
+       <width>161</width>
+       <height>2</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="Line" name="line_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>190</y>
+       <width>161</width>
+       <height>2</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="fault_alarm" native="true">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>570</y>
-      <width>181</width>
-      <height>221</height>
+      <y>730</y>
+      <width>211</width>
+      <height>281</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -399,8 +436,8 @@ background:transparent;
       <rect>
        <x>120</x>
        <y>60</y>
-       <width>41</width>
-       <height>41</height>
+       <width>45</width>
+       <height>45</height>
       </rect>
      </property>
      <widget class="QLabel" name="label">
@@ -424,9 +461,9 @@ background:transparent;
      <property name="geometry">
       <rect>
        <x>120</x>
-       <y>110</y>
-       <width>41</width>
-       <height>41</height>
+       <y>124</y>
+       <width>45</width>
+       <height>45</height>
       </rect>
      </property>
      <widget class="QLabel" name="label_2">
@@ -450,9 +487,9 @@ background:transparent;
      <property name="geometry">
       <rect>
        <x>120</x>
-       <y>160</y>
-       <width>41</width>
-       <height>41</height>
+       <y>190</y>
+       <width>45</width>
+       <height>45</height>
       </rect>
      </property>
      <widget class="QLabel" name="label_3">
@@ -476,7 +513,7 @@ background:transparent;
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>77</y>
+       <y>70</y>
        <width>101</width>
        <height>16</height>
       </rect>
@@ -489,7 +526,7 @@ background:transparent;
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>125</y>
+       <y>140</y>
        <width>111</width>
        <height>16</height>
       </rect>
@@ -502,7 +539,7 @@ background:transparent;
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>174</y>
+       <y>210</y>
        <width>111</width>
        <height>16</height>
       </rect>
@@ -511,56 +548,258 @@ background:transparent;
       <string/>
      </property>
     </widget>
+    <widget class="Line" name="line_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>110</y>
+       <width>161</width>
+       <height>2</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="Line" name="line_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>180</y>
+       <width>161</width>
+       <height>2</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="widget_center" native="true">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>70</y>
-      <width>961</width>
-      <height>721</height>
+      <x>250</x>
+      <y>90</y>
+      <width>1401</width>
+      <height>921</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">#widget_center{
 border-image: url(:/image/主页_中间.png);
 }
-</string>
+QLabel{
+	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
+}</string>
     </property>
    </widget>
    <widget class="QWidget" name="widget_6" native="true">
     <property name="geometry">
      <rect>
-      <x>1200</x>
-      <y>70</y>
-      <width>185</width>
-      <height>231</height>
+      <x>1670</x>
+      <y>90</y>
+      <width>221</width>
+      <height>271</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">border-image: url(:/image/主页_电源.png);</string>
     </property>
    </widget>
-   <widget class="QWidget" name="widget_7" native="true">
+   <widget class="QWidget" name="run_param" native="true">
     <property name="geometry">
      <rect>
-      <x>1200</x>
-      <y>330</y>
-      <width>185</width>
-      <height>221</height>
+      <x>1670</x>
+      <y>380</y>
+      <width>221</width>
+      <height>351</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/image/主页_运行参数.png);</string>
+     <string notr="true">#run_param{
+border-image: url(:/image/主页_运行参数.png);
+}
+QLabel{
+	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
+}</string>
     </property>
+    <widget class="Line" name="line_7">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>232</width>
+       <height>2</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="Line" name="line_8">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>140</y>
+       <width>232</width>
+       <height>2</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="Line" name="line_16">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>180</y>
+       <width>232</width>
+       <height>2</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="Line" name="line_17">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>220</y>
+       <width>232</width>
+       <height>2</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="Line" name="line_18">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>260</y>
+       <width>232</width>
+       <height>2</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="Line" name="line_19">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>300</y>
+       <width>232</width>
+       <height>2</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_16">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>70</y>
+       <width>131</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>额定容量(mAh)</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_17">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>110</y>
+       <width>141</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>剩余电量(mAh)</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_18">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>150</y>
+       <width>111</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>放电电流(mA)</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_19">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>190</y>
+       <width>121</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>充电电流(mA)</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_20">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>230</y>
+       <width>121</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>充电输入(mA)</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_21">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>270</y>
+       <width>141</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>电池组电压(mV)</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_22">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>310</y>
+       <width>121</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>电池组温度(℃)</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="widget_8" native="true">
     <property name="geometry">
      <rect>
-      <x>1200</x>
-      <y>570</y>
-      <width>185</width>
-      <height>221</height>
+      <x>1670</x>
+      <y>750</y>
+      <width>221</width>
+      <height>261</height>
      </rect>
     </property>
     <property name="styleSheet">
