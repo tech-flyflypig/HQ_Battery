@@ -1,4 +1,4 @@
-#include "batterygridwidget.h"
+﻿#include "batterygridwidget.h"
 #include <QDebug>
 
 BatteryGridWidget::BatteryGridWidget(QWidget *parent)

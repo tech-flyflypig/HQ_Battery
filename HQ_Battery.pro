@@ -33,13 +33,16 @@ SOURCES += \
     component/adduserform.cpp \
     component/batterylistform.cpp \
     component/batterygridwidget.cpp \
+    component/batterystatusform.cpp \
     component/bms1infoshowform.cpp \
     component/cfdrecordform.cpp \
+    component/deviceinfoform.cpp \
     component/exceptionform.cpp \
     component/layoutbatterywidget.cpp \
     component/mytreewidget.cpp \
     component/queryform.cpp \
     component/revisepowerform.cpp \
+    component/runningparamform.cpp \
     main.cpp \
     mainwindow.cpp \
     protocols/batteryport.cpp \
@@ -55,13 +58,16 @@ HEADERS += \
     component/adduserform.h \
     component/batterylistform.h \
     component/batterygridwidget.h \
+    component/batterystatusform.h \
     component/bms1infoshowform.h \
     component/cfdrecordform.h \
+    component/deviceinfoform.h \
     component/exceptionform.h \
     component/layoutbatterywidget.h \
     component/mytreewidget.h \
     component/queryform.h \
     component/revisepowerform.h \
+    component/runningparamform.h \
     mainwindow.h \
     protocols/battery.h \
     protocols/batteryinterface.h \
@@ -79,11 +85,14 @@ FORMS += \
     component/adduser.ui \
     component/adduserform.ui \
     component/batterylistform.ui \
+    component/batterystatusform.ui \
     component/bms1infoshowform.ui \
     component/cfdrecordform.ui \
+    component/deviceinfoform.ui \
     component/exceptionform.ui \
     component/queryform.ui \
     component/revisepowerform.ui \
+    component/runningparamform.ui \
     mainwindow.ui
 
 # Default rules for deployment.

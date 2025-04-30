@@ -45,7 +45,7 @@ void MainWindow::initUI()
     batteryGrid->setTotalItems(49); // 设置50个电池
 
     // 设置底部空间和分页控件自动隐藏
-    batteryGrid->setBottomMargin(20);  // 设置50像素的底部间距
+    batteryGrid->setBottomMargin(30);  // 设置50像素的底部间距
     batteryGrid->setAutoHidePagination(true);  // 当电池数量不足一页时自动隐藏分页控件
 
     // 将电池网格添加到 widget_center
@@ -58,7 +58,7 @@ void MainWindow::initUI()
     {
         // 处理电池选择事件
         qDebug() << "Battery selected";
-        
+
         // 显示选中电池的详细信息
         battery_info info = battery->getBatteryInfo();
         //ui->statusbar->showMessage(QString("选中电池: %1, 位置: %2").arg(info.power_id).arg(info.site));
@@ -69,39 +69,39 @@ void MainWindow::initUI()
     {
         // 添加右键菜单
         battery->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect(battery, &BatteryListForm::customContextMenuRequested, this, [this, battery](const QPoint &pos)
+        connect(battery, &BatteryListForm::customContextMenuRequested, this, [this, battery](const QPoint & pos)
         {
             // 创建右键菜单
             QMenu menu(this);
             QAction *startAction = new QAction("开始监控", this);
             QAction *stopAction = new QAction("停止监控", this);
             QAction *detailAction = new QAction("详细信息", this);
-            
+
             // 连接菜单动作
             connect(startAction, &QAction::triggered, this, [battery]()
             {
                 battery->startCommunication();
             });
-            
+
             connect(stopAction, &QAction::triggered, this, [battery]()
             {
                 battery->stopCommunication();
             });
-            
+
             connect(detailAction, &QAction::triggered, this, [this, battery]()
             {
                 // 显示详细信息表单
                 // TODO: 实现详细信息显示
             });
-            
+
             menu.addAction(startAction);
             menu.addAction(stopAction);
             menu.addAction(detailAction);
-            
+
             // 显示菜单
             menu.exec(battery->mapToGlobal(pos));
         });
-        
+
         connectBatterySignals(battery);
     }
 }

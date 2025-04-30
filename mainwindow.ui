@@ -25,11 +25,11 @@
 background-color:#0f1228;
 color: rgb(255, 255, 255);
 }
-Line{
-	background-color: rgb(23, 54, 133);
-}
 QLabel{
 	color: rgb(255, 255, 255);
+}
+QFrame[frameShape=&quot;4&quot;] {
+	background-color: rgb(23, 54, 133);
 }</string>
    </property>
    <widget class="QWidget" name="widget_2" native="true">
@@ -37,7 +37,7 @@ QLabel{
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1881</width>
+      <width>1921</width>
       <height>71</height>
      </rect>
     </property>
@@ -80,7 +80,7 @@ background:#a0d7da;width:10px;border-radius:5px;
     <widget class="QSlider" name="verticalSlider">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>35</x>
        <y>90</y>
        <width>36</width>
        <height>151</height>
@@ -96,7 +96,7 @@ background:#a0d7da;width:10px;border-radius:5px;
     <widget class="QSlider" name="verticalSlider_2">
      <property name="geometry">
       <rect>
-       <x>70</x>
+       <x>85</x>
        <y>90</y>
        <width>36</width>
        <height>151</height>
@@ -112,7 +112,7 @@ background:#a0d7da;width:10px;border-radius:5px;
     <widget class="QSlider" name="verticalSlider_3">
      <property name="geometry">
       <rect>
-       <x>120</x>
+       <x>135</x>
        <y>90</y>
        <width>36</width>
        <height>151</height>
@@ -128,7 +128,7 @@ background:#a0d7da;width:10px;border-radius:5px;
     <widget class="QLabel" name="label_runing_num">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>45</x>
        <y>63</y>
        <width>16</width>
        <height>16</height>
@@ -144,7 +144,7 @@ background:#a0d7da;width:10px;border-radius:5px;
     <widget class="QLabel" name="label_stop_num">
      <property name="geometry">
       <rect>
-       <x>80</x>
+       <x>95</x>
        <y>62</y>
        <width>16</width>
        <height>16</height>
@@ -160,7 +160,7 @@ background:#a0d7da;width:10px;border-radius:5px;
     <widget class="QLabel" name="label_fault_num">
      <property name="geometry">
       <rect>
-       <x>128</x>
+       <x>143</x>
        <y>60</y>
        <width>21</width>
        <height>16</height>
@@ -176,7 +176,7 @@ background:#a0d7da;width:10px;border-radius:5px;
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>27</x>
+       <x>42</x>
        <y>250</y>
        <width>31</width>
        <height>16</height>
@@ -189,7 +189,7 @@ background:#a0d7da;width:10px;border-radius:5px;
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>75</x>
+       <x>90</x>
        <y>250</y>
        <width>31</width>
        <height>16</height>
@@ -202,7 +202,7 @@ background:#a0d7da;width:10px;border-radius:5px;
     <widget class="QLabel" name="label_6">
      <property name="geometry">
       <rect>
-       <x>125</x>
+       <x>140</x>
        <y>250</y>
        <width>31</width>
        <height>16</height>
@@ -215,8 +215,8 @@ background:#a0d7da;width:10px;border-radius:5px;
     <widget class="QLabel" name="label_total_num">
      <property name="geometry">
       <rect>
-       <x>147</x>
-       <y>10</y>
+       <x>170</x>
+       <y>20</y>
        <width>16</width>
        <height>21</height>
       </rect>
@@ -256,7 +256,9 @@ border-image: url(:/image/过充电压.png);
 #label_shortCircuitProtect{
 	border-image: url(:/image/输出短路.png);
 }
-
+Line{
+	background-color: rgb(23, 54, 133);
+}
 
 </string>
     </property>
@@ -593,23 +595,39 @@ QLabel{
 }</string>
     </property>
    </widget>
-   <widget class="QWidget" name="widget_6" native="true">
+   <widget class="QWidget" name="widget_battery_status" native="true">
     <property name="geometry">
      <rect>
-      <x>1670</x>
+      <x>1680</x>
       <y>90</y>
       <width>221</width>
       <height>271</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/image/主页_电源.png);</string>
+     <string notr="true">#widget_battery_status{
+border-image: url(:/image/主页_电源.png);
+}</string>
     </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="leftMargin">
+      <number>25</number>
+     </property>
+     <property name="topMargin">
+      <number>50</number>
+     </property>
+     <property name="rightMargin">
+      <number>25</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="BatteryStatusForm" name="widget" native="true"/>
+     </item>
+    </layout>
    </widget>
    <widget class="QWidget" name="run_param" native="true">
     <property name="geometry">
      <rect>
-      <x>1670</x>
+      <x>1680</x>
       <y>380</y>
       <width>221</width>
       <height>351</height>
@@ -621,193 +639,71 @@ border-image: url(:/image/主页_运行参数.png);
 }
 QLabel{
 	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
-}</string>
+}
+</string>
     </property>
-    <widget class="Line" name="line_7">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>100</y>
-       <width>232</width>
-       <height>2</height>
-      </rect>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="topMargin">
+      <number>62</number>
      </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_8">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>140</y>
-       <width>232</width>
-       <height>2</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_16">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>180</y>
-       <width>232</width>
-       <height>2</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_17">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>220</y>
-       <width>232</width>
-       <height>2</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_18">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>260</y>
-       <width>232</width>
-       <height>2</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_19">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>300</y>
-       <width>232</width>
-       <height>2</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_16">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>70</y>
-       <width>131</width>
-       <height>19</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>额定容量(mAh)</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_17">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>110</y>
-       <width>141</width>
-       <height>19</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>剩余电量(mAh)</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_18">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>150</y>
-       <width>111</width>
-       <height>19</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>放电电流(mA)</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_19">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>190</y>
-       <width>121</width>
-       <height>19</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>充电电流(mA)</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_20">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>230</y>
-       <width>121</width>
-       <height>19</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>充电输入(mA)</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_21">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>270</y>
-       <width>141</width>
-       <height>19</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>电池组电压(mV)</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_22">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>310</y>
-       <width>121</width>
-       <height>19</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>电池组温度(℃)</string>
-     </property>
-    </widget>
+     <item row="0" column="0">
+      <widget class="RunningParamForm" name="widget_running_param" native="true">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
-   <widget class="QWidget" name="widget_8" native="true">
+   <widget class="QWidget" name="device_info" native="true">
     <property name="geometry">
      <rect>
-      <x>1670</x>
+      <x>1680</x>
       <y>750</y>
       <width>221</width>
       <height>261</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/image/主页_设备信息.png);</string>
+     <string notr="true">#device_info{
+border-image: url(:/image/主页_设备信息.png);
+}
+QLabel{
+	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
+}
+</string>
     </property>
+    <layout class="QGridLayout" name="gridLayout_3">
+     <property name="topMargin">
+      <number>50</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="DeviceInfoForm" name="widget_device_info" native="true"/>
+     </item>
+    </layout>
    </widget>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BatteryStatusForm</class>
+   <extends>QWidget</extends>
+   <header>batterystatusform.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DeviceInfoForm</class>
+   <extends>QWidget</extends>
+   <header>deviceinfoform.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>RunningParamForm</class>
+   <extends>QWidget</extends>
+   <header>runningparamform.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

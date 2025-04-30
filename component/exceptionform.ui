@@ -160,7 +160,7 @@ QPushButton:hover{
     <string>搜索</string>
    </property>
    <property name="icon">
-    <iconset resource="res.qrc">
+    <iconset>
      <normaloff>:/image/search_50px.png</normaloff>:/image/search_50px.png</iconset>
    </property>
   </widget>
@@ -261,13 +261,11 @@ color: white;
     <string>导出</string>
    </property>
    <property name="icon">
-    <iconset resource="res.qrc">
+    <iconset>
      <normaloff>:/image/file_excel_24px.png</normaloff>:/image/file_excel_24px.png</iconset>
    </property>
   </widget>
  </widget>
- <resources>
-  <include location="res.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
