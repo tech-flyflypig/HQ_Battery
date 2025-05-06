@@ -18,6 +18,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QMenu>
+#include <QSqlError>
 #include "batterylistform.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -26,7 +27,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle("HQ_Battery");
+
+    // 初始化UI
     this->initUI();
+
+    // 初始化数据库并加载电池信息
     this->init_sql();
 }
 
@@ -40,18 +45,18 @@ void MainWindow::initUI()
     // 创建电池网格组件
     batteryGrid = new BatteryGridWidget(ui->widget_center);
 
-    // 设置网格大小和总电池数量
-    batteryGrid->setGridSize(5, 5); // 5行5列
-    batteryGrid->setTotalItems(49); // 设置50个电池
-
+    // 设置网格大小，调整为合适的行列数
+    batteryGrid->setGridSize(7, 6); // 每页最多4行4列
+    
     // 设置底部空间和分页控件自动隐藏
-    batteryGrid->setBottomMargin(30);  // 设置50像素的底部间距
+    batteryGrid->setBottomMargin(30);  // 设置30像素的底部间距
     batteryGrid->setAutoHidePagination(true);  // 当电池数量不足一页时自动隐藏分页控件
 
-    // 将电池网格添加到 widget_center
+    // 将电池网格添加到 widget_center，设置合适的边距让组件不会占满整个区域
     QVBoxLayout *layout = new QVBoxLayout(ui->widget_center);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(batteryGrid);
+    layout->setContentsMargins(20, 20, 20, 20); // 设置上下左右的边距
+    layout->addWidget(batteryGrid, 0, Qt::AlignLeft | Qt::AlignTop); // 设置左上角对齐
+    layout->addStretch(); // 添加弹性空间，确保组件靠上靠左
 
     // 连接电池选择信号
     connect(batteryGrid, &BatteryGridWidget::batterySelected, this, [this](BatteryListForm * battery)
@@ -63,47 +68,6 @@ void MainWindow::initUI()
         battery_info info = battery->getBatteryInfo();
         //ui->statusbar->showMessage(QString("选中电池: %1, 位置: %2").arg(info.power_id).arg(info.site));
     });
-
-    // 为每个电池添加右键菜单
-    for (BatteryListForm *battery : batteryGrid->getBatteryWidgets())
-    {
-        // 添加右键菜单
-        battery->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect(battery, &BatteryListForm::customContextMenuRequested, this, [this, battery](const QPoint & pos)
-        {
-            // 创建右键菜单
-            QMenu menu(this);
-            QAction *startAction = new QAction("开始监控", this);
-            QAction *stopAction = new QAction("停止监控", this);
-            QAction *detailAction = new QAction("详细信息", this);
-
-            // 连接菜单动作
-            connect(startAction, &QAction::triggered, this, [battery]()
-            {
-                battery->startCommunication();
-            });
-
-            connect(stopAction, &QAction::triggered, this, [battery]()
-            {
-                battery->stopCommunication();
-            });
-
-            connect(detailAction, &QAction::triggered, this, [this, battery]()
-            {
-                // 显示详细信息表单
-                // TODO: 实现详细信息显示
-            });
-
-            menu.addAction(startAction);
-            menu.addAction(stopAction);
-            menu.addAction(detailAction);
-
-            // 显示菜单
-            menu.exec(battery->mapToGlobal(pos));
-        });
-
-        connectBatterySignals(battery);
-    }
 }
 
 void MainWindow::connectBatterySignals(BatteryListForm *battery)
@@ -139,79 +103,115 @@ void MainWindow::connectBatterySignals(BatteryListForm *battery)
 
 void MainWindow::init_sql()
 {
-#if 0
-    ui->treeWidget->clear();
-    //添加顶层节点
-    QTreeWidgetItem *topItem1 = new QTreeWidgetItem(ui->treeWidget, 0);
-    topItem1->setText(0, "BMS_1");
-    //ui->treeWidget->addTopLevelItem(topItem1);
-    QTreeWidgetItem *topItem2 = new QTreeWidgetItem(ui->treeWidget, 0);
-    topItem2->setText(0, "BMS_2");
-    //ui->treeWidget->addTopLevelItem(topItem2);
-    //隐藏表头
-    ui->treeWidget->setHeaderHidden(true);
-    //    ui->treeWidget->setIconSize(QSize(40, 40));
-    //设置展开
-    ui->treeWidget->expandAll();
+    // 从数据库中获取电池信息
     QSqlQuery query;
-    QString sql = "select power_id,type,site,port_name,baud_rate,data_bits,stop_bits,parity,x,y from power_source";
+    QString sql = "select power_id, type, site, port_name, baud_rate, data_bits, stop_bits, parity, x, y from power_source";
+
     if(query.exec(sql))
     {
+        // 清除全局存储的电池备份信息
+        myApp::back_up_battery.clear();
+
+        // 用于临时存储从数据库中读取的所有电池信息
+        QList<battery_info> batteryList;
+
         while (query.next())
         {
-            if(query.value(1).toString() == "BMS_1")
+            // 创建电池信息对象
+            battery_info battery;
+            battery.power_id = query.value(0).toString();
+            battery.type = query.value(1).toString();
+            battery.site = query.value(2).toString();
+            battery.port_name = query.value(3).toString();
+            battery.baud_rate = query.value(4).toUInt();
+            battery.data_bits = query.value(5).toUInt();
+            battery.stop_bits = query.value(6).toUInt();
+            battery.parity = query.value(7).toUInt();
+
+            // 获取电池的坐标位置
+            battery.x = query.value(8).toUInt();
+            battery.y = query.value(9).toUInt();
+
+            if(battery.x > 0 && battery.y > 0)
             {
-                QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget->topLevelItem(0), 1);
-                item->setText(0, query.value(2).toString());
-                item->setIcon(0, QIcon(":image/BMS_1.png"));
-                qDebug() << query.value(0).toString();
-                battery_info battery;
-                battery.power_id = query.value(0).toString();
-                battery.type = query.value(1).toString();
-                battery.site = query.value(2).toString();
-                battery.port_name = query.value(3).toString();
-                battery.baud_rate = query.value(4).toUInt();
-                battery.data_bits = query.value(5).toUInt();
-                battery.stop_bits = query.value(6).toUInt();
-                battery.parity = query.value(7).toUInt();
-                if(query.value(8).toUInt() > 0 && query.value(9).toUInt() > 0)
-                {
-                    QPoint pos = QPoint(query.value(8).toUInt(), query.value(9).toUInt());
-                    battery.pos = pos;
-                    myApp::back_up_battery.append(battery);
-                }
-                item->setData(0, Qt::UserRole, QVariant::fromValue(battery));
+                QPoint pos = QPoint(battery.x, battery.y);
+                battery.pos = pos;
             }
-            if(query.value(1).toString() == "BMS_2")
-            {
-                QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget->topLevelItem(1));
-                item->setText(0, query.value(2).toString());
-                item->setIcon(0, QIcon(":image/BMS_2.png"));
-                qDebug() << query.value(0).toString();
-                battery_info battery;
-                battery.power_id = query.value(0).toString();
-                battery.type = query.value(1).toString();
-                battery.site = query.value(2).toString();
-                battery.port_name = query.value(3).toString();
-                battery.baud_rate = query.value(4).toUInt();
-                battery.data_bits = query.value(5).toUInt();
-                battery.stop_bits = query.value(6).toUInt();
-                battery.parity = query.value(7).toUInt();
-                if(query.value(8).toUInt() > 0 && query.value(9).toUInt() > 0)
-                {
-                    QPoint pos = QPoint(query.value(8).toUInt(), query.value(9).toUInt());
-                    battery.pos = pos;
-                    myApp::back_up_battery.append(battery);
-                }
-                item->setData(0, Qt::UserRole, QVariant::fromValue(battery));
-            }
+
+            // 设置默认的标称参数值
+            battery.bcdy = 60.0;    // 标称电压默认值
+            battery.bcdl = 60.0;    // 标称电流默认值
+            battery.bcwd = 50.0;    // 标称温度默认值
+            battery.bcsysj = 2500.0;  // 标称使用时间默认值
+
+            // 将电池信息添加到列表
+            batteryList.append(battery);
+
+            // 添加到全局备份
+            myApp::back_up_battery.append(battery);
         }
+
+        // 设置电池网格的总数量，根据数据库中读取到的电池数量来设置
+        batteryGrid->setTotalItems(batteryList.size());
+
+        // 更新每个电池控件的信息
+        QList<BatteryListForm *> batteryWidgets = batteryGrid->getBatteryWidgets();
+        for (int i = 0; i < batteryList.size() && i < batteryWidgets.size(); i++)
+        {
+            batteryWidgets[i]->setBatteryInfo(batteryList[i]);
+        }
+
+        // 为每个电池添加右键菜单，在这里添加而不是在initUI中，这样只为实际从数据库读取的电池添加
+        for (int i = 0; i < batteryList.size() && i < batteryWidgets.size(); i++)
+        {
+            BatteryListForm *battery = batteryWidgets[i];
+
+            // 添加右键菜单
+            battery->setContextMenuPolicy(Qt::CustomContextMenu);
+            connect(battery, &BatteryListForm::customContextMenuRequested, this, [this, battery](const QPoint & pos)
+            {
+                // 创建右键菜单
+                QMenu menu(this);
+                QAction *startAction = new QAction("开始监控", this);
+                QAction *stopAction = new QAction("停止监控", this);
+                QAction *detailAction = new QAction("详细信息", this);
+
+                // 连接菜单动作
+                connect(startAction, &QAction::triggered, this, [battery]()
+                {
+                    battery->startCommunication();
+                });
+
+                connect(stopAction, &QAction::triggered, this, [battery]()
+                {
+                    battery->stopCommunication();
+                });
+
+                connect(detailAction, &QAction::triggered, this, [this, battery]()
+                {
+                    // 显示详细信息表单
+                    // TODO: 实现详细信息显示
+                });
+
+                menu.addAction(startAction);
+                menu.addAction(stopAction);
+                menu.addAction(detailAction);
+
+                // 显示菜单
+                menu.exec(battery->mapToGlobal(pos));
+            });
+
+            connectBatterySignals(battery);
+        }
+
+        // 刷新布局
+        batteryGrid->refreshLayout();
     }
     else
     {
-        this->statusBar()->setToolTip("数据库未打开");
+        qDebug() << "读取数据库失败: " << query.lastError().text();
+        qDebug() << "数据库读取错误";
     }
-#endif
 }
 
 void MainWindow::cfd_record_action()

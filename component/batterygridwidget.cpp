@@ -32,8 +32,13 @@ void BatteryGridWidget::setupUI()
     // 创建容器和网格布局
     containerWidget = new QWidget(this);
     gridLayout = new QGridLayout(containerWidget);
-    gridLayout->setSpacing(20);
-    gridLayout->setContentsMargins(20, 20, 20, 20);
+
+    // 调整网格间距，使电池显示更紧凑
+    gridLayout->setSpacing(10);
+    gridLayout->setContentsMargins(10, 10, 10, 10);
+
+    // 设置网格布局的对齐方式为左上角对齐，而不是默认的居中对齐
+    gridLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     // 创建分页控制
     pageControlWidget = new QWidget(this);
@@ -50,9 +55,10 @@ void BatteryGridWidget::setupUI()
     pageControlLayout->addStretch();
 
     // 添加布局到主布局
-    mainLayout->addSpacing(20);
-    mainLayout->addWidget(containerWidget);
+    mainLayout->addSpacing(10);
+    mainLayout->addWidget(containerWidget, 0, Qt::AlignLeft | Qt::AlignTop);
     mainLayout->addWidget(pageControlWidget);
+    mainLayout->addStretch(); // 添加弹性空间，确保内容靠上靠左
 
     // 默认添加底部空白区域
     mainLayout->addSpacing(bottomMargin);
@@ -97,6 +103,10 @@ void BatteryGridWidget::setTotalItems(int count)
     for (int i = 0; i < totalItems; ++i)
     {
         BatteryListForm *batteryWidget = new BatteryListForm(containerWidget);
+
+        // 设置电池组件的固定大小，防止变得过大
+        batteryWidget->setFixedSize(220, 110); // 设置更紧凑的宽度和高度
+
         batteryWidget->setVisible(false);
         batteryWidgets.append(batteryWidget);
 
@@ -205,24 +215,29 @@ void BatteryGridWidget::onBatteryClicked(BatteryListForm *battery)
 
 void BatteryGridWidget::updatePage()
 {
-    // 先清除所有控件
-    for (auto widget : batteryWidgets)
+    // 先清除网格布局中的所有组件
+    QLayoutItem *child;
+    while ((child = gridLayout->takeAt(0)) != nullptr)
     {
-        widget->setVisible(false);
-        widget->setParent(nullptr);
+        delete child;
     }
 
     // 显示当前页面的控件
     int startIdx = currentPage * itemsPerPage;
-    for (int i = 0; i < itemsPerPage && startIdx + i < batteryWidgets.size(); ++i)
+    int itemsOnPage = qMin(itemsPerPage, totalItems - startIdx);
+
+    // 简单地从左到右、从上到下布局
+    for (int i = 0; i < itemsOnPage; ++i)
     {
         int row = i / cols;
         int col = i % cols;
 
         BatteryListForm *widget = batteryWidgets[startIdx + i];
+
+        // 添加到布局，并指定左上角对齐方式
         widget->setParent(containerWidget);
         widget->setVisible(true);
-        gridLayout->addWidget(widget, row, col);
+        gridLayout->addWidget(widget, row, col, 1, 1, Qt::AlignLeft | Qt::AlignTop);
     }
 
     // 更新页面信息

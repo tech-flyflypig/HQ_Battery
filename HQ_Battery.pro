@@ -33,13 +33,16 @@ SOURCES += \
     component/adduserform.cpp \
     component/batterylistform.cpp \
     component/batterygridwidget.cpp \
+    component/batterynumberform.cpp \
     component/batterystatusform.cpp \
     component/bms1infoshowform.cpp \
     component/cfdrecordform.cpp \
     component/deviceinfoform.cpp \
     component/exceptionform.cpp \
+    component/faultalarmform.cpp \
     component/layoutbatterywidget.cpp \
     component/mytreewidget.cpp \
+    component/protectstatusform.cpp \
     component/queryform.cpp \
     component/revisepowerform.cpp \
     component/runningparamform.cpp \
@@ -58,13 +61,16 @@ HEADERS += \
     component/adduserform.h \
     component/batterylistform.h \
     component/batterygridwidget.h \
+    component/batterynumberform.h \
     component/batterystatusform.h \
     component/bms1infoshowform.h \
     component/cfdrecordform.h \
     component/deviceinfoform.h \
     component/exceptionform.h \
+    component/faultalarmform.h \
     component/layoutbatterywidget.h \
     component/mytreewidget.h \
+    component/protectstatusform.h \
     component/queryform.h \
     component/revisepowerform.h \
     component/runningparamform.h \
@@ -85,11 +91,14 @@ FORMS += \
     component/adduser.ui \
     component/adduserform.ui \
     component/batterylistform.ui \
+    component/batterynumberform.ui \
     component/batterystatusform.ui \
     component/bms1infoshowform.ui \
     component/cfdrecordform.ui \
     component/deviceinfoform.ui \
     component/exceptionform.ui \
+    component/faultalarmform.ui \
+    component/protectstatusform.ui \
     component/queryform.ui \
     component/revisepowerform.ui \
     component/runningparamform.ui \
