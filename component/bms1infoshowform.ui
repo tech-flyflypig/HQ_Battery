@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1132</width>
-    <height>530</height>
+    <width>1227</width>
+    <height>696</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,330 +18,71 @@
 	background-color: qlineargradient(spread:reflect, x1:0, y1:0.46, x2:1, y2:0.483, stop:0 rgba(7, 13, 40, 255), stop:0.497207 rgba(13, 30, 87, 255), stop:1 rgba(7, 13, 40, 255));
 }
 #left_top_widget{	
-	background-color: rgb(5, 15, 74);
+	border-image: url(:/image/详情_主.png);
 }
 Line{
 	background-color: rgb(29, 63, 114);
 }
-#right_top_widget{
-	background-color: rgb(11, 30, 72);
+#widget_templine{
+	border-image: url(:/image/详情_实时温度曲线.png);
 }
-#right_bottom_widget{
-	background-color: rgb(11, 30, 72);
+#widget_voltageline{
+	border-image: url(:/image/详情_实时电压曲线.png);
 }
 #widget_protection{
-	background-color: rgb(11, 30, 72);
+	border-image: url(:/image/详情_保护状态.png);
 }
 #widget_alarm{
-	background-color: rgb(11, 30, 72);
+	border-image: url(:/image/详情_保护失效状态故障报警.png);
 }</string>
   </property>
   <widget class="QWidget" name="left_top_widget" native="true">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>501</width>
-     <height>241</height>
-    </rect>
-   </property>
-   <widget class="QFrame" name="frame">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>110</y>
-      <width>161</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>iIP地址</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>192.168.0.83</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>端口</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>10123</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>地址码</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>01</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>备注</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>无</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="widget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>300</x>
-      <y>10</y>
-      <width>162</width>
-      <height>213</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_9">
-       <property name="text">
-        <string>额定容量（mAh）</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="label_ratedCapacity">
-       <property name="text">
-        <string>8000</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="2">
-      <widget class="Line" name="line">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_12">
-       <property name="text">
-        <string>剩余电量（mAh）</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="label_remainCapacity">
-       <property name="text">
-        <string>7993</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="Line" name="line_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_14">
-       <property name="text">
-        <string>放电电流（mA）</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QLabel" name="label_current">
-       <property name="text">
-        <string>0</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0" colspan="2">
-      <widget class="Line" name="line_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_16">
-       <property name="text">
-        <string>充电电流（mA）</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QLabel" name="label_current_f">
-       <property name="text">
-        <string>0</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0" colspan="2">
-      <widget class="Line" name="line_4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_18">
-       <property name="text">
-        <string>充电输入（mA）</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1">
-      <widget class="QLabel" name="label_17">
-       <property name="text">
-        <string>35134</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0" colspan="2">
-      <widget class="Line" name="line_5">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0">
-      <widget class="QLabel" name="label_20">
-       <property name="text">
-        <string>电池组电压（mV）</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <widget class="QLabel" name="label_voltage">
-       <property name="text">
-        <string>27531</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="0" colspan="2">
-      <widget class="Line" name="line_6">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="0">
-      <widget class="QLabel" name="label_21">
-       <property name="text">
-        <string>电池组温度（℃）</string>
-       </property>
-      </widget>
-     </item>
-     <item row="12" column="1">
-      <widget class="QLabel" name="label_tempMax">
-       <property name="text">
-        <string>26.5</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QWidget" name="right_top_widget" native="true">
-   <property name="geometry">
-    <rect>
-     <x>540</x>
-     <y>10</y>
-     <width>551</width>
-     <height>241</height>
+     <x>20</x>
+     <y>20</y>
+     <width>621</width>
+     <height>321</height>
     </rect>
    </property>
   </widget>
-  <widget class="QWidget" name="right_bottom_widget" native="true">
+  <widget class="QWidget" name="widget_templine" native="true">
    <property name="geometry">
     <rect>
-     <x>540</x>
-     <y>270</y>
+     <x>660</x>
+     <y>20</y>
      <width>551</width>
-     <height>241</height>
+     <height>321</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QWidget" name="widget_voltageline" native="true">
+   <property name="geometry">
+    <rect>
+     <x>660</x>
+     <y>360</y>
+     <width>551</width>
+     <height>321</height>
     </rect>
    </property>
   </widget>
   <widget class="QWidget" name="widget_protection" native="true">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>270</y>
-     <width>241</width>
-     <height>241</height>
+     <x>20</x>
+     <y>360</y>
+     <width>290</width>
+     <height>321</height>
     </rect>
    </property>
   </widget>
   <widget class="QWidget" name="widget_alarm" native="true">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>270</y>
-     <width>241</width>
-     <height>241</height>
+     <x>350</x>
+     <y>360</y>
+     <width>290</width>
+     <height>321</height>
     </rect>
    </property>
   </widget>

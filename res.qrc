@@ -46,5 +46,11 @@
         <file>image/运行.png</file>
         <file>image/单个电池模块背景.png</file>
         <file>image/单个电池模块背景_选中.png</file>
+        <file>image/详情_保护失效状态故障报警.png</file>
+        <file>image/详情_保护状态.png</file>
+        <file>image/详情_实时电压曲线.png</file>
+        <file>image/详情_实时温度曲线.png</file>
+        <file>image/详情_主.png</file>
+        <file>image/详情_信息介绍.png</file>
     </qresource>
 </RCC>
