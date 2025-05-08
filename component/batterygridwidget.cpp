@@ -115,6 +115,12 @@ void BatteryGridWidget::setTotalItems(int count)
         {
             onBatteryClicked(batteryWidget);
         });
+        
+        // 连接双击信号
+        connect(batteryWidget, &BatteryListForm::doubleclicked, this, [this, batteryWidget](BatteryListForm* battery)
+        {
+            onBatteryDoubleClicked(battery);
+        });
     }
 
     // 计算总页数
@@ -211,6 +217,15 @@ void BatteryGridWidget::onBatteryClicked(BatteryListForm *battery)
 
     // 发送信号
     emit batterySelected(battery);
+}
+
+void BatteryGridWidget::onBatteryDoubleClicked(BatteryListForm *battery)
+{
+    // 先确保电池被选中
+    onBatteryClicked(battery);
+    
+    // 发送双击信号
+    emit batteryDoubleClicked(battery);
 }
 
 void BatteryGridWidget::updatePage()

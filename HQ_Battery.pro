@@ -1,4 +1,4 @@
-QT       += core gui serialport sql xlsx
+QT       += core gui serialport sql xlsx charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

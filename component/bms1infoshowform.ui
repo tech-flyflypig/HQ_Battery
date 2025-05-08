@@ -17,9 +17,7 @@
    <string notr="true">QWidget #BMS1InfoShowForm{
 	background-color: qlineargradient(spread:reflect, x1:0, y1:0.46, x2:1, y2:0.483, stop:0 rgba(7, 13, 40, 255), stop:0.497207 rgba(13, 30, 87, 255), stop:1 rgba(7, 13, 40, 255));
 }
-#left_top_widget{	
-	border-image: url(:/image/详情_主.png);
-}
+
 Line{
 	background-color: rgb(29, 63, 114);
 }
@@ -36,7 +34,7 @@ Line{
 	border-image: url(:/image/详情_保护失效状态故障报警.png);
 }</string>
   </property>
-  <widget class="QWidget" name="left_top_widget" native="true">
+  <widget class="BatteryDetailMainForm" name="left_top_widget" native="true">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -87,6 +85,14 @@ Line{
    </property>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>BatteryDetailMainForm</class>
+   <extends>QWidget</extends>
+   <header>batterydetailmainform.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

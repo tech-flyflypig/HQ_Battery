@@ -42,6 +42,8 @@ public:
 signals:
     // 当电池选择改变时发出的信号
     void batterySelected(BatteryListForm* battery);
+    // 当电池被双击时发出的信号
+    void batteryDoubleClicked(BatteryListForm* battery);
 
 private slots:
     // 处理页面切换
@@ -50,6 +52,8 @@ private slots:
     
     // 处理电池选择
     void onBatteryClicked(BatteryListForm* battery);
+    // 处理电池双击
+    void onBatteryDoubleClicked(BatteryListForm* battery);
 
 private:
     // 更新当前页面显示

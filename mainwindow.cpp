@@ -58,6 +58,15 @@ void MainWindow::initUI()
     layout->addWidget(batteryGrid, 0, Qt::AlignLeft | Qt::AlignTop); // 设置左上角对齐
     layout->addStretch(); // 添加弹性空间，确保组件靠上靠左
 
+    // 创建电池详情页面
+    batteryDetailForm = new BatteryDetailMainForm();
+    ui->stackedWidget->addWidget(batteryDetailForm);
+    
+    // 连接返回信号
+    connect(batteryDetailForm, &BatteryDetailMainForm::backToMain, this, [this]() {
+        ui->stackedWidget->setCurrentIndex(0);  // 切换回主页
+    });
+
     // 连接电池选择信号
     connect(batteryGrid, &BatteryGridWidget::batterySelected, this, [this](BatteryListForm * battery)
     {
@@ -67,6 +76,18 @@ void MainWindow::initUI()
         // 显示选中电池的详细信息
         battery_info info = battery->getBatteryInfo();
         //ui->statusbar->showMessage(QString("选中电池: %1, 位置: %2").arg(info.power_id).arg(info.site));
+    });
+    
+    // 连接电池双击信号
+    connect(batteryGrid, &BatteryGridWidget::batteryDoubleClicked, this, [this](BatteryListForm * battery)
+    {
+        qDebug() << "Battery double clicked";
+        
+        // 设置电池详情
+        batteryDetailForm->setBatteryInfo(battery);
+        
+        // 切换到详情页
+        ui->stackedWidget->setCurrentIndex(1);  // 详情页索引为1
     });
 }
 

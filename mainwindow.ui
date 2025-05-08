@@ -45,141 +45,159 @@ QFrame[frameShape=&quot;4&quot;] {
      <string notr="true">border-image: url(:/image/top_title.png);</string>
     </property>
    </widget>
-   <widget class="QWidget" name="widget_center" native="true">
+   <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
      <rect>
-      <x>250</x>
+      <x>10</x>
       <y>90</y>
-      <width>1401</width>
-      <height>921</height>
+      <width>1911</width>
+      <height>951</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">#widget_center{
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="page">
+     <widget class="BatteryNumberForm" name="widget_battery_num" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>201</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="ProtectStatusForm" name="widget_protect" native="true">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>340</y>
+        <width>191</width>
+        <height>291</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="FaultAlarmForm" name="widget_fault_alarm" native="true">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>670</y>
+        <width>201</width>
+        <height>261</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QWidget" name="widget_center" native="true">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>0</y>
+        <width>1401</width>
+        <height>921</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">#widget_center{
 border-image: url(:/image/主页_中间.png);
 }
 QLabel{
 	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
 }</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="widget_battery_status" native="true">
-    <property name="geometry">
-     <rect>
-      <x>1680</x>
-      <y>90</y>
-      <width>221</width>
-      <height>271</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">#widget_battery_status{
-border-image: url(:/image/主页_电源.png);
-}</string>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="leftMargin">
-      <number>25</number>
-     </property>
-     <property name="topMargin">
-      <number>50</number>
-     </property>
-     <property name="rightMargin">
-      <number>25</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="BatteryStatusForm" name="widget" native="true"/>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="run_param" native="true">
-    <property name="geometry">
-     <rect>
-      <x>1680</x>
-      <y>380</y>
-      <width>221</width>
-      <height>351</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">#run_param{
-border-image: url(:/image/主页_运行参数.png);
-}
-QLabel{
-	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
-}
-</string>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_2">
-     <property name="topMargin">
-      <number>62</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="RunningParamForm" name="widget_running_param" native="true">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="device_info" native="true">
-    <property name="geometry">
-     <rect>
-      <x>1680</x>
-      <y>750</y>
-      <width>221</width>
-      <height>261</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">#device_info{
+      </property>
+     </widget>
+     <widget class="QWidget" name="device_info" native="true">
+      <property name="geometry">
+       <rect>
+        <x>1670</x>
+        <y>690</y>
+        <width>221</width>
+        <height>261</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">#device_info{
 border-image: url(:/image/主页_设备信息.png);
 }
 QLabel{
 	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
 }
 </string>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_3">
-     <property name="topMargin">
-      <number>50</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="DeviceInfoForm" name="widget_device_info" native="true"/>
-     </item>
-    </layout>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <property name="topMargin">
+        <number>50</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="DeviceInfoForm" name="widget_device_info" native="true"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="run_param" native="true">
+      <property name="geometry">
+       <rect>
+        <x>1670</x>
+        <y>300</y>
+        <width>221</width>
+        <height>351</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">#run_param{
+border-image: url(:/image/主页_运行参数.png);
+}
+QLabel{
+	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
+}
+</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <property name="topMargin">
+        <number>62</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="RunningParamForm" name="widget_running_param" native="true">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="widget_battery_status" native="true">
+      <property name="geometry">
+       <rect>
+        <x>1670</x>
+        <y>10</y>
+        <width>221</width>
+        <height>271</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">#widget_battery_status{
+border-image: url(:/image/主页_电源.png);
+}</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="leftMargin">
+        <number>25</number>
+       </property>
+       <property name="topMargin">
+        <number>50</number>
+       </property>
+       <property name="rightMargin">
+        <number>25</number>
+       </property>
+       <item row="0" column="0">
+        <widget class="BatteryStatusForm" name="widget" native="true"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_2"/>
    </widget>
-   <widget class="BatteryNumberForm" name="widget_battery_num" native="true">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>110</y>
-      <width>201</width>
-      <height>301</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="ProtectStatusForm" name="widget_protect" native="true">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>420</y>
-      <width>191</width>
-      <height>291</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="FaultAlarmForm" name="widget_fault_alarm" native="true">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>740</y>
-      <width>201</width>
-      <height>261</height>
-     </rect>
-    </property>
-   </widget>
+   <zorder>stackedWidget</zorder>
+   <zorder>widget_2</zorder>
   </widget>
  </widget>
  <customwidgets>

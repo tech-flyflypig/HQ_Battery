@@ -26,9 +26,13 @@ public:
     // 开始/停止串口通信
     void startCommunication();
     void stopCommunication();
+    
+    // 获取最新的电池数据
+    BMS_1 getLastData() const { return m_lastData; }
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
 
 private:
@@ -42,6 +46,7 @@ private:
 signals:
     void selectedChanged(bool);
     void clicked(BatteryListForm *);
+    void doubleclicked(BatteryListForm *);
     void communicationError(BatteryListForm *, const QString &);
     void communicationTimeout(BatteryListForm *);
     void dataReceived(BatteryListForm *, const BMS_1 &);

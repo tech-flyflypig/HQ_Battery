@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "component/batterygridwidget.h"
+#include "component/batterydetailmainform.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -37,5 +38,6 @@ private:
     Ui::MainWindow *ui;
     QMenu *menu_list, *menu_about;
     BatteryGridWidget *batteryGrid;
+    BatteryDetailMainForm *batteryDetailForm;
 };
 #endif // MAINWINDOW_H 

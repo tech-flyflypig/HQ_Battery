@@ -159,6 +159,18 @@ void BatteryListForm::mousePressEvent(QMouseEvent *event)
     QWidget::mousePressEvent(event);
 }
 
+void BatteryListForm::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        // 设置为选中状态
+        setSelected(true);
+        // 发出双击信号，传递自身指针
+        emit doubleclicked(this);
+    }
+    QWidget::mouseDoubleClickEvent(event);
+}
+
 // 处理电池数据接收
 void BatteryListForm::onBatteryDataReceived(const BMS_1 &data)
 {

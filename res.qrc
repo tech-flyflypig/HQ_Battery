@@ -11,7 +11,6 @@
         <file>image/normal.png</file>
         <file>image/normal_hover.png</file>
         <file>image/battery.png</file>
-        <file>image/logo_battery.png</file>
         <file>image/icon_battery.png</file>
         <file>image/BMS_1.png</file>
         <file>image/BMS_2.png</file>
@@ -52,5 +51,7 @@
         <file>image/详情_实时温度曲线.png</file>
         <file>image/详情_主.png</file>
         <file>image/详情_信息介绍.png</file>
+        <file>image/底座.png</file>
+        <file>image/logo_battery.png</file>
     </qresource>
 </RCC>
