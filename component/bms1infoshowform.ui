@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1283</width>
-    <height>696</height>
+    <width>1920</width>
+    <height>910</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,40 +27,63 @@ Line{
 #widget_voltageline{
 	border-image: url(:/image/详情_实时电压曲线.png);
 }
-#widget_protection{
+#widget_protection{	
 	border-image: url(:/image/详情_保护状态.png);
 }
 #widget_alarm{
 	border-image: url(:/image/详情_保护失效状态故障报警.png);
-}</string>
+}
+QRadioButton {
+   color: white;
+    spacing: 8px;
+	font: 11pt &quot;Microsoft YaHei UI&quot;;
+}
+QRadioButton:checked {
+   color:#f6e92f;
+}
+QRadioButton::indicator {
+     width: 16px;
+      height: 16px;
+      border-radius: 8px;
+}
+
+QRadioButton::indicator:unchecked {
+      border: 2px solid #0a5aa5;
+}
+
+QRadioButton::indicator:checked {
+     border: 2px solid #f6e92f;
+     background-color: #f6e92f;  
+}
+</string>
   </property>
   <widget class="BatteryDetailMainForm" name="left_top_widget" native="true">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>20</y>
-     <width>651</width>
-     <height>321</height>
+     <y>0</y>
+     <width>911</width>
+     <height>421</height>
     </rect>
    </property>
   </widget>
   <widget class="QWidget" name="widget_templine" native="true">
    <property name="geometry">
     <rect>
-     <x>720</x>
-     <y>20</y>
-     <width>551</width>
-     <height>321</height>
+     <x>960</x>
+     <y>0</y>
+     <width>911</width>
+     <height>431</height>
     </rect>
    </property>
   </widget>
   <widget class="QWidget" name="widget_voltageline" native="true">
    <property name="geometry">
     <rect>
-     <x>710</x>
-     <y>360</y>
-     <width>551</width>
-     <height>321</height>
+     <x>960</x>
+     <y>450</y>
+     <width>921</width>
+     <height>431</height>
     </rect>
    </property>
   </widget>
@@ -68,21 +91,369 @@ Line{
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>360</y>
-     <width>290</width>
-     <height>321</height>
+     <y>460</y>
+     <width>431</width>
+     <height>421</height>
     </rect>
    </property>
+   <layout class="QFormLayout" name="formLayout">
+    <property name="horizontalSpacing">
+     <number>75</number>
+    </property>
+    <property name="verticalSpacing">
+     <number>39</number>
+    </property>
+    <property name="leftMargin">
+     <number>51</number>
+    </property>
+    <property name="topMargin">
+     <number>96</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QRadioButton" name="radioButton_OverchargeVoltage_p">
+      <property name="text">
+       <string>过充电压</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QRadioButton" name="radioButton_OverdischargeVoltage_p">
+      <property name="text">
+       <string>过放电压</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QRadioButton" name="radioButton_ChargingOvercurrent_p">
+      <property name="text">
+       <string>充电过流</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QRadioButton" name="radioButton_DischargingOvercurrent_p">
+      <property name="text">
+       <string>放电过流</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QRadioButton" name="radioButton_CellHighTemp_p">
+      <property name="text">
+       <string>电芯高温保护</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QRadioButton" name="radioButton_CellLowTemp_p">
+      <property name="text">
+       <string>电芯低温保护</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QRadioButton" name="radioButton_EnvHighTemp_p">
+      <property name="text">
+       <string>环境高温保护</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QRadioButton" name="radioButton_EnvLowTemp_p">
+      <property name="text">
+       <string>环境低温保护</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QRadioButton" name="radioButton_OutputShortCircuit_p">
+      <property name="text">
+       <string>输出短路</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QRadioButton" name="radioButton_PowerTubeHighTemp_p">
+      <property name="text">
+       <string>功率管高温保护</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QWidget" name="widget_alarm" native="true">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>360</y>
-     <width>290</width>
-     <height>321</height>
+     <x>490</x>
+     <y>460</y>
+     <width>431</width>
+     <height>421</height>
     </rect>
    </property>
+   <layout class="QFormLayout" name="formLayout_2">
+    <property name="horizontalSpacing">
+     <number>75</number>
+    </property>
+    <property name="verticalSpacing">
+     <number>39</number>
+    </property>
+    <property name="leftMargin">
+     <number>51</number>
+    </property>
+    <property name="topMargin">
+     <number>96</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QRadioButton" name="radioButton_OverchargeVoltage">
+      <property name="text">
+       <string>过充电压</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QRadioButton" name="radioButton_OverdischargeVoltage">
+      <property name="text">
+       <string>过放电压</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QRadioButton" name="radioButton_ChargingOvercurrent">
+      <property name="text">
+       <string>充电过流</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QRadioButton" name="radioButton_DischargingOvercurrent">
+      <property name="text">
+       <string>放电过流</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QRadioButton" name="radioButton_CellHighTemp">
+      <property name="text">
+       <string>电芯高温</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QRadioButton" name="radioButton_CellLowTemp">
+      <property name="text">
+       <string>电芯低温</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QRadioButton" name="radioButton_EnvHighTemp">
+      <property name="text">
+       <string>环境高温</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QRadioButton" name="radioButton_EnvLowTemp">
+      <property name="text">
+       <string>环境低温</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QRadioButton" name="radioButton_BatteryLevel">
+      <property name="text">
+       <string>电量告警</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QRadioButton" name="radioButton_PowerTubeHighTemp">
+      <property name="text">
+       <string>功率管高温</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <customwidgets>

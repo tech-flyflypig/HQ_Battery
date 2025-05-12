@@ -91,7 +91,7 @@ QFrame[frameShape=&quot;4&quot;] {
      <widget class="QWidget" name="widget_center" native="true">
       <property name="geometry">
        <rect>
-        <x>230</x>
+        <x>250</x>
         <y>0</y>
         <width>1401</width>
         <height>921</height>

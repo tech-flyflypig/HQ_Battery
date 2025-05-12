@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>572</width>
-    <height>316</height>
+    <width>911</width>
+    <height>411</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,21 +16,31 @@
   <property name="styleSheet">
    <string notr="true">BatteryDetailMainForm{
 border-image: url(:/image/详情_主.png);
-}</string>
+}
+QLabel{
+	font: 11pt &quot;Microsoft YaHei UI&quot;;
+}
+#btn_back{
+	background-color: rgb(0, 128, 187);
+}
+#label_soc{
+	color: rgb(85, 255, 255);
+	font: 700 12pt &quot;Microsoft YaHei UI&quot;;
+}
+</string>
   </property>
   <widget class="QFrame" name="detailframe">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>200</y>
-     <width>161</width>
-     <height>91</height>
+     <y>270</y>
+     <width>191</width>
+     <height>121</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">#detailframe{
-border-image: url(:/image/详情_信息介绍.png);
-	background-color: rgba(20, 26, 68, 50);
+	border-image: url(:/image/详情_信息介绍.png);
 }</string>
    </property>
    <property name="frameShape">
@@ -113,10 +123,10 @@ border-image: url(:/image/详情_信息介绍.png);
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>20</y>
-     <width>161</width>
-     <height>213</height>
+     <x>670</x>
+     <y>10</y>
+     <width>211</width>
+     <height>301</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -286,10 +296,10 @@ border-image: url(:/image/详情_信息介绍.png);
   <widget class="QLabel" name="label_10">
    <property name="geometry">
     <rect>
-     <x>30</x>
+     <x>40</x>
      <y>40</y>
-     <width>131</width>
-     <height>151</height>
+     <width>181</width>
+     <height>191</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -302,10 +312,10 @@ border-image: url(:/image/详情_信息介绍.png);
   <widget class="QLabel" name="label_11">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>20</y>
-     <width>171</width>
-     <height>181</height>
+     <x>360</x>
+     <y>40</y>
+     <width>221</width>
+     <height>241</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -318,10 +328,10 @@ border-image: url(:/image/详情_信息介绍.png);
   <widget class="QWidget" name="widget_2" native="true">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>220</y>
-     <width>291</width>
-     <height>61</height>
+     <x>230</x>
+     <y>270</y>
+     <width>511</width>
+     <height>121</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -331,8 +341,8 @@ border-image: url(:/image/详情_信息介绍.png);
   <widget class="QPushButton" name="btn_back">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>250</y>
+     <x>800</x>
+     <y>340</y>
      <width>80</width>
      <height>31</height>
     </rect>
@@ -341,12 +351,29 @@ border-image: url(:/image/详情_信息介绍.png);
     <string>返回</string>
    </property>
   </widget>
+  <widget class="QLabel" name="label_soc">
+   <property name="geometry">
+    <rect>
+     <x>460</x>
+     <y>300</y>
+     <width>53</width>
+     <height>15</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>99%</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
   <zorder>widget_2</zorder>
   <zorder>detailframe</zorder>
   <zorder>widget</zorder>
   <zorder>label_10</zorder>
   <zorder>label_11</zorder>
   <zorder>btn_back</zorder>
+  <zorder>label_soc</zorder>
  </widget>
  <resources/>
  <connections/>
