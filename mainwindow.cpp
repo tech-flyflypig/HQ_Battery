@@ -58,15 +58,45 @@ void MainWindow::initUI()
     layout->addWidget(batteryGrid, 0, Qt::AlignLeft | Qt::AlignTop); // 设置左上角对齐
     layout->addStretch(); // 添加弹性空间，确保组件靠上靠左
 
+    // 创建返回按钮，放在与Logo相同的位置
+    m_backButton = new QPushButton(ui->widget_2);
+    m_backButton->setText("返回");
+    m_backButton->setStyleSheet("QPushButton { background-color: rgb(0, 128, 187); color: white; font: bold 12pt 'Microsoft YaHei UI'; }");
+    m_backButton->setFixedSize(80, 30);
+
+    // 初始显示Logo，隐藏返回按钮
+    m_backButton->hide();
+    ui->label_logo->show();
+
+    // 找到widget_2当前的布局并添加返回按钮
+    // 注意：返回按钮和Logo占用相同位置
+    if (ui->widget_2->layout())
+    {
+        // 已有布局，在原布局中添加返回按钮
+        ui->widget_2->layout()->addWidget(m_backButton);
+    }
+    else
+    {
+        // 无布局，创建新布局
+        QHBoxLayout *headerLayout = new QHBoxLayout(ui->widget_2);
+        headerLayout->setContentsMargins(10, 5, 10, 5);
+        headerLayout->addWidget(m_backButton);
+        headerLayout->addStretch();
+    }
+
+    // 确保返回按钮与Logo对齐
+    QRect logoRect = ui->label_logo->geometry();
+    m_backButton->setGeometry(logoRect);
+
+    // 连接返回按钮信号
+    connect(m_backButton, &QPushButton::clicked, this, &MainWindow::onBackButtonClicked);
+
     // 创建电池详情页面
     bms1InfoShowForm = new BMS1InfoShowForm();
     ui->stackedWidget->addWidget(bms1InfoShowForm);
 
     // 连接返回信号
-    connect(bms1InfoShowForm, &BMS1InfoShowForm::backToMain, this, [this]()
-    {
-        ui->stackedWidget->setCurrentIndex(0);  // 切换回主页
-    });
+    connect(bms1InfoShowForm, &BMS1InfoShowForm::backToMain, this, &MainWindow::switchToMainView);
 
     // 连接电池选择信号
     connect(batteryGrid, &BatteryGridWidget::batterySelected, this, [this](BatteryListForm * battery)
@@ -89,6 +119,9 @@ void MainWindow::initUI()
 
         // 切换到详情页
         ui->stackedWidget->setCurrentIndex(1);  // 详情页索引为1
+
+        // 显示返回按钮，隐藏logo
+        updateWidget2Content(true);
     });
 }
 
@@ -276,5 +309,36 @@ void MainWindow::on_btn_about_clicked()
     menu_about->move(QCursor::pos());
     menu_about->show();
 #endif
+}
+
+void MainWindow::updateWidget2Content(bool showBackButton)
+{
+    if (showBackButton)
+    {
+        // 显示返回按钮，隐藏Logo
+        m_backButton->show();
+        ui->label_logo->hide();
+    }
+    else
+    {
+        // 隐藏返回按钮，显示Logo
+        m_backButton->hide();
+        ui->label_logo->show();
+    }
+}
+
+void MainWindow::onBackButtonClicked()
+{
+    // 调用BMS1InfoShowForm的触发返回方法，确保数据正确清理
+    bms1InfoShowForm->triggerBackToMain();
+}
+
+void MainWindow::switchToMainView()
+{
+    // 切换到主页
+    ui->stackedWidget->setCurrentIndex(0);
+
+    // 更新widget_2，隐藏返回按钮
+    updateWidget2Content(false);
 }
 

@@ -53,5 +53,6 @@
         <file>image/详情_信息介绍.png</file>
         <file>image/底座.png</file>
         <file>image/logo_battery.png</file>
+        <file>image/logo.png</file>
     </qresource>
 </RCC>

@@ -42,8 +42,43 @@ QFrame[frameShape=&quot;4&quot;] {
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">border-image: url(:/image/top_title.png);</string>
+     <string notr="true">#widget_2{
+border-image: url(:/image/top_title.png);
+}
+#label_logo{
+	border-image: url(:/image/logo.png);
+}
+#label_company{
+	
+	font: 700 20pt &quot;Microsoft YaHei UI&quot;;
+}</string>
     </property>
+    <widget class="QLabel" name="label_logo">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>61</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_company">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>10</y>
+       <width>371</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>徐州华强电器制造有限公司</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">

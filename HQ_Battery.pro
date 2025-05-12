@@ -1,4 +1,4 @@
-QT       += core gui serialport sql xlsx charts
+QT       += core gui serialport sql xlsx charts network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -46,6 +46,7 @@ SOURCES += \
     component/queryform.cpp \
     component/revisepowerform.cpp \
     component/runningparamform.cpp \
+    component/batterychartwidget.cpp \
     main.cpp \
     mainwindow.cpp \
     protocols/batteryport.cpp \
@@ -74,6 +75,7 @@ HEADERS += \
     component/queryform.h \
     component/revisepowerform.h \
     component/runningparamform.h \
+    component/batterychartwidget.h \
     mainwindow.h \
     protocols/battery.h \
     protocols/batteryinterface.h \
@@ -84,7 +86,8 @@ HEADERS += \
     protocols/serialworker.h \
     utils/ModbusHelper.h \
     utils/Struct.h \
-    utils/myapp.h
+    utils/myapp.h \
+    config.h
 
 FORMS += \
     component/addpowerform.ui \

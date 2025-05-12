@@ -734,7 +734,7 @@ QLabel{
        <bool>true</bool>
       </property>
       <property name="checked">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="autoExclusive">
        <bool>false</bool>
@@ -766,7 +766,7 @@ QLabel{
        <bool>true</bool>
       </property>
       <property name="checked">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="autoExclusive">
        <bool>false</bool>

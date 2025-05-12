@@ -22,8 +22,13 @@ public:
 
 private slots:
     void on_btn_menu_clicked();
-
     void on_btn_about_clicked();
+    
+    // 切换到主界面
+    void switchToMainView();
+    
+    // 处理返回按钮点击
+    void onBackButtonClicked();
 
 private:
     void initUI();
@@ -33,11 +38,17 @@ private:
     void device_manage_action();
     void user_manage_action();
     void connectBatterySignals(BatteryListForm *battery);
+    
+    // 更新widget_2内容（返回按钮或logo）
+    void updateWidget2Content(bool showBackButton);
 
 private:
     Ui::MainWindow *ui;
     QMenu *menu_list, *menu_about;
     BatteryGridWidget *batteryGrid;
     BMS1InfoShowForm *bms1InfoShowForm;
+    
+    // 返回按钮和logo标签
+    QPushButton *m_backButton;
 };
 #endif // MAINWINDOW_H 
