@@ -11,8 +11,9 @@
 #include <QtCharts/QLineSeries>
 QT_CHARTS_USE_NAMESPACE
 
-namespace Ui {
-class BatteryDetailMainForm;
+namespace Ui
+{
+    class BatteryDetailMainForm;
 }
 
 class BatteryDetailMainForm : public QWidget
@@ -30,6 +31,9 @@ public slots:
     // 返回按钮，回到主界面
     void onBackButtonClicked();
 
+protected:
+    void paintEvent(QPaintEvent *event) override;
+
 private slots:
     // 处理电池数据更新
     void updateBatteryData(BatteryListForm *battery, const BMS_1 &data);
@@ -45,20 +49,20 @@ signals:
 private:
     Ui::BatteryDetailMainForm *ui;
     BatteryListForm *m_currentBattery;
-    
+
     // 电压电流曲线图表
     QChartView *m_voltageCurrentChartView;
     QLineSeries *m_voltageSeries;
     QLineSeries *m_currentSeries;
-    
+
     // 温度曲线图表
     QChartView *m_temperatureChartView;
     QLineSeries *m_temperatureSeries;
-    
+
     // 时间相关
     QTimer m_updateTimer;
     QList<QDateTime> m_timePoints;
-    
+
     // 初始化图表
     void initCharts();
     // 更新图表数据

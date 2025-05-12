@@ -47,7 +47,7 @@ void MainWindow::initUI()
 
     // 设置网格大小，调整为合适的行列数
     batteryGrid->setGridSize(7, 6); // 每页最多4行4列
-    
+
     // 设置底部空间和分页控件自动隐藏
     batteryGrid->setBottomMargin(30);  // 设置30像素的底部间距
     batteryGrid->setAutoHidePagination(true);  // 当电池数量不足一页时自动隐藏分页控件
@@ -59,11 +59,12 @@ void MainWindow::initUI()
     layout->addStretch(); // 添加弹性空间，确保组件靠上靠左
 
     // 创建电池详情页面
-    batteryDetailForm = new BatteryDetailMainForm();
-    ui->stackedWidget->addWidget(batteryDetailForm);
-    
+    bms1InfoShowForm = new BMS1InfoShowForm();
+    ui->stackedWidget->addWidget(bms1InfoShowForm);
+
     // 连接返回信号
-    connect(batteryDetailForm, &BatteryDetailMainForm::backToMain, this, [this]() {
+    connect(bms1InfoShowForm, &BMS1InfoShowForm::backToMain, this, [this]()
+    {
         ui->stackedWidget->setCurrentIndex(0);  // 切换回主页
     });
 
@@ -77,15 +78,15 @@ void MainWindow::initUI()
         battery_info info = battery->getBatteryInfo();
         //ui->statusbar->showMessage(QString("选中电池: %1, 位置: %2").arg(info.power_id).arg(info.site));
     });
-    
+
     // 连接电池双击信号
     connect(batteryGrid, &BatteryGridWidget::batteryDoubleClicked, this, [this](BatteryListForm * battery)
     {
         qDebug() << "Battery double clicked";
-        
+
         // 设置电池详情
-        batteryDetailForm->setBatteryInfo(battery);
-        
+        bms1InfoShowForm->setBatteryInfo(battery);
+
         // 切换到详情页
         ui->stackedWidget->setCurrentIndex(1);  // 详情页索引为1
     });

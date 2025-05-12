@@ -6,31 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>572</width>
-    <height>316</height>
+    <width>565</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">BatteryDetailMainForm{
-border-image: url(:/image/详情_主.png);
-}</string>
-  </property>
   <widget class="QFrame" name="detailframe">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>200</y>
-     <width>161</width>
-     <height>91</height>
+     <x>10</x>
+     <y>170</y>
+     <width>181</width>
+     <height>111</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">#detailframe{
 border-image: url(:/image/详情_信息介绍.png);
-	background-color: rgba(20, 26, 68, 50);
 }</string>
    </property>
    <property name="frameShape">
@@ -43,7 +37,7 @@ border-image: url(:/image/详情_信息介绍.png);
     <item row="0" column="0">
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>IP地址</string>
+       <string>iIP地址</string>
       </property>
      </widget>
     </item>
@@ -113,9 +107,9 @@ border-image: url(:/image/详情_信息介绍.png);
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
     <rect>
-     <x>410</x>
-     <y>20</y>
-     <width>161</width>
+     <x>380</x>
+     <y>50</y>
+     <width>162</width>
      <height>213</height>
     </rect>
    </property>
@@ -287,7 +281,7 @@ border-image: url(:/image/详情_信息介绍.png);
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>40</y>
+     <y>10</y>
      <width>131</width>
      <height>151</height>
     </rect>
@@ -299,54 +293,6 @@ border-image: url(:/image/详情_信息介绍.png);
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_11">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>20</y>
-     <width>171</width>
-     <height>181</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border-image: url(:/image/logo_battery.png);</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
-  <widget class="QWidget" name="widget_2" native="true">
-   <property name="geometry">
-    <rect>
-     <x>150</x>
-     <y>220</y>
-     <width>291</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border-image: url(:/image/底座.png);</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="btn_back">
-   <property name="geometry">
-    <rect>
-     <x>470</x>
-     <y>250</y>
-     <width>80</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>返回</string>
-   </property>
-  </widget>
-  <zorder>widget_2</zorder>
-  <zorder>detailframe</zorder>
-  <zorder>widget</zorder>
-  <zorder>label_10</zorder>
-  <zorder>label_11</zorder>
-  <zorder>btn_back</zorder>
  </widget>
  <resources/>
  <connections/>

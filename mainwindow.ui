@@ -194,7 +194,6 @@ border-image: url(:/image/主页_电源.png);
       </layout>
      </widget>
     </widget>
-    <widget class="QWidget" name="page_2"/>
    </widget>
    <zorder>stackedWidget</zorder>
    <zorder>widget_2</zorder>

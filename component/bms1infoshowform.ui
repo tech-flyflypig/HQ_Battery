@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1227</width>
+    <width>1283</width>
     <height>696</height>
    </rect>
   </property>
@@ -39,7 +39,7 @@ Line{
     <rect>
      <x>20</x>
      <y>20</y>
-     <width>621</width>
+     <width>651</width>
      <height>321</height>
     </rect>
    </property>
@@ -47,7 +47,7 @@ Line{
   <widget class="QWidget" name="widget_templine" native="true">
    <property name="geometry">
     <rect>
-     <x>660</x>
+     <x>720</x>
      <y>20</y>
      <width>551</width>
      <height>321</height>
@@ -57,7 +57,7 @@ Line{
   <widget class="QWidget" name="widget_voltageline" native="true">
    <property name="geometry">
     <rect>
-     <x>660</x>
+     <x>710</x>
      <y>360</y>
      <width>551</width>
      <height>321</height>
@@ -67,7 +67,7 @@ Line{
   <widget class="QWidget" name="widget_protection" native="true">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>30</x>
      <y>360</y>
      <width>290</width>
      <height>321</height>
@@ -77,7 +77,7 @@ Line{
   <widget class="QWidget" name="widget_alarm" native="true">
    <property name="geometry">
     <rect>
-     <x>350</x>
+     <x>370</x>
      <y>360</y>
      <width>290</width>
      <height>321</height>
