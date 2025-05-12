@@ -31,7 +31,6 @@ SOURCES += \
     component/addpowerform.cpp \
     component/adduser.cpp \
     component/adduserform.cpp \
-    component/batterydetailmainform.cpp \
     component/batterylistform.cpp \
     component/batterygridwidget.cpp \
     component/batterynumberform.cpp \
@@ -60,7 +59,6 @@ HEADERS += \
     component/addpowerform.h \
     component/adduser.h \
     component/adduserform.h \
-    component/batterydetailmainform.h \
     component/batterylistform.h \
     component/batterygridwidget.h \
     component/batterynumberform.h \
@@ -92,7 +90,6 @@ FORMS += \
     component/addpowerform.ui \
     component/adduser.ui \
     component/adduserform.ui \
-    component/batterydetailmainform.ui \
     component/batterylistform.ui \
     component/batterynumberform.ui \
     component/batterystatusform.ui \
