@@ -93,33 +93,13 @@ border-image: url(:/image/top_title.png);
      <number>0</number>
     </property>
     <widget class="QWidget" name="page">
-     <widget class="BatteryNumberForm" name="widget_battery_num" native="true">
+     <widget class="LeftStatsForm" name="widget_left" native="true">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>201</width>
-        <height>301</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="ProtectStatusForm" name="widget_protect" native="true">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>340</y>
-        <width>191</width>
-        <height>291</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="FaultAlarmForm" name="widget_fault_alarm" native="true">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>670</y>
-        <width>201</width>
-        <height>261</height>
+        <x>0</x>
+        <y>0</y>
+        <width>231</width>
+        <height>931</height>
        </rect>
       </property>
      </widget>
@@ -254,21 +234,9 @@ border-image: url(:/image/主页_电源.png);
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>BatteryNumberForm</class>
+   <class>LeftStatsForm</class>
    <extends>QWidget</extends>
-   <header>batterynumberform.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ProtectStatusForm</class>
-   <extends>QWidget</extends>
-   <header>protectstatusform.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>FaultAlarmForm</class>
-   <extends>QWidget</extends>
-   <header>faultalarmform.h</header>
+   <header>leftstatsform.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

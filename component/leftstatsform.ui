@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LeftStatsForm</class>
+ <widget class="QWidget" name="LeftStatsForm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>247</width>
+    <height>951</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QRadioButton {
+   color: white;
+    spacing: 8px;
+	font: 11pt &quot;Microsoft YaHei UI&quot;;
+}
+QRadioButton:checked {
+   color:#f6e92f;
+}
+QRadioButton::indicator {
+     width: 16px;
+      height: 16px;
+      border-radius: 10px;
+}
+
+QRadioButton::indicator:unchecked {
+      border: 2px solid #0a5aa5;
+}
+
+QRadioButton::indicator:checked {
+     border: 2px solid #f6e92f;
+     background-color: #f6e92f;  
+}
+Line{
+	background-color: rgb(23, 54, 133);
+}
+QLabel{	
+	font: 11pt &quot;Microsoft YaHei UI&quot;;
+}</string>
+  </property>
+  <widget class="QWidget" name="battery_number" native="true">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>0</y>
+     <width>210</width>
+     <height>288</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#battery_number{
+border-image: url(:/image/主页_电源数量.png);
+}
+QLabel{
+background:transparent;
+}
+QLabel#label_total_num{
+	font: 700 14pt &quot;Microsoft YaHei UI&quot;;
+}
+QSlider::vertical{
+min-width:36px;color:#000000;background:transparent;
+} 
+QSlider::groove:vertical{
+background:#a0d7da;width:10px;border-radius:5px;
+}
+QSlider::add-page:vertical{
+background:#00ffff;width:10px;border-radius:5px;
+}
+QSlider::sub-page:vertical{
+background:#a0d7da;width:10px;border-radius:5px;
+}</string>
+   </property>
+   <widget class="QSlider" name="verticalSlider_running">
+    <property name="geometry">
+     <rect>
+      <x>35</x>
+      <y>90</y>
+      <width>36</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>75</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QSlider" name="verticalSlider_stop">
+    <property name="geometry">
+     <rect>
+      <x>85</x>
+      <y>90</y>
+      <width>36</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>80</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QSlider" name="verticalSlider_fault">
+    <property name="geometry">
+     <rect>
+      <x>135</x>
+      <y>90</y>
+      <width>36</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="value">
+     <number>80</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_runing_num">
+    <property name="geometry">
+     <rect>
+      <x>45</x>
+      <y>63</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>5</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_stop_num">
+    <property name="geometry">
+     <rect>
+      <x>95</x>
+      <y>62</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_fault_num">
+    <property name="geometry">
+     <rect>
+      <x>143</x>
+      <y>60</y>
+      <width>21</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>250</y>
+      <width>41</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>运行</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>246</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>停止</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>131</x>
+      <y>246</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>故障</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_total_num">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>20</y>
+      <width>16</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>5</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="fault_alarm" native="true">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>650</y>
+     <width>211</width>
+     <height>281</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#fault_alarm{
+border-image: url(:/image/主页_故障报警.png);
+}
+#widget_batery_square,#widget_batery_square_2,#widget_batery_square_3{
+	border-image: url(:/image/电源_框.png);	
+	background-color:transparent;
+}
+QLabel{
+background:transparent;
+	color: rgb(0, 194, 223);
+	font: 700 12pt &quot;Microsoft YaHei UI&quot;;
+}
+#label_7,#label_8,#label_9{
+	border-image: url(:/image/输出短路保护失效_A.png);
+}
+</string>
+   </property>
+   <widget class="QWidget" name="widget_batery_square" native="true">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>65</y>
+      <width>45</width>
+      <height>45</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="label_voltage_alarm">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>10</y>
+       <width>31</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>1</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="widget_batery_square_2" native="true">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>129</y>
+      <width>45</width>
+      <height>45</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="label_current_alarm">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>10</y>
+       <width>31</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>2</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="widget_batery_square_3" native="true">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>210</y>
+      <width>45</width>
+      <height>45</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="label_temperature_alarm">
+     <property name="geometry">
+      <rect>
+       <x>5</x>
+       <y>10</y>
+       <width>31</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>3</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="Line" name="line_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>120</y>
+      <width>187</width>
+      <height>2</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>190</y>
+      <width>187</width>
+      <height>2</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>80</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>电压报警</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>146</y>
+      <width>97</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>电流报警</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_3">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>220</y>
+      <width>97</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>温度告警</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="protect_status" native="true">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>320</y>
+     <width>211</width>
+     <height>301</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">#protect_status{
+border-image: url(:/image/主页_保护状态.png);
+}
+QLabel{
+background:transparent;
+}
+#widget_battery_bak,#widget_battery_bak_2,#widget_battery_bak_3
+{
+	border-image: url(:/image/电源.png);
+	background:transparent;
+}
+
+
+
+</string>
+   </property>
+   <widget class="QWidget" name="widget_battery_bak" native="true">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>70</y>
+      <width>45</width>
+      <height>45</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="label_over_voltage_discharge_protect">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>5</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="widget_battery_bak_2" native="true">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>140</y>
+      <width>45</width>
+      <height>45</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="label_tempeture_protect">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>5</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="widget_battery_bak_3" native="true">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>224</y>
+      <width>45</width>
+      <height>45</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="label_shortCircuitProtect_num">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>0</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>5</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>130</y>
+      <width>187</width>
+      <height>2</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>210</y>
+      <width>187</width>
+      <height>2</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_4">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>236</y>
+      <width>97</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>输出短路</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbtn_tempeture_protect">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>156</y>
+      <width>97</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>温度保护</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rbtn_over_voltage_and_discharge">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>82</y>
+      <width>97</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>过压过放</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -54,5 +54,6 @@
         <file>image/底座.png</file>
         <file>image/logo_battery.png</file>
         <file>image/logo.png</file>
+        <file>image/详情_告警状态.png</file>
     </qresource>
 </RCC>

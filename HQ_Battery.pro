@@ -41,6 +41,9 @@ SOURCES += \
     component/exceptionform.cpp \
     component/faultalarmform.cpp \
     component/layoutbatterywidget.cpp \
+    component/leftstatsform.cpp \
+    component/leftstatsform.cpp \
+    component/leftstatsform.cpp \
     component/mytreewidget.cpp \
     component/protectstatusform.cpp \
     component/queryform.cpp \
@@ -53,6 +56,7 @@ SOURCES += \
     protocols/bms1battery.cpp \
     protocols/protocol.cpp \
     protocols/serialworker.cpp \
+    utils/BatteryStats.cpp \
     utils/ModbusHelper.cpp \
     utils/myapp.cpp
 
@@ -70,6 +74,9 @@ HEADERS += \
     component/exceptionform.h \
     component/faultalarmform.h \
     component/layoutbatterywidget.h \
+    component/leftstatsform.h \
+    component/leftstatsform.h \
+    component/leftstatsform.h \
     component/mytreewidget.h \
     component/protectstatusform.h \
     component/queryform.h \
@@ -84,6 +91,7 @@ HEADERS += \
     protocols/bms1battery.h \
     protocols/protocol.h \
     protocols/serialworker.h \
+    utils/BatteryStats.h \
     utils/ModbusHelper.h \
     utils/Struct.h \
     utils/myapp.h \
@@ -101,6 +109,8 @@ FORMS += \
     component/deviceinfoform.ui \
     component/exceptionform.ui \
     component/faultalarmform.ui \
+    component/leftstatsform.ui \
+    component/leftstatsform.ui \
     component/protectstatusform.ui \
     component/queryform.ui \
     component/revisepowerform.ui \

@@ -42,6 +42,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initUI()
 {
+    ui->label_company->setVisible(false);
     // 创建电池网格组件
     batteryGrid = new BatteryGridWidget(ui->widget_center);
 
@@ -246,6 +247,14 @@ void MainWindow::init_sql()
                 {
                     // 显示详细信息表单
                     // TODO: 实现详细信息显示
+                    // 设置电池详情
+                    bms1InfoShowForm->setBatteryInfo(battery);
+
+                    // 切换到详情页
+                    ui->stackedWidget->setCurrentIndex(1);  // 详情页索引为1
+
+                    // 显示返回按钮，隐藏logo
+                    updateWidget2Content(true);
                 });
 
                 menu.addAction(startAction);

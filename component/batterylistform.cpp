@@ -5,6 +5,7 @@
 #include <QStyleOption>
 #include <QMouseEvent>
 #include <QDebug>
+#include "../utils/BatteryStats.h"
 
 BatteryListForm::BatteryListForm(QWidget *parent)
     : QWidget(parent)
@@ -122,7 +123,7 @@ void BatteryListForm::updateDisplay(const BMS_1 &data)
     QString tempStr = QString::number(data.tempMax / 10.0, 'f', 1) + "℃";
 
     // 更新容量显示
-    QString capacityStr = QString::number(data.ratedCapacity / 100.0, 'f', 1) + "AH";
+    QString capacityStr = QString::number(data.remainCapacity / 100.0, 'f', 1) + "AH";
 
     // 更新UI标签
     ui->label_remainCapacity->setText(capacityStr);
@@ -176,6 +177,10 @@ void BatteryListForm::onBatteryDataReceived(const BMS_1 &data)
 {
     m_lastData = data;
     updateDisplay(data);
+    
+    // 更新全局统计信息
+    BatteryStats::instance()->updateBatteryStatus(m_batteryInfo.power_id, data);
+    
     emit dataReceived(this, data);
 }
 

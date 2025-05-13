@@ -34,7 +34,7 @@ Line{
 	border-image: url(:/image/详情_保护状态.png);
 }
 #widget_alarm{
-	border-image: url(:/image/详情_保护失效状态故障报警.png);
+	border-image: url(:/image/详情_告警状态.png);
 }
 QRadioButton {
    color: white;
