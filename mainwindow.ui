@@ -79,6 +79,78 @@ border-image: url(:/image/top_title.png);
       <string>徐州华强电器制造有限公司</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="btn_close">
+     <property name="geometry">
+      <rect>
+       <x>1849</x>
+       <y>10</y>
+       <width>51</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	border-image: url(:/image/close.png);
+}
+QPushButton:hover{
+	border-image: url(:/image/close_hover.png);
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_max">
+     <property name="geometry">
+      <rect>
+       <x>1780</x>
+       <y>10</y>
+       <width>51</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	border-image: url(:/image/max.png);
+}
+QPushButton:hover{
+	border-image: url(:/image/max_hover.png);
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_min">
+     <property name="geometry">
+      <rect>
+       <x>1730</x>
+       <y>10</y>
+       <width>41</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="layoutDirection">
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton{	
+	border-image: url(:/image/min.png);
+}
+QPushButton:hover{
+	border-image: url(:/image/min_hover.png);
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
@@ -121,92 +193,15 @@ QLabel{
 }</string>
       </property>
      </widget>
-     <widget class="QWidget" name="device_info" native="true">
+     <widget class="RightStatsForm" name="widget_right" native="true">
       <property name="geometry">
        <rect>
         <x>1670</x>
-        <y>690</y>
-        <width>221</width>
-        <height>261</height>
+        <y>0</y>
+        <width>231</width>
+        <height>931</height>
        </rect>
       </property>
-      <property name="styleSheet">
-       <string notr="true">#device_info{
-border-image: url(:/image/主页_设备信息.png);
-}
-QLabel{
-	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
-}
-</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <property name="topMargin">
-        <number>50</number>
-       </property>
-       <item row="0" column="0">
-        <widget class="DeviceInfoForm" name="widget_device_info" native="true"/>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="run_param" native="true">
-      <property name="geometry">
-       <rect>
-        <x>1670</x>
-        <y>300</y>
-        <width>221</width>
-        <height>351</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">#run_param{
-border-image: url(:/image/主页_运行参数.png);
-}
-QLabel{
-	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
-}
-</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout_2">
-       <property name="topMargin">
-        <number>62</number>
-       </property>
-       <item row="0" column="0">
-        <widget class="RunningParamForm" name="widget_running_param" native="true">
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="widget_battery_status" native="true">
-      <property name="geometry">
-       <rect>
-        <x>1670</x>
-        <y>10</y>
-        <width>221</width>
-        <height>271</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">#widget_battery_status{
-border-image: url(:/image/主页_电源.png);
-}</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <property name="leftMargin">
-        <number>25</number>
-       </property>
-       <property name="topMargin">
-        <number>50</number>
-       </property>
-       <property name="rightMargin">
-        <number>25</number>
-       </property>
-       <item row="0" column="0">
-        <widget class="BatteryStatusForm" name="widget" native="true"/>
-       </item>
-      </layout>
      </widget>
     </widget>
    </widget>
@@ -216,27 +211,15 @@ border-image: url(:/image/主页_电源.png);
  </widget>
  <customwidgets>
   <customwidget>
-   <class>BatteryStatusForm</class>
-   <extends>QWidget</extends>
-   <header>batterystatusform.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>DeviceInfoForm</class>
-   <extends>QWidget</extends>
-   <header>deviceinfoform.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>RunningParamForm</class>
-   <extends>QWidget</extends>
-   <header>runningparamform.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>LeftStatsForm</class>
    <extends>QWidget</extends>
    <header>leftstatsform.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>RightStatsForm</class>
+   <extends>QWidget</extends>
+   <header>rightstatsform.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

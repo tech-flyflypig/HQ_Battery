@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle("HQ_Battery");
+    this->setWindowFlags(Qt::FramelessWindowHint);
 
     // 初始化UI
     this->initUI();
@@ -349,5 +350,34 @@ void MainWindow::switchToMainView()
 
     // 更新widget_2，隐藏返回按钮
     updateWidget2Content(false);
+}
+
+
+void MainWindow::on_btn_max_clicked(bool checked)
+{
+    if(checked)
+    {
+        this->showFullScreen();
+        ui->btn_max->setStyleSheet("QPushButton{ border-image: url(:/image/normal.png);}"
+                                   "QPushButton:hover{border-image: url(:/image/normal_hover.png);}");
+
+    }
+    else
+    {
+        this->showNormal();
+        ui->btn_max->setStyleSheet("QPushButton{ border-image: url(:/image/max.png);}"
+                                   "QPushButton:hover{border-image: url(:/image/max_hover.png);}");
+    }
+}
+
+
+void MainWindow::on_btn_min_clicked()
+{
+    this->showMinimized();
+}
+
+void MainWindow::on_btn_close_clicked()
+{
+    this->close();
 }
 

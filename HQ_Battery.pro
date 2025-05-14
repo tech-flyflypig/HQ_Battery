@@ -48,6 +48,7 @@ SOURCES += \
     component/protectstatusform.cpp \
     component/queryform.cpp \
     component/revisepowerform.cpp \
+    component/rightstatsform.cpp \
     component/runningparamform.cpp \
     component/batterychartwidget.cpp \
     main.cpp \
@@ -81,6 +82,7 @@ HEADERS += \
     component/protectstatusform.h \
     component/queryform.h \
     component/revisepowerform.h \
+    component/rightstatsform.h \
     component/runningparamform.h \
     component/batterychartwidget.h \
     mainwindow.h \
@@ -114,6 +116,7 @@ FORMS += \
     component/protectstatusform.ui \
     component/queryform.ui \
     component/revisepowerform.ui \
+    component/rightstatsform.ui \
     component/runningparamform.ui \
     mainwindow.ui
 
