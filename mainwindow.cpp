@@ -101,15 +101,7 @@ void MainWindow::initUI()
     connect(bms1InfoShowForm, &BMS1InfoShowForm::backToMain, this, &MainWindow::switchToMainView);
 
     // 连接电池选择信号
-    connect(batteryGrid, &BatteryGridWidget::batterySelected, this, [this](BatteryListForm * battery)
-    {
-        // 处理电池选择事件
-        qDebug() << "Battery selected";
-
-        // 显示选中电池的详细信息
-        battery_info info = battery->getBatteryInfo();
-        //ui->statusbar->showMessage(QString("选中电池: %1, 位置: %2").arg(info.power_id).arg(info.site));
-    });
+    connect(batteryGrid, &BatteryGridWidget::batterySelected, this, &MainWindow::updateRightPanel);
 
     // 连接电池双击信号
     connect(batteryGrid, &BatteryGridWidget::batteryDoubleClicked, this, [this](BatteryListForm * battery)
@@ -271,6 +263,16 @@ void MainWindow::init_sql()
 
         // 刷新布局
         batteryGrid->refreshLayout();
+        //xxx 暂时先不选择电池，先不更新右侧信息面板
+        // 默认选中第一个电池并更新右侧信息面板（如果有电池）
+        // if (!batteryWidgets.isEmpty())
+        // {
+        //     BatteryListForm *firstBattery = batteryWidgets.first();
+        //     firstBattery->setSelected(true);
+
+        //     // 更新右侧面板信息
+        //     updateRightPanel(firstBattery);
+        // }
     }
     else
     {
@@ -379,5 +381,20 @@ void MainWindow::on_btn_min_clicked()
 void MainWindow::on_btn_close_clicked()
 {
     this->close();
+}
+
+void MainWindow::updateRightPanel(BatteryListForm *battery)
+{
+    if (!battery) return;
+
+    // 处理电池选择事件
+    qDebug() << "Battery selected, updating right panel";
+
+    // 获取电池信息
+    battery_info info = battery->getBatteryInfo();
+    qDebug() << "Selected battery - ID:" << info.power_id << ", 位置:" << info.site;
+
+    // 更新右侧信息面板显示
+    ui->widget_right->setBatteryInfo(battery);
 }
 

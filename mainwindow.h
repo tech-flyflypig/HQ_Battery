@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "component/batterygridwidget.h"
 #include "component/bms1infoshowform.h"
+#include "component/rightstatsform.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -34,6 +35,9 @@ private slots:
     void on_btn_min_clicked();
 
     void on_btn_close_clicked();
+    
+    // 更新右侧信息面板
+    void updateRightPanel(BatteryListForm *battery);
 
 private:
     void initUI();

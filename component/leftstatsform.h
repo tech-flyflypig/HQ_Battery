@@ -2,6 +2,7 @@
 #define LEFTSTATSFORM_H
 
 #include <QWidget>
+#include <QRadioButton>
 
 namespace Ui
 {
@@ -20,6 +21,9 @@ private slots:
     void updateStats();
 
 private:
+    // 初始化RadioButton为只读状态
+    void initializeRadioButtons();
+    
     Ui::LeftStatsForm *ui;
 };
 

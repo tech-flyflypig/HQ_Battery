@@ -364,7 +364,7 @@ background:transparent;
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton">
+   <widget class="QRadioButton" name="rbtn_voltage_alarm">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -377,7 +377,7 @@ background:transparent;
      <string>电压报警</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_2">
+   <widget class="QRadioButton" name="rbtn_current_alarm">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -390,7 +390,7 @@ background:transparent;
      <string>电流报警</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_3">
+   <widget class="QRadioButton" name="rbtn_temperature_alarm">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -534,7 +534,7 @@ background:transparent;
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_4">
+   <widget class="QRadioButton" name="rbtn_short_circuit">
     <property name="geometry">
      <rect>
       <x>20</x>
