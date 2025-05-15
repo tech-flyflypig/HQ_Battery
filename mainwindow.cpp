@@ -19,15 +19,20 @@
 #include <QLabel>
 #include <QMenu>
 #include <QSqlError>
+#include <QMouseEvent>
 #include "batterylistform.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , m_isMoving(false) // 初始化拖拽状态
 {
     ui->setupUi(this);
     this->setWindowTitle("HQ_Battery");
     this->setWindowFlags(Qt::FramelessWindowHint);
+    
+    // 为标题栏安装事件过滤器
+    ui->widget_2->installEventFilter(this);
 
     // 初始化UI
     this->initUI();
@@ -395,5 +400,44 @@ void MainWindow::updateRightPanel(BatteryListForm *battery)
 
     // 更新右侧信息面板显示
     ui->widget_right->setBatteryInfo(battery);
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    // 检查事件是否发生在标题栏组件上
+    if (watched == ui->widget_2)
+    {
+        // 处理鼠标按下事件
+        if (event->type() == QEvent::MouseButtonPress)
+        {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            if (mouseEvent->button() == Qt::LeftButton)
+            {
+                // 获取窗口左上角坐标与鼠标当前位置之间的偏移
+                m_lastPos = mouseEvent->globalPos() - this->frameGeometry().topLeft();
+                m_isMoving = true;
+                return true;  // 事件已处理
+            }
+        }
+        // 处理鼠标移动事件
+        else if (event->type() == QEvent::MouseMove)
+        {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            if (m_isMoving && (mouseEvent->buttons() & Qt::LeftButton))
+            {
+                this->move(mouseEvent->globalPos() - m_lastPos);
+                return true;  // 事件已处理
+            }
+        }
+        // 处理鼠标释放事件
+        else if (event->type() == QEvent::MouseButtonRelease)
+        {
+            m_isMoving = false;
+            return true;  // 事件已处理
+        }
+    }
+    
+    // 默认的事件处理
+    return QMainWindow::eventFilter(watched, event);
 }
 

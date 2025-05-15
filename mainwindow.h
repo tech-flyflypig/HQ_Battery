@@ -5,6 +5,7 @@
 #include "component/batterygridwidget.h"
 #include "component/bms1infoshowform.h"
 #include "component/rightstatsform.h"
+#include <QPoint>
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -20,6 +21,10 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+protected:
+    // 事件过滤器，可为指定控件添加自定义事件处理
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private slots:
     void on_btn_menu_clicked();
@@ -59,5 +64,9 @@ private:
 
     // 返回按钮和logo标签
     QPushButton *m_backButton;
+    
+    // 窗口拖拽相关变量
+    bool m_isMoving;
+    QPoint m_lastPos;
 };
 #endif // MAINWINDOW_H 
