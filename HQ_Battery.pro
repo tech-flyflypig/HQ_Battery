@@ -33,23 +33,17 @@ SOURCES += \
     component/adduserform.cpp \
     component/batterylistform.cpp \
     component/batterygridwidget.cpp \
-    component/batterynumberform.cpp \
-    component/batterystatusform.cpp \
     component/bms1infoshowform.cpp \
     component/cfdrecordform.cpp \
-    component/deviceinfoform.cpp \
     component/exceptionform.cpp \
-    component/faultalarmform.cpp \
     component/layoutbatterywidget.cpp \
     component/leftstatsform.cpp \
     component/leftstatsform.cpp \
     component/leftstatsform.cpp \
     component/mytreewidget.cpp \
-    component/protectstatusform.cpp \
     component/queryform.cpp \
     component/revisepowerform.cpp \
     component/rightstatsform.cpp \
-    component/runningparamform.cpp \
     component/batterychartwidget.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -67,23 +61,17 @@ HEADERS += \
     component/adduserform.h \
     component/batterylistform.h \
     component/batterygridwidget.h \
-    component/batterynumberform.h \
-    component/batterystatusform.h \
     component/bms1infoshowform.h \
     component/cfdrecordform.h \
-    component/deviceinfoform.h \
     component/exceptionform.h \
-    component/faultalarmform.h \
     component/layoutbatterywidget.h \
     component/leftstatsform.h \
     component/leftstatsform.h \
     component/leftstatsform.h \
     component/mytreewidget.h \
-    component/protectstatusform.h \
     component/queryform.h \
     component/revisepowerform.h \
     component/rightstatsform.h \
-    component/runningparamform.h \
     component/batterychartwidget.h \
     mainwindow.h \
     protocols/battery.h \
@@ -104,20 +92,14 @@ FORMS += \
     component/adduser.ui \
     component/adduserform.ui \
     component/batterylistform.ui \
-    component/batterynumberform.ui \
-    component/batterystatusform.ui \
     component/bms1infoshowform.ui \
     component/cfdrecordform.ui \
-    component/deviceinfoform.ui \
     component/exceptionform.ui \
-    component/faultalarmform.ui \
     component/leftstatsform.ui \
     component/leftstatsform.ui \
-    component/protectstatusform.ui \
     component/queryform.ui \
     component/revisepowerform.ui \
     component/rightstatsform.ui \
-    component/runningparamform.ui \
     mainwindow.ui
 
 # Default rules for deployment.

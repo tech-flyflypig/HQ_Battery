@@ -376,6 +376,9 @@ background:transparent;
     <property name="text">
      <string>电压报警</string>
     </property>
+    <property name="autoExclusive">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QRadioButton" name="rbtn_current_alarm">
     <property name="geometry">
@@ -389,6 +392,12 @@ background:transparent;
     <property name="text">
      <string>电流报警</string>
     </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+    <property name="autoExclusive">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QRadioButton" name="rbtn_temperature_alarm">
     <property name="geometry">
@@ -401,6 +410,9 @@ background:transparent;
     </property>
     <property name="text">
      <string>温度告警</string>
+    </property>
+    <property name="autoExclusive">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>
@@ -419,6 +431,7 @@ border-image: url(:/image/主页_保护状态.png);
 }
 QLabel{
 background:transparent;
+
 }
 #widget_battery_bak,#widget_battery_bak_2,#widget_battery_bak_3
 {
@@ -546,6 +559,12 @@ background:transparent;
     <property name="text">
      <string>输出短路</string>
     </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+    <property name="autoExclusive">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QRadioButton" name="rbtn_tempeture_protect">
     <property name="geometry">
@@ -559,6 +578,12 @@ background:transparent;
     <property name="text">
      <string>温度保护</string>
     </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+    <property name="autoExclusive">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QRadioButton" name="rbtn_over_voltage_and_discharge">
     <property name="geometry">
@@ -571,6 +596,12 @@ background:transparent;
     </property>
     <property name="text">
      <string>过压过放</string>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+    <property name="autoExclusive">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>

@@ -31,6 +31,22 @@ BMS1InfoShowForm::BMS1InfoShowForm(QWidget *parent)
 
 BMS1InfoShowForm::~BMS1InfoShowForm()
 {
+    // 断开与电池的连接
+    if (m_currentBattery)
+    {
+        disconnect(m_currentBattery, &BatteryListForm::dataReceived,
+                   this, &BMS1InfoShowForm::updateBatteryData);
+        disconnect(m_currentBattery, &BatteryListForm::communicationError,
+                   this, &BMS1InfoShowForm::handleCommunicationError);
+        disconnect(m_currentBattery, &BatteryListForm::communicationTimeout,
+                   this, &BMS1InfoShowForm::handleCommunicationTimeout);
+
+        // 停止图表更新
+        m_temperatureChart->stopRealTimeUpdate();
+        m_voltageCurrentChart->stopRealTimeUpdate();
+
+        m_currentBattery = nullptr;
+    }
     delete ui;
 }
 
@@ -86,29 +102,6 @@ void BMS1InfoShowForm::setBatteryInfo(BatteryListForm *battery)
     }
 }
 
-// 手动触发返回主界面信号
-void BMS1InfoShowForm::triggerBackToMain()
-{
-    // 断开与电池的连接
-    if (m_currentBattery)
-    {
-        disconnect(m_currentBattery, &BatteryListForm::dataReceived,
-                   this, &BMS1InfoShowForm::updateBatteryData);
-        disconnect(m_currentBattery, &BatteryListForm::communicationError,
-                   this, &BMS1InfoShowForm::handleCommunicationError);
-        disconnect(m_currentBattery, &BatteryListForm::communicationTimeout,
-                   this, &BMS1InfoShowForm::handleCommunicationTimeout);
-
-        // 停止图表更新
-        m_temperatureChart->stopRealTimeUpdate();
-        m_voltageCurrentChart->stopRealTimeUpdate();
-
-        m_currentBattery = nullptr;
-    }
-
-    // 发送返回信号
-    emit backToMain();
-}
 
 void BMS1InfoShowForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &data)
 {

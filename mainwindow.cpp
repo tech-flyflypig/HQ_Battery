@@ -43,7 +43,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initUI()
 {
-    ui->label_company->setVisible(false);
+    //ui->label_company->setVisible(false);
     // 创建电池网格组件
     batteryGrid = new BatteryGridWidget(ui->widget_center);
 
@@ -62,9 +62,8 @@ void MainWindow::initUI()
 
     // 创建返回按钮，放在与Logo相同的位置
     m_backButton = new QPushButton(ui->widget_2);
-    m_backButton->setText("返回");
-    m_backButton->setStyleSheet("QPushButton { background-color: rgb(0, 128, 187); color: white; font: bold 12pt 'Microsoft YaHei UI'; }");
-    m_backButton->setFixedSize(80, 30);
+    m_backButton->setStyleSheet("QPushButton { border-image: url(:/image/undo.png);}");
+    m_backButton->setFixedSize(60, 30);
 
     // 初始显示Logo，隐藏返回按钮
     m_backButton->hide();
@@ -96,9 +95,6 @@ void MainWindow::initUI()
     // 创建电池详情页面
     bms1InfoShowForm = new BMS1InfoShowForm();
     ui->stackedWidget->addWidget(bms1InfoShowForm);
-
-    // 连接返回信号
-    connect(bms1InfoShowForm, &BMS1InfoShowForm::backToMain, this, &MainWindow::switchToMainView);
 
     // 连接电池选择信号
     connect(batteryGrid, &BatteryGridWidget::batterySelected, this, &MainWindow::updateRightPanel);
@@ -135,10 +131,11 @@ void MainWindow::connectBatterySignals(BatteryListForm *battery)
     connect(battery, &BatteryListForm::communicationError, this, [this](BatteryListForm * battery, const QString & error)
     {
         // 显示错误信息
-        QMessageBox::warning(this, "通信错误",
-                             QString("电池 %1 通信错误: %2")
-                             .arg(battery->getBatteryInfo().site)
-                             .arg(error));
+        // QMessageBox::warning(this, "通信错误",
+        //                      QString("电池 %1 通信错误: %2")
+        //                      .arg(battery->getBatteryInfo().site)
+        //                      .arg(error));
+        qDebug() << QString("电池 %1 通信错误: %2") .arg(battery->getBatteryInfo().site).arg(error);
     });
 
     // 连接通信超时信号
@@ -342,7 +339,9 @@ void MainWindow::updateWidget2Content(bool showBackButton)
 void MainWindow::onBackButtonClicked()
 {
     // 调用BMS1InfoShowForm的触发返回方法，确保数据正确清理
-    bms1InfoShowForm->triggerBackToMain();
+    //bms1InfoShowForm->triggerBackToMain();
+    bms1InfoShowForm->deleteLater();
+    bms1InfoShowForm = nullptr;
 }
 
 void MainWindow::switchToMainView()

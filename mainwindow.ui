@@ -75,6 +75,9 @@ border-image: url(:/image/top_title.png);
        <height>51</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <property name="text">
       <string>徐州华强电器制造有限公司</string>
      </property>
@@ -103,7 +106,7 @@ QPushButton:hover{
     <widget class="QPushButton" name="btn_max">
      <property name="geometry">
       <rect>
-       <x>1780</x>
+       <x>1790</x>
        <y>10</y>
        <width>51</width>
        <height>51</height>
@@ -132,8 +135,8 @@ QPushButton:hover{
       <rect>
        <x>1730</x>
        <y>10</y>
-       <width>41</width>
-       <height>41</height>
+       <width>51</width>
+       <height>51</height>
       </rect>
      </property>
      <property name="layoutDirection">

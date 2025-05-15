@@ -55,5 +55,6 @@
         <file>image/logo_battery.png</file>
         <file>image/logo.png</file>
         <file>image/详情_告警状态.png</file>
+        <file>image/undo.png</file>
     </qresource>
 </RCC>

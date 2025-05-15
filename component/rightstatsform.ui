@@ -416,7 +416,9 @@ border-image: url(:/image/主页_运行参数.png);
 QLabel{
 	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
 }
-</string>
+#label_current_in,#label_current_out,#label_pcbtemp,#label_ratedCapacity,#label_remainCapacity,#label_tempMax,#label_voltage{	
+	color: rgb(255, 255, 0);
+}</string>
    </property>
    <widget class="Line" name="line_18">
     <property name="geometry">
@@ -496,7 +498,7 @@ QLabel{
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
