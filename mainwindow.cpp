@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle("HQ_Battery");
     this->setWindowFlags(Qt::FramelessWindowHint);
-    
+
     // 为标题栏安装事件过滤器
     ui->widget_2->installEventFilter(this);
 
@@ -43,12 +43,28 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    // 清理资源，确保所有动态创建的对象被正确删除
+    if (bms1InfoShowForm)
+    {
+        // 如果窗口关闭时，详情页面还存在，需要手动删除
+        ui->stackedWidget->removeWidget(bms1InfoShowForm);
+        delete bms1InfoShowForm;  // 直接删除而不是deleteLater，因为程序即将退出
+        bms1InfoShowForm = nullptr;
+    }
+
+    // 删除电池网格
+    if (batteryGrid)
+    {
+        delete batteryGrid;
+        batteryGrid = nullptr;
+    }
+
     delete ui;
 }
 
 void MainWindow::initUI()
 {
-    //ui->label_company->setVisible(false);
+    ui->label_company->setVisible(false);
     // 创建电池网格组件
     batteryGrid = new BatteryGridWidget(ui->widget_center);
 
@@ -97,9 +113,8 @@ void MainWindow::initUI()
     // 连接返回按钮信号
     connect(m_backButton, &QPushButton::clicked, this, &MainWindow::onBackButtonClicked);
 
-    // 创建电池详情页面
-    bms1InfoShowForm = new BMS1InfoShowForm();
-    ui->stackedWidget->addWidget(bms1InfoShowForm);
+    // 初始化指针
+    bms1InfoShowForm = nullptr;
 
     // 连接电池选择信号
     connect(batteryGrid, &BatteryGridWidget::batterySelected, this, &MainWindow::updateRightPanel);
@@ -109,47 +124,82 @@ void MainWindow::initUI()
     {
         qDebug() << "Battery double clicked";
 
+        // 如果已有实例，先删除
+        if (bms1InfoShowForm)
+        {
+            ui->stackedWidget->removeWidget(bms1InfoShowForm);
+            delete bms1InfoShowForm;
+        }
+
+        // 创建新的电池详情页面
+        bms1InfoShowForm = new BMS1InfoShowForm();
+        ui->stackedWidget->addWidget(bms1InfoShowForm);
+
         // 设置电池详情
-        bms1InfoShowForm->setBatteryInfo(battery);
+        try {
+            // 使用智能指针安全地设置电池信息
+            bms1InfoShowForm->setBatteryInfo(battery);
 
-        // 切换到详情页
-        ui->stackedWidget->setCurrentIndex(1);  // 详情页索引为1
+            // 切换到详情页
+            ui->stackedWidget->setCurrentIndex(1);  // 详情页索引为1
 
-        // 显示返回按钮，隐藏logo
-        updateWidget2Content(true);
+            // 显示返回按钮，隐藏logo
+            updateWidget2Content(true);
+        } catch (const std::exception& e) {
+            qDebug() << "设置电池详情时发生异常: " << e.what();
+        }
     });
 }
 
 void MainWindow::connectBatterySignals(BatteryListForm *battery)
 {
-    // 连接数据接收信号
-    connect(battery, &BatteryListForm::dataReceived, this, [this](BatteryListForm * battery, const BMS_1 & data)
-    {
-        // 更新状态栏或处理数据
-        //ui->statusbar->showMessage(QString("电池: %1, SOC: %2%, 温度: %3°C")
-        // .arg(battery->getBatteryInfo().site)
-        // .arg(data.soc)
-        // .arg(data.tempMax / 10.0));
-    });
+    // 尝试获取shared_ptr
+    try {
+        auto sharedBattery = battery->getSharedPtr();
+        
+        // 连接数据接收信号
+        connect(battery, &BatteryListForm::dataReceived, this, [this, weakBattery=std::weak_ptr<BatteryListForm>(sharedBattery)](BatteryListForm * battery, const BMS_1 & data)
+        {
+            // 安全检查
+            auto currentBattery = weakBattery.lock();
+            if (!currentBattery || currentBattery.get() != battery) return;
+            
+            // 更新状态栏或处理数据
+            //ui->statusbar->showMessage(QString("电池: %1, SOC: %2%, 温度: %3°C")
+            // .arg(battery->getBatteryInfo().site)
+            // .arg(data.soc)
+            // .arg(data.tempMax / 10.0));
+        });
 
-    // 连接通信错误信号
-    connect(battery, &BatteryListForm::communicationError, this, [this](BatteryListForm * battery, const QString & error)
-    {
-        // 显示错误信息
-        // QMessageBox::warning(this, "通信错误",
-        //                      QString("电池 %1 通信错误: %2")
-        //                      .arg(battery->getBatteryInfo().site)
-        //                      .arg(error));
-        qDebug() << QString("电池 %1 通信错误: %2") .arg(battery->getBatteryInfo().site).arg(error);
-    });
+        // 连接通信错误信号
+        connect(battery, &BatteryListForm::communicationError, this, [this, weakBattery=std::weak_ptr<BatteryListForm>(sharedBattery)](BatteryListForm * battery, const QString & error)
+        {
+            // 安全检查
+            auto currentBattery = weakBattery.lock();
+            if (!currentBattery || currentBattery.get() != battery) return;
+            
+            // 显示错误信息
+            // QMessageBox::warning(this, "通信错误",
+            //                      QString("电池 %1 通信错误: %2")
+            //                      .arg(battery->getBatteryInfo().site)
+            //                      .arg(error));
+            qDebug() << QString("电池 %1 通信错误: %2") .arg(battery->getBatteryInfo().site).arg(error);
+        });
 
-    // 连接通信超时信号
-    connect(battery, &BatteryListForm::communicationTimeout, this, [this](BatteryListForm * battery)
-    {
-        // 显示超时信息
-        // ui->statusbar->showMessage(QString("电池: %1 通信超时")
-        //                            .arg(battery->getBatteryInfo().site));
-    });
+        // 连接通信超时信号
+        connect(battery, &BatteryListForm::communicationTimeout, this, [this, weakBattery=std::weak_ptr<BatteryListForm>(sharedBattery)](BatteryListForm * battery)
+        {
+            // 安全检查
+            auto currentBattery = weakBattery.lock();
+            if (!currentBattery || currentBattery.get() != battery) return;
+            
+            // 显示超时信息
+            // ui->statusbar->showMessage(QString("电池: %1 通信超时")
+            //                            .arg(battery->getBatteryInfo().site));
+        });
+    } catch (const std::bad_weak_ptr& e) {
+        qDebug() << "警告: 无法获取电池对象的shared_ptr: " << e.what();
+    }
 }
 
 void MainWindow::init_sql()
@@ -240,16 +290,30 @@ void MainWindow::init_sql()
 
                 connect(detailAction, &QAction::triggered, this, [this, battery]()
                 {
-                    // 显示详细信息表单
-                    // TODO: 实现详细信息显示
-                    // 设置电池详情
-                    bms1InfoShowForm->setBatteryInfo(battery);
+                    // 如果已有实例，先删除
+                    if (bms1InfoShowForm)
+                    {
+                        ui->stackedWidget->removeWidget(bms1InfoShowForm);
+                        delete bms1InfoShowForm;
+                        bms1InfoShowForm = nullptr;
+                    }
 
-                    // 切换到详情页
-                    ui->stackedWidget->setCurrentIndex(1);  // 详情页索引为1
+                    // 创建新的电池详情页面
+                    bms1InfoShowForm = new BMS1InfoShowForm();
+                    ui->stackedWidget->addWidget(bms1InfoShowForm);
 
-                    // 显示返回按钮，隐藏logo
-                    updateWidget2Content(true);
+                    try {
+                        // 设置电池详情
+                        bms1InfoShowForm->setBatteryInfo(battery);
+
+                        // 切换到详情页
+                        ui->stackedWidget->setCurrentIndex(1);  // 详情页索引为1
+
+                        // 显示返回按钮，隐藏logo
+                        updateWidget2Content(true);
+                    } catch (const std::exception& e) {
+                        qDebug() << "设置电池详情时发生异常: " << e.what();
+                    }
                 });
 
                 menu.addAction(startAction);
@@ -343,10 +407,21 @@ void MainWindow::updateWidget2Content(bool showBackButton)
 
 void MainWindow::onBackButtonClicked()
 {
-    // 调用BMS1InfoShowForm的触发返回方法，确保数据正确清理
-    //bms1InfoShowForm->triggerBackToMain();
-    bms1InfoShowForm->deleteLater();
-    bms1InfoShowForm = nullptr;
+    // 先切换到主页面，防止stackedWidget继续引用即将删除的组件
+    ui->stackedWidget->setCurrentIndex(0);
+
+    // 从stackedWidget中移除详情页面
+    if (bms1InfoShowForm)
+    {
+        ui->stackedWidget->removeWidget(bms1InfoShowForm);
+
+        // 标记为删除
+        bms1InfoShowForm->deleteLater();
+        bms1InfoShowForm = nullptr;
+    }
+
+    // 更新widget_2，隐藏返回按钮
+    updateWidget2Content(false);
 }
 
 void MainWindow::switchToMainView()
@@ -391,15 +466,19 @@ void MainWindow::updateRightPanel(BatteryListForm *battery)
 {
     if (!battery) return;
 
-    // 处理电池选择事件
-    qDebug() << "Battery selected, updating right panel";
+    try {
+        // 处理电池选择事件
+        qDebug() << "Battery selected, updating right panel";
 
-    // 获取电池信息
-    battery_info info = battery->getBatteryInfo();
-    qDebug() << "Selected battery - ID:" << info.power_id << ", 位置:" << info.site;
+        // 获取电池信息
+        battery_info info = battery->getBatteryInfo();
+        qDebug() << "Selected battery - ID:" << info.power_id << ", 位置:" << info.site;
 
-    // 更新右侧信息面板显示
-    ui->widget_right->setBatteryInfo(battery);
+        // 更新右侧信息面板显示
+        ui->widget_right->setBatteryInfo(battery);
+    } catch (const std::exception& e) {
+        qDebug() << "更新右侧信息面板时发生异常: " << e.what();
+    }
 }
 
 bool MainWindow::eventFilter(QObject *watched, QEvent *event)
@@ -410,7 +489,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         // 处理鼠标按下事件
         if (event->type() == QEvent::MouseButtonPress)
         {
-            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if (mouseEvent->button() == Qt::LeftButton)
             {
                 // 获取窗口左上角坐标与鼠标当前位置之间的偏移
@@ -422,7 +501,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
         // 处理鼠标移动事件
         else if (event->type() == QEvent::MouseMove)
         {
-            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if (m_isMoving && (mouseEvent->buttons() & Qt::LeftButton))
             {
                 this->move(mouseEvent->globalPos() - m_lastPos);
@@ -436,7 +515,7 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             return true;  // 事件已处理
         }
     }
-    
+
     // 默认的事件处理
     return QMainWindow::eventFilter(watched, event);
 }

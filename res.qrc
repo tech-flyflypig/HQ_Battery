@@ -56,5 +56,6 @@
         <file>image/logo.png</file>
         <file>image/详情_告警状态.png</file>
         <file>image/undo.png</file>
+        <file>image/登录背景_01.png</file>
     </qresource>
 </RCC>

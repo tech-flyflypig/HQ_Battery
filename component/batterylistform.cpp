@@ -6,6 +6,8 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include "../utils/BatteryStats.h"
+#include <QElapsedTimer>
+#include <QCoreApplication>
 
 BatteryListForm::BatteryListForm(QWidget *parent)
     : QWidget(parent)
@@ -23,6 +25,16 @@ BatteryListForm::BatteryListForm(QWidget *parent)
 BatteryListForm::~BatteryListForm()
 {
     stopCommunication();
+    
+    // 确保m_serialWorker被正确删除
+    if (m_serialWorker)
+    {
+        // 断开所有信号连接
+        disconnect(m_serialWorker, nullptr, this, nullptr);
+        delete m_serialWorker;
+        m_serialWorker = nullptr;
+    }
+    
     delete ui;
 }
 
@@ -87,9 +99,20 @@ void BatteryListForm::stopCommunication()
     // 设置为停止状态图标
     ui->label_battery_status->setStyleSheet("border-image: url(:/image/停止.png);");
 
+    // 确保断开所有与电池数据相关的连接
+    disconnect(m_serialWorker, &SerialWorker::forwardBatteryData,
+              this, &BatteryListForm::onBatteryDataReceived);
+    
     // 停止串口通信
     m_serialWorker->stopReading();
     m_isRunning = false;
+    
+    // 等待一小段时间确保完成停止
+    QElapsedTimer timer;
+    timer.start();
+    while (timer.elapsed() < 500) { // 最多等待500毫秒
+        QCoreApplication::processEvents();
+    }
 }
 
 // 初始化串口通信

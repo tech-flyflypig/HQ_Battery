@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "component/batterylistform.h"
 #include "component/batterychartwidget.h"
+#include <memory>
 
 namespace Ui
 {
@@ -44,7 +45,7 @@ private:
     void updateAlarmStatus(unsigned int alarmStatus);
 
     Ui::BMS1InfoShowForm *ui;
-    BatteryListForm *m_currentBattery;
+    std::weak_ptr<BatteryListForm> m_currentBattery;
 
     // 曲线图组件
     BatteryChartWidget *m_temperatureChart;

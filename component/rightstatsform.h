@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "batterylistform.h"
+#include <memory> // 添加智能指针头文件
 
 namespace Ui {
 class RightStatsForm;
@@ -31,7 +32,7 @@ private slots:
 
 private:
     Ui::RightStatsForm *ui;
-    BatteryListForm *m_currentBattery; // 当前显示的电池
+    std::weak_ptr<BatteryListForm> m_currentBattery; // 使用弱引用避免所有权问题
 };
 
 #endif // RIGHTSTATSFORM_H

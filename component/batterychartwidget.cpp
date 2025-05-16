@@ -90,10 +90,32 @@ BatteryChartWidget::BatteryChartWidget(ChartType type, QWidget *parent)
 BatteryChartWidget::~BatteryChartWidget()
 {
     // 停止更新
-    if (m_updateTimer->isActive())
-    {
-        m_updateTimer->stop();
+    if (m_updateTimer) {
+        if (m_updateTimer->isActive()) {
+            m_updateTimer->stop();
+        }
+        delete m_updateTimer;
+        m_updateTimer = nullptr;
     }
+    
+    // 清理图表资源
+    if (m_chartView) {
+        // 不需要显式删除m_chart，因为QChartView会在其析构函数中删除它
+        delete m_chartView;
+        m_chartView = nullptr;
+    }
+    
+    // m_chart不需要显式删除，已由QChartView删除
+    m_chart = nullptr;
+    
+    // 轴和数据序列也不需要显式删除，因为它们是图表的子对象，会自动删除
+    m_axisX = nullptr;
+    m_axisY = nullptr;
+    m_axisY2 = nullptr;
+    
+    m_temperatureSeries = nullptr;
+    m_voltageSeries = nullptr;
+    m_currentSeries = nullptr;
 }
 
 void BatteryChartWidget::setupTemperatureChart()

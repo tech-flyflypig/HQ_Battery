@@ -2,6 +2,7 @@
 #define BATTERYLISTFORM_H
 
 #include <QWidget>
+#include <memory>
 #include "../protocols/serialworker.h"
 #include "../utils/Struct.h"
 
@@ -10,7 +11,7 @@ namespace Ui
     class BatteryListForm;
 }
 
-class BatteryListForm : public QWidget
+class BatteryListForm : public QWidget, public std::enable_shared_from_this<BatteryListForm>
 {
     Q_OBJECT
 
@@ -29,6 +30,16 @@ public:
     
     // 获取最新的电池数据
     BMS_1 getLastData() const { return m_lastData; }
+
+    // 静态方法创建shared_ptr
+    static std::shared_ptr<BatteryListForm> create(QWidget *parent = nullptr) {
+        return std::shared_ptr<BatteryListForm>(new BatteryListForm(parent));
+    }
+    
+    // 获取shared_ptr
+    std::shared_ptr<BatteryListForm> getSharedPtr() {
+        return shared_from_this();
+    }
 
 protected:
     void mousePressEvent(QMouseEvent *event) override;

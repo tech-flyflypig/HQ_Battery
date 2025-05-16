@@ -5,7 +5,6 @@
 BMS1InfoShowForm::BMS1InfoShowForm(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::BMS1InfoShowForm)
-    , m_currentBattery(nullptr)
     , m_chartsInitialized(false)
 {
     ui->setupUi(this);
@@ -32,80 +31,129 @@ BMS1InfoShowForm::BMS1InfoShowForm(QWidget *parent)
 BMS1InfoShowForm::~BMS1InfoShowForm()
 {
     // 断开与电池的连接
-    if (m_currentBattery)
+    auto currentBattery = m_currentBattery.lock();
+    if (currentBattery)
     {
-        disconnect(m_currentBattery, &BatteryListForm::dataReceived,
+        disconnect(currentBattery.get(), &BatteryListForm::dataReceived,
                    this, &BMS1InfoShowForm::updateBatteryData);
-        disconnect(m_currentBattery, &BatteryListForm::communicationError,
+        disconnect(currentBattery.get(), &BatteryListForm::communicationError,
                    this, &BMS1InfoShowForm::handleCommunicationError);
-        disconnect(m_currentBattery, &BatteryListForm::communicationTimeout,
+        disconnect(currentBattery.get(), &BatteryListForm::communicationTimeout,
                    this, &BMS1InfoShowForm::handleCommunicationTimeout);
 
         // 停止图表更新
-        m_temperatureChart->stopRealTimeUpdate();
-        m_voltageCurrentChart->stopRealTimeUpdate();
-
-        m_currentBattery = nullptr;
+        if (m_temperatureChart) {
+            m_temperatureChart->stopRealTimeUpdate();
+        }
+        
+        if (m_voltageCurrentChart) {
+            m_voltageCurrentChart->stopRealTimeUpdate();
+        }
     }
+    
+    // 确保删除图表组件
+    if (m_temperatureChart) {
+        delete m_temperatureChart;
+        m_temperatureChart = nullptr;
+    }
+    
+    if (m_voltageCurrentChart) {
+        delete m_voltageCurrentChart;
+        m_voltageCurrentChart = nullptr;
+    }
+    
     delete ui;
 }
 
 void BMS1InfoShowForm::setBatteryInfo(BatteryListForm *battery)
 {
     // 如果已经连接了电池，先断开
-    if (m_currentBattery)
+    auto currentBattery = m_currentBattery.lock();
+    if (currentBattery)
     {
-        disconnect(m_currentBattery, &BatteryListForm::dataReceived,
+        // 首先停止图表更新，防止在断开连接期间尝试访问已释放的资源
+        if (m_temperatureChart) {
+            m_temperatureChart->stopRealTimeUpdate();
+        }
+        
+        if (m_voltageCurrentChart) {
+            m_voltageCurrentChart->stopRealTimeUpdate();
+        }
+        
+        // 然后断开所有信号连接
+        disconnect(currentBattery.get(), &BatteryListForm::dataReceived,
                    this, &BMS1InfoShowForm::updateBatteryData);
-        disconnect(m_currentBattery, &BatteryListForm::communicationError,
+        disconnect(currentBattery.get(), &BatteryListForm::communicationError,
                    this, &BMS1InfoShowForm::handleCommunicationError);
-        disconnect(m_currentBattery, &BatteryListForm::communicationTimeout,
+        disconnect(currentBattery.get(), &BatteryListForm::communicationTimeout,
                    this, &BMS1InfoShowForm::handleCommunicationTimeout);
-
-        // 停止图表更新
-        m_temperatureChart->stopRealTimeUpdate();
-        m_voltageCurrentChart->stopRealTimeUpdate();
     }
 
-    m_currentBattery = battery;
+    // 清除现有电池引用
+    m_currentBattery.reset();
 
     if (battery)
     {
-        // 获取电池信息
-        battery_info info = battery->getBatteryInfo();
-        BMS_1 lastData = battery->getLastData();
+        try 
+        {
+            // 获取电池的shared_ptr
+            auto sharedBattery = battery->getSharedPtr(); 
+            m_currentBattery = sharedBattery; // 存储电池引用
 
-        qDebug() << "BMS1InfoShowForm: 设置电池信息 - ID:" << info.power_id << ", 位置:" << info.site;
+            // 获取电池信息
+            battery_info info = battery->getBatteryInfo();
+            BMS_1 lastData = battery->getLastData();
 
-        // 更新UI显示电池基本信息
-        updateBatteryData(battery, lastData);
+            qDebug() << "BMS1InfoShowForm: 设置电池信息 - ID:" << info.power_id << ", 位置:" << info.site;
 
-        // 连接信号，接收电池数据更新
-        connect(battery, &BatteryListForm::dataReceived,
-                this, &BMS1InfoShowForm::updateBatteryData);
-        connect(battery, &BatteryListForm::communicationError,
-                this, &BMS1InfoShowForm::handleCommunicationError);
-        connect(battery, &BatteryListForm::communicationTimeout,
-                this, &BMS1InfoShowForm::handleCommunicationTimeout);
+            // 更新UI显示电池基本信息
+            updateBatteryData(battery, lastData);
 
-        // 清除图表数据
-        m_temperatureChart->clearAllData();
-        m_voltageCurrentChart->clearAllData();
+            // 连接信号，接收电池数据更新
+            connect(battery, &BatteryListForm::dataReceived,
+                    this, &BMS1InfoShowForm::updateBatteryData);
+            connect(battery, &BatteryListForm::communicationError,
+                    this, &BMS1InfoShowForm::handleCommunicationError);
+            connect(battery, &BatteryListForm::communicationTimeout,
+                    this, &BMS1InfoShowForm::handleCommunicationTimeout);
 
-        // 开始图表实时更新
-        m_temperatureChart->startRealTimeUpdate();
-        m_voltageCurrentChart->startRealTimeUpdate();
+            // 清除图表数据
+            if (m_temperatureChart) {
+                m_temperatureChart->clearAllData();
+            }
+            
+            if (m_voltageCurrentChart) {
+                m_voltageCurrentChart->clearAllData();
+            }
 
-        // 添加初始数据
-        m_temperatureChart->addTemperatureData(lastData.tempMax / 10.0);
-        m_voltageCurrentChart->addVoltageCurrentData(lastData.voltage / 100.0, lastData.current / 100.0);
+            // 添加初始数据并启动图表实时更新
+            if (m_temperatureChart) {
+                m_temperatureChart->addTemperatureData(lastData.tempMax / 10.0);
+                m_temperatureChart->startRealTimeUpdate();
+            }
+            
+            if (m_voltageCurrentChart) {
+                m_voltageCurrentChart->addVoltageCurrentData(lastData.voltage / 100.0, lastData.current / 100.0);
+                m_voltageCurrentChart->startRealTimeUpdate();
+            }
+        }
+        catch (const std::bad_weak_ptr& e) 
+        {
+            // 如果无法获取shared_ptr，这可能是由于对象不是shared_ptr管理的
+            qDebug() << "警告: 无法获取电池对象的shared_ptr: " << e.what();
+        }
     }
 }
 
 
 void BMS1InfoShowForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &data)
 {
-    if (battery != m_currentBattery) return;
+    // 安全检查
+    if (!battery) return; // 如果指针为空，直接返回
+    
+    // 检查当前电池引用是否有效并指向正确的对象
+    auto currentBattery = m_currentBattery.lock();
+    if (!currentBattery || currentBattery.get() != battery) return;
 
     // 更新电池信息显示
     ui->label_soc->setText(QString::number(data.soc) + "%");
@@ -134,14 +182,18 @@ void BMS1InfoShowForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &
 
 void BMS1InfoShowForm::handleCommunicationError(BatteryListForm *battery, const QString &errorMessage)
 {
-    if (battery != m_currentBattery) return;
+    // 检查当前电池引用是否有效并指向正确的对象
+    auto currentBattery = m_currentBattery.lock();
+    if (!currentBattery || currentBattery.get() != battery) return;
 
     qDebug() << "通信错误: " << errorMessage;
 }
 
 void BMS1InfoShowForm::handleCommunicationTimeout(BatteryListForm *battery)
 {
-    if (battery != m_currentBattery) return;
+    // 检查当前电池引用是否有效并指向正确的对象
+    auto currentBattery = m_currentBattery.lock();
+    if (!currentBattery || currentBattery.get() != battery) return;
 
     qDebug() << "通信超时";
 }
