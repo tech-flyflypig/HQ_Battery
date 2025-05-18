@@ -1,6 +1,6 @@
 ﻿#include "bms1battery.h"
 #include "ModbusHelper.h"
-
+#include <QDebug>
 // 构造函数初始化
 BMS1Battery::BMS1Battery()
 {
@@ -24,6 +24,7 @@ void BMS1Battery::configure()
 
 void BMS1Battery::processSerialData(const QByteArray &data)
 {
+    qDebug() << "接收：" << data.toHex();
     // 1. 检查响应的有效性
     if (!ModbusHelper::validateResponse(data, SLAVE_ADDR, READ_HOLDINGS))
     {

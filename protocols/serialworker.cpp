@@ -215,6 +215,7 @@ void SerialWorker::sendQuery()
     if (!cmd.isEmpty())
     {
         sendCommand(cmd);
+        qDebug() << "发送：" << cmd.toHex();
     }
 }
 
