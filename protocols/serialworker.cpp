@@ -2,6 +2,7 @@
 #include "batteryinterfacefactory.h"
 #include <QDebug>
 #include <QElapsedTimer>
+#include <QEventLoop>
 
 SerialWorker::SerialWorker(QObject *parent)
     : QThread(parent)
@@ -12,6 +13,7 @@ SerialWorker::SerialWorker(QObject *parent)
     , m_communicationTimeout(5000)  // 默认5秒超时
     , m_lastDataTime(0)
     , m_isCommunicationTimeout(false)
+    , m_dataBuffer()
 {
     // 不再需要创建和连接QTimer
 }
@@ -117,7 +119,7 @@ void SerialWorker::run()
     QElapsedTimer communicationTimer; // 用于检测通信超时
     communicationTimer.start();       // 开始计时
     m_lastDataTime = communicationTimer.elapsed(); // 初始化最后数据时间
-
+    QEventLoop eventLoop;
     while (m_running)
     {
         if (!serialPort->isOpen())
@@ -168,11 +170,15 @@ void SerialWorker::run()
         }
 
         // 仅在串口打开时进行读取操作
-        if (serialPort->isOpen() && serialPort->waitForReadyRead(100))
+        if (serialPort->isOpen() )
         {
+            serialPort->waitForReadyRead(1000);
+            // 确保读取所有可用数据
             QByteArray data = serialPort->readAll();
             if (!data.isEmpty())
             {
+                qDebug() << "接收到数据长度:" << data.size() << "字节";
+                qDebug() << "数据内容:" << data.toHex();
                 // 更新最后一次接收数据时间
                 m_lastDataTime = communicationTimer.elapsed();
 
@@ -183,11 +189,15 @@ void SerialWorker::run()
                     qDebug() << "Communication restored";
                 }
 
-                processData(data);
+                // 将新数据添加到缓冲区
+                m_dataBuffer.append(data);
+
+                // 尝试处理缓冲区中的数据
+                processBuffer();
+
                 emit dataReceived(data);
             }
         }
-
         msleep(10); // 避免CPU占用过高，但保持响应
     }
 
@@ -230,6 +240,10 @@ bool SerialWorker::sendCommand(const QByteArray &cmd)
     }
 
     serialPort->flush();
+
+    // 添加延时，给设备足够的响应时间
+    QThread::msleep(100);
+
     return true;
 }
 
@@ -251,4 +265,52 @@ bool SerialWorker::sendControlCommand(uint16_t reg, uint16_t value)
     }
 
     return sendCommand(cmd);
+}
+
+void SerialWorker::processBuffer()
+{
+    if (!m_batteryInterface) return;
+
+    // 从电池接口获取 Modbus 参数
+    uint8_t slaveAddr = 0x01;  // 默认从机地址，应该从接口获取
+    uint8_t readHoldings = 0x03;  // 默认功能码，应该从接口获取
+
+    // 检查缓冲区中是否有完整的 Modbus 帧
+    while (m_dataBuffer.size() >= 5) // 最小的 Modbus 响应长度
+    {
+        // 检查是否是有效的 Modbus 响应开头
+        if (static_cast<uint8_t>(m_dataBuffer[0]) == slaveAddr &&
+                static_cast<uint8_t>(m_dataBuffer[1]) == readHoldings)
+        {
+            // 获取数据长度字节
+            uint8_t byteCount = static_cast<uint8_t>(m_dataBuffer[2]);
+
+            // 计算完整帧的预期长度 (从机地址 + 功能码 + 字节数 + 数据 + CRC)
+            //???发送过来的字节数不对 获取122寄存器，应该数据位的字节数是244
+            int frameLength = 3 + byteCount + 2;
+
+            // 如果缓冲区中有完整的帧
+            if (m_dataBuffer.size() >= byteCount)
+            {
+                // 提取完整的帧
+                QByteArray frame = m_dataBuffer.left(frameLength);
+
+                // 处理这个完整的帧
+                processData(frame);
+
+                // 从缓冲区中移除已处理的数据
+                m_dataBuffer.remove(0, frameLength);
+            }
+            else
+            {
+                // 缓冲区中没有完整的帧，等待更多数据
+                break;
+            }
+        }
+        else
+        {
+            // 不是有效的帧开头，移除第一个字节并继续查找
+            m_dataBuffer.remove(0, 1);
+        }
+    }
 }

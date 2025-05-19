@@ -9,7 +9,7 @@ BMS1Battery::BMS1Battery()
     READ_HOLDINGS = 0x03;
     WRITE_MULTIPLE = 0x10;
     DATA_START_REG = 128;
-    DATA_REG_COUNT = 67;
+    DATA_REG_COUNT = 122;
     CHARGE_REG = 1;
     DISCHARGE_REG = 2;
     COMMAND_ENABLE = 0xaaaa;

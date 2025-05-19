@@ -38,7 +38,8 @@ private:
     void setupProcessorConnections();
     void sendQuery();          // 发送查询命令
     bool sendCommand(const QByteArray& cmd);  // 通用发送命令函数
-
+    void processBuffer();          // 处理缓冲区中的数据
+    QByteArray m_dataBuffer;  // 添加数据缓冲区成员变量
     QSerialPort *serialPort;
     QString m_portName;
     bool m_running;
