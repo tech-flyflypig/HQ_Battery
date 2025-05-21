@@ -67,47 +67,47 @@ void BMS1Battery::processSerialData(const QByteArray &data)
     // 循环次数，寄存器135，16位无符号整数
     batteryData.cycleCount = registers[7];
 
-    // 告警状态，寄存器136，16位无符号整数
+    // 告警状态，寄存器137，16位无符号整数
     batteryData.alarmStatus = registers[9];
 
-    // 保护状态，寄存器137，16位无符号整数
+    // 保护状态，寄存器138，16位无符号整数
     batteryData.protectStatus = registers[10];
 
-    // 故障状态，寄存器138，16位无符号整数
+    // 故障状态，寄存器139，16位无符号整数
     batteryData.faultStatus = registers[11];
 
-    // 系统状态，寄存器139，16位无符号整数
+    // 系统状态，寄存器140，16位无符号整数
     batteryData.systemStatus = registers[12];
 
-    // 功能开关状态，寄存器140，16位无符号整数
+    // 功能开关状态，寄存器141，16位无符号整数
     batteryData.functionSwitchStatus = registers[13];
 
-    // 电池组串数，寄存器141，16位无符号整数
+    // 电池组串数，寄存器145，16位无符号整数
     batteryData.cellCount = registers[17];
 
-    // 单体最大值，寄存器142，16位无符号整数，单位mV
+    // 单体最大值，寄存器146，16位无符号整数，单位mV
     batteryData.cellVoltageMax = registers[18];
 
-    // 单体最小值，寄存器143，16位无符号整数，单位mV
+    // 单体最小值，寄存器147，16位无符号整数，单位mV
     batteryData.cellVoltageMin = registers[19];
 
-    // 电芯温度个数，寄存器144，16位无符号整数
+    // 电芯温度个数，寄存器148，16位无符号整数
     batteryData.tempSensorCount = registers[20];
 
-    // 电芯温度最大值，寄存器145，16位有符号整数，单位0.1°C
+    // 电芯温度最大值，寄存器149，16位有符号整数，单位0.1°C
     batteryData.tempMax = static_cast<int16_t>(registers[21]);
 
-    // 电芯温度最小值，寄存器146，16位有符号整数，单位0.1°C
+    // 电芯温度最小值，寄存器150，16位有符号整数，单位0.1°C
     batteryData.tempMin = static_cast<int16_t>(registers[22]);
 
-    // 功率管温度，寄存器147，16位有符号整数，单位0.1°C
+    // 功率管温度，寄存器151，16位有符号整数，单位0.1°C
     batteryData.powerTempValue = static_cast<int16_t>(registers[23]);
 
-    // 环境温度，寄存器148，16位有符号整数，单位0.1°C
+    // 环境温度，寄存器152，16位有符号整数，单位0.1°C
     batteryData.ambientTemp = static_cast<int16_t>(registers[24]);
 
     // 提取单体电压数据
-    int cellVoltageStartIndex = 25; // 寄存器155开始 186结束
+    int cellVoltageStartIndex = 27; // 寄存器155开始 186结束
     for (int i = 0; i < 32 && (cellVoltageStartIndex + i) < registers.size(); i++)
     {
         batteryData.cellVoltage[i] = registers[cellVoltageStartIndex + i];
