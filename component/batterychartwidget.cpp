@@ -90,29 +90,32 @@ BatteryChartWidget::BatteryChartWidget(ChartType type, QWidget *parent)
 BatteryChartWidget::~BatteryChartWidget()
 {
     // 停止更新
-    if (m_updateTimer) {
-        if (m_updateTimer->isActive()) {
+    if (m_updateTimer)
+    {
+        if (m_updateTimer->isActive())
+        {
             m_updateTimer->stop();
         }
         delete m_updateTimer;
         m_updateTimer = nullptr;
     }
-    
+
     // 清理图表资源
-    if (m_chartView) {
+    if (m_chartView)
+    {
         // 不需要显式删除m_chart，因为QChartView会在其析构函数中删除它
         delete m_chartView;
         m_chartView = nullptr;
     }
-    
+
     // m_chart不需要显式删除，已由QChartView删除
     m_chart = nullptr;
-    
+
     // 轴和数据序列也不需要显式删除，因为它们是图表的子对象，会自动删除
     m_axisX = nullptr;
     m_axisY = nullptr;
     m_axisY2 = nullptr;
-    
+
     m_temperatureSeries = nullptr;
     m_voltageSeries = nullptr;
     m_currentSeries = nullptr;
@@ -191,7 +194,7 @@ void BatteryChartWidget::setupVoltageCurrentChart()
 
     // 设置时间范围（显示最近10分钟的数据）
     QDateTime now = QDateTime::currentDateTime();
-    m_axisX->setRange(now.addSecs(-600), now);
+    m_axisX->setRange(now.addSecs(-60), now);
 }
 
 void BatteryChartWidget::addTemperatureData(double temperature)
@@ -268,7 +271,7 @@ void BatteryChartWidget::clearAllData()
 
     // 重置X轴时间范围
     QDateTime now = QDateTime::currentDateTime();
-    m_axisX->setRange(now.addSecs(-600), now);
+    m_axisX->setRange(now.addSecs(-60), now);
 }
 
 void BatteryChartWidget::startRealTimeUpdate()
@@ -293,8 +296,8 @@ void BatteryChartWidget::updateChart()
 {
     QDateTime now = QDateTime::currentDateTime();
 
-    // 更新X轴范围（显示最近10分钟的数据）
-    m_axisX->setRange(now.addSecs(-600), now);
+    // 更新X轴范围（显示最近1分钟的数据）
+    m_axisX->setRange(now.addSecs(-60), now);
 
     if (m_chartType == TEMPERATURE_CHART)
     {
