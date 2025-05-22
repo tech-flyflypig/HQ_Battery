@@ -1,4 +1,5 @@
 ﻿#include "mainwindow.h"
+#include "utils/Struct.h"
 
 #include <QApplication>
 #include <QFile>
@@ -8,6 +9,10 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    
+    // 注册BMS_1类型，使其可以在信号槽中使用
+    qRegisterMetaType<BMS_1>("BMS_1");
+    
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("battery.db");
     if(QFile::exists("battery.db"))

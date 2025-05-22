@@ -18,14 +18,41 @@ SerialWorker::SerialWorker(QObject *parent)
     // 不再需要创建和连接QTimer
 }
 
+void SerialWorker::onBatteryDataProcessed(const BMS_1 &batteryData)
+{
+    qDebug() << "Received battery data in SerialWorker::onBatteryDataProcessed, thread:" << QThread::currentThreadId();
+    qDebug() << "Battery data - SOC:" << batteryData.soc
+             << ", Voltage:" << batteryData.voltage
+             << ", Current:" << batteryData.current;
+    emit forwardBatteryData(batteryData);
+}
+
 void SerialWorker::setupProcessorConnections()
 {
-    if (!m_batteryInterface) return;
+    if (!m_batteryInterface) {
+        qDebug() << "Error: m_batteryInterface is null in setupProcessorConnections";
+        return;
+    }
 
-    // 连接电池数据信号
-    connect(m_batteryInterface, &BatteryInterface::batteryDataProcessed,
-            this, &SerialWorker::forwardBatteryData);
+    qDebug() << "Setting up processor connections in thread:" << QThread::currentThreadId();
+    qDebug() << "m_batteryInterface at:" << m_batteryInterface;
+    qDebug() << "this object at:" << this;
+    
+    // 断开所有之前的连接
+    disconnect(m_batteryInterface, nullptr, this, nullptr);
+    
+    // 连接到中间槽函数
+    bool connected = connect(m_batteryInterface, &BatteryInterface::batteryDataProcessed,
+            this, &SerialWorker::onBatteryDataProcessed,
+            Qt::QueuedConnection);
+            
+    qDebug() << "Signal connection established:" << connected;
+    
+    if (!connected) {
+        qDebug() << "Failed to connect BatteryInterface signal to SerialWorker slot";
+    }
 }
+
 
 SerialWorker::~SerialWorker()
 {
@@ -65,6 +92,7 @@ SerialWorker::~SerialWorker()
 void SerialWorker::startReading(const QString &portName, const QString &productType)
 {
     QMutexLocker locker(&m_mutex);
+    qDebug() << "Starting SerialWorker in thread:" << QThread::currentThreadId();
     m_portName = portName;
 
     // 使用工厂创建对应的电池接口
@@ -107,6 +135,11 @@ void SerialWorker::stopReading()
 
 void SerialWorker::run()
 {
+    qDebug() << "Worker thread started, thread ID:" << QThread::currentThreadId();
+
+    // 在工作线程中重新建立连接
+    setupProcessorConnections();
+
     // 确保serialPort为空时创建新实例
     if (!serialPort)
     {
@@ -177,8 +210,6 @@ void SerialWorker::run()
             QByteArray data = serialPort->readAll();
             if (!data.isEmpty())
             {
-                qDebug() << "接收到数据长度:" << data.size() << "字节";
-                qDebug() << "数据内容:" << data.toHex();
                 // 更新最后一次接收数据时间
                 m_lastDataTime = communicationTimer.elapsed();
 

@@ -53,9 +53,6 @@ private:
     quint16 calculateCRC16(const QByteArray &data) const;
 
     BMS_1 batteryData;
-
-signals:
-    void batteryDataProcessed(const BMS_1 &batteryData);
 };
 
 #endif // BMS1BATTERY_H

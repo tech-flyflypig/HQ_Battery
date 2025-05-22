@@ -81,7 +81,7 @@ struct BMS_1_Protection
     uint16_t totalVoltageLowProtect;         // 总体欠压保护, mV
     uint16_t totalVoltageLowProtectRelease;  // 总体欠压保护恢复, mV
     uint16_t totalVoltageLowProtectDelay;    // 总体欠压保护延时, 0.1S
-    
+
     // 单体电压告警和保护参数
     uint16_t cellVoltageOverAlarm;           // 单体过压告警, 0.01V
     uint16_t cellVoltageOverProtect;         // 单体过压保护, 0.01V
@@ -91,7 +91,7 @@ struct BMS_1_Protection
     uint16_t cellVoltageLowProtect;          // 单体欠压保护, mV
     uint16_t cellVoltageLowProtectRelease;   // 单体欠压保护恢复, mV
     uint16_t cellVoltageLowProtectDelay;     // 单体欠压保护延时, 0.1S
-    
+
     // 充电电流告警和保护参数
     uint16_t chargeCurrentOverAlarm;         // 充电过流告警, A
     uint16_t chargeCurrentOverProtect;       // 充电过流保护, A
@@ -103,11 +103,11 @@ struct BMS_1_Protection
     uint16_t dischargeCurrentOverProtectDelay; // 放电过流保护延时, 0.1S
     uint16_t dischargeCurrentProtectRelease; // 放电过流—恢复保护, A
     uint16_t dischargeCurrentProtectReleaseDelay; // 放电过流—恢复保护延时, 0.01S
-    
+
     // 短路保护参数
     uint16_t shortCircuitProtect;            // 短路保护电流, A
     uint16_t shortCircuitProtectDelay;       // 短路保护延时, 0.01ms
-    
+
     // 温度保护参数
     int16_t chargeTempHighAlarm;            // 充电高温告警, 0.1°C
     int16_t chargeTempHighProtect;          // 充电高温保护, 0.1°C
@@ -121,12 +121,12 @@ struct BMS_1_Protection
     int16_t dischargeTempLowAlarm;          // 放电低温告警, 0.1°C
     int16_t dischargeTempLowProtect;        // 放电低温保护, 0.1°C
     int16_t dischargeTempLowProtectRelease; // 放电低温保护恢复, 0.1°C
-    
+
     // 功率管温度保护参数
     int16_t powerTempHighAlarm;             // 功率管高温告警, 0.1°C
     int16_t powerTempHighProtect;           // 功率管高温保护, 0.1°C
     int16_t powerTempHighProtectRelease;    // 功率管高温保护恢复, 0.1°C
-    
+
     // 环境温度保护参数
     int16_t environmentTempHighAlarm;       // 环境高温告警, 0.1°C
     int16_t environmentTempHighProtect;     // 环境高温保护, 0.1°C
@@ -134,7 +134,7 @@ struct BMS_1_Protection
     int16_t environmentTempLowAlarm;        // 环境低温告警, 0.1°C
     int16_t environmentTempLowProtect;      // 环境低温保护, 0.1°C
     int16_t environmentTempLowProtectRelease; // 环境低温保护恢复, 0.1°C
-    
+
     // 均衡参数
     uint16_t balanceStartVoltage;           // 均衡开启电压, mV
     uint16_t balanceStartDeltaVoltage;      // 均衡开启压差, mV
@@ -282,9 +282,10 @@ struct SetParam
 
 
 Q_DECLARE_METATYPE(battery_info);
+
 // Q_DECLARE_METATYPE(JHJ_Param);
 // Q_DECLARE_METATYPE(UPS1);
 // Q_DECLARE_METATYPE(UPS2);
 // Q_DECLARE_METATYPE(UPS2_Cell_Dynamic);
-
+Q_DECLARE_METATYPE(BMS_1);
 #endif // STRUCT_H

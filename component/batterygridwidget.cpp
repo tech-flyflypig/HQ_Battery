@@ -18,8 +18,7 @@ BatteryGridWidget::BatteryGridWidget(QWidget *parent)
 
 BatteryGridWidget::~BatteryGridWidget()
 {
-    // 清理资源
-    qDeleteAll(batteryWidgets);
+    // 使用shared_ptr，不需要手动清理
     batteryWidgets.clear();
 }
 
@@ -94,7 +93,6 @@ void BatteryGridWidget::setTotalItems(int count)
     }
 
     // 清理现有控件
-    qDeleteAll(batteryWidgets);
     batteryWidgets.clear();
     selectedBattery = nullptr;
 
@@ -102,24 +100,24 @@ void BatteryGridWidget::setTotalItems(int count)
     totalItems = count;
     for (int i = 0; i < totalItems; ++i)
     {
-        BatteryListForm *batteryWidget = new BatteryListForm(containerWidget);
-
+        auto batteryPtr = BatteryListForm::create(containerWidget);
+        
         // 设置电池组件的固定大小，防止变得过大
-        batteryWidget->setFixedSize(220, 110); // 设置更紧凑的宽度和高度
+        batteryPtr->setFixedSize(220, 110); // 设置更紧凑的宽度和高度
 
-        batteryWidget->setVisible(false);
-        batteryWidgets.append(batteryWidget);
+        batteryPtr->setVisible(false);
+        batteryWidgets.append(batteryPtr);
 
         // 连接点击信号
-        connect(batteryWidget, &BatteryListForm::clicked, this, [this, batteryWidget]()
+        connect(batteryPtr.get(), &BatteryListForm::clicked, this, [this, ptr = batteryPtr.get()]()
         {
-            onBatteryClicked(batteryWidget);
+            onBatteryClicked(ptr);
         });
         
         // 连接双击信号
-        connect(batteryWidget, &BatteryListForm::doubleclicked, this, [this, batteryWidget](BatteryListForm* battery)
+        connect(batteryPtr.get(), &BatteryListForm::doubleclicked, this, [this, ptr = batteryPtr.get()](BatteryListForm* battery)
         {
-            onBatteryDoubleClicked(battery);
+            onBatteryDoubleClicked(ptr);
         });
     }
 
@@ -141,12 +139,16 @@ void BatteryGridWidget::refreshLayout()
 
 BatteryListForm *BatteryGridWidget::getSelectedBattery() const
 {
-    return selectedBattery;
+    return selectedBattery ? selectedBattery.get() : nullptr;
 }
 
 QList<BatteryListForm *> BatteryGridWidget::getBatteryWidgets() const
 {
-    return batteryWidgets;
+    QList<BatteryListForm *> result;
+    for (const auto& ptr : batteryWidgets) {
+        result.append(ptr.get());
+    }
+    return result;
 }
 
 void BatteryGridWidget::setBottomMargin(int margin)
@@ -204,16 +206,21 @@ void BatteryGridWidget::onNextPageClicked()
 void BatteryGridWidget::onBatteryClicked(BatteryListForm *battery)
 {
     // 清除之前选中的电池
-    for (auto widget : batteryWidgets)
+    for (const auto& widget : batteryWidgets)
     {
-        if (widget != battery)
+        if (widget.get() != battery)
         {
             widget->setSelected(false);
         }
     }
 
-    // 更新当前选中的电池
-    selectedBattery = battery;
+    // 找到对应的shared_ptr
+    for (const auto& ptr : batteryWidgets) {
+        if (ptr.get() == battery) {
+            selectedBattery = ptr;
+            break;
+        }
+    }
 
     // 发送信号
     emit batterySelected(battery);
@@ -247,12 +254,14 @@ void BatteryGridWidget::updatePage()
         int row = i / cols;
         int col = i % cols;
 
-        BatteryListForm *widget = batteryWidgets[startIdx + i];
+        auto widget = batteryWidgets[startIdx + i].get();
 
         // 添加到布局，并指定左上角对齐方式
-        widget->setParent(containerWidget);
-        widget->setVisible(true);
-        gridLayout->addWidget(widget, row, col, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+        if (widget) {
+            widget->setParent(containerWidget);
+            widget->setVisible(true);
+            gridLayout->addWidget(widget, row, col, 1, 1, Qt::AlignLeft | Qt::AlignTop);
+        }
     }
 
     // 更新页面信息

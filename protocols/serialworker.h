@@ -1,4 +1,4 @@
-#ifndef SERIALWORKER_H
+﻿#ifndef SERIALWORKER_H
 #define SERIALWORKER_H
 
 #include <QThread>
@@ -17,13 +17,15 @@ public:
 
     void startReading(const QString &portName, const QString &productType);
     void stopReading();
-    
+
     // 新增：发送控制命令的接口
     bool sendControlCommand(uint16_t reg, uint16_t value);
-    
-    // 设置通信超时时间（毫秒）
-    void setCommunicationTimeout(int timeout) { m_communicationTimeout = timeout; }
 
+    // 设置通信超时时间（毫秒）
+    void setCommunicationTimeout(int timeout)
+    {
+        m_communicationTimeout = timeout;
+    }
 signals:
     void error(const QString &errorMessage);
     void dataReceived(const QByteArray &data);
@@ -33,11 +35,14 @@ signals:
 protected:
     void run() override;
 
+private slots:
+    void onBatteryDataProcessed(const BMS_1 &batteryData);
+
 private:
     void processData(const QByteArray &data);
     void setupProcessorConnections();
     void sendQuery();          // 发送查询命令
-    bool sendCommand(const QByteArray& cmd);  // 通用发送命令函数
+    bool sendCommand(const QByteArray &cmd);  // 通用发送命令函数
     void processBuffer();          // 处理缓冲区中的数据
     QByteArray m_dataBuffer;  // 添加数据缓冲区成员变量
     QSerialPort *serialPort;
@@ -46,7 +51,7 @@ private:
     QMutex m_mutex;
     BatteryInterface *m_batteryInterface;  // 电池接口处理器
     int m_queryInterval;  // 查询间隔（毫秒）
-    
+
     // 通信超时相关
     int m_communicationTimeout; // 通信超时时间（毫秒），默认5000ms
     qint64 m_lastDataTime;      // 上次接收数据的时间

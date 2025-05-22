@@ -42,26 +42,30 @@ BMS1InfoShowForm::~BMS1InfoShowForm()
                    this, &BMS1InfoShowForm::handleCommunicationTimeout);
 
         // 停止图表更新
-        if (m_temperatureChart) {
+        if (m_temperatureChart)
+        {
             m_temperatureChart->stopRealTimeUpdate();
         }
-        
-        if (m_voltageCurrentChart) {
+
+        if (m_voltageCurrentChart)
+        {
             m_voltageCurrentChart->stopRealTimeUpdate();
         }
     }
-    
+
     // 确保删除图表组件
-    if (m_temperatureChart) {
+    if (m_temperatureChart)
+    {
         delete m_temperatureChart;
         m_temperatureChart = nullptr;
     }
-    
-    if (m_voltageCurrentChart) {
+
+    if (m_voltageCurrentChart)
+    {
         delete m_voltageCurrentChart;
         m_voltageCurrentChart = nullptr;
     }
-    
+
     delete ui;
 }
 
@@ -72,14 +76,16 @@ void BMS1InfoShowForm::setBatteryInfo(BatteryListForm *battery)
     if (currentBattery)
     {
         // 首先停止图表更新，防止在断开连接期间尝试访问已释放的资源
-        if (m_temperatureChart) {
+        if (m_temperatureChart)
+        {
             m_temperatureChart->stopRealTimeUpdate();
         }
-        
-        if (m_voltageCurrentChart) {
+
+        if (m_voltageCurrentChart)
+        {
             m_voltageCurrentChart->stopRealTimeUpdate();
         }
-        
+
         // 然后断开所有信号连接
         disconnect(currentBattery.get(), &BatteryListForm::dataReceived,
                    this, &BMS1InfoShowForm::updateBatteryData);
@@ -94,10 +100,10 @@ void BMS1InfoShowForm::setBatteryInfo(BatteryListForm *battery)
 
     if (battery)
     {
-        try 
+        try
         {
             // 获取电池的shared_ptr
-            auto sharedBattery = battery->getSharedPtr(); 
+            auto sharedBattery = battery->getSharedPtr();
             m_currentBattery = sharedBattery; // 存储电池引用
 
             // 获取电池信息
@@ -118,26 +124,30 @@ void BMS1InfoShowForm::setBatteryInfo(BatteryListForm *battery)
                     this, &BMS1InfoShowForm::handleCommunicationTimeout);
 
             // 清除图表数据
-            if (m_temperatureChart) {
+            if (m_temperatureChart)
+            {
                 m_temperatureChart->clearAllData();
             }
-            
-            if (m_voltageCurrentChart) {
+
+            if (m_voltageCurrentChart)
+            {
                 m_voltageCurrentChart->clearAllData();
             }
 
             // 添加初始数据并启动图表实时更新
-            if (m_temperatureChart) {
+            if (m_temperatureChart)
+            {
                 m_temperatureChart->addTemperatureData(lastData.tempMax / 10.0);
                 m_temperatureChart->startRealTimeUpdate();
             }
-            
-            if (m_voltageCurrentChart) {
+
+            if (m_voltageCurrentChart)
+            {
                 m_voltageCurrentChart->addVoltageCurrentData(lastData.voltage / 100.0, lastData.current / 100.0);
                 m_voltageCurrentChart->startRealTimeUpdate();
             }
         }
-        catch (const std::bad_weak_ptr& e) 
+        catch (const std::bad_weak_ptr &e)
         {
             // 如果无法获取shared_ptr，这可能是由于对象不是shared_ptr管理的
             qDebug() << "警告: 无法获取电池对象的shared_ptr: " << e.what();
@@ -150,21 +160,21 @@ void BMS1InfoShowForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &
 {
     // 安全检查
     if (!battery) return; // 如果指针为空，直接返回
-    
+
     // 检查当前电池引用是否有效并指向正确的对象
     auto currentBattery = m_currentBattery.lock();
     if (!currentBattery || currentBattery.get() != battery) return;
 
     // 更新电池信息显示
     ui->label_soc->setText(QString::number(data.soc) + "%");
-    ui->label_voltage->setText(QString::number(data.voltage / 100.0, 'f', 2) + "V");
-    ui->label_current->setText(QString::number(data.current / 100.0, 'f', 2) + "A");
-    ui->label_current_f->setText(QString::number(data.current / 100.0, 'f', 2) + "A");
+    ui->label_voltage->setText(QString::number(data.voltage / 100.0, 'f', 2) );
+    ui->label_current->setText(QString::number(data.current / 100.0, 'f', 2) );
+    ui->label_current_f->setText(QString::number(data.current / 100.0, 'f', 2));
     ui->label_tempMax->setText(QString::number(data.tempMax / 10.0, 'f', 1));
 
     // 更新其他数据
-    ui->label_ratedCapacity->setText(QString::number(data.ratedCapacity / 100.0));
-    ui->label_remainCapacity->setText(QString::number(data.remainCapacity));
+    ui->label_ratedCapacity->setText(QString::number(data.ratedCapacity / 100.0 * 1000));
+    ui->label_remainCapacity->setText(QString::number(data.remainCapacity / 100.0 * 1000));
 
     // 更新保护状态和告警信息（如果有）
     updateProtectionStatus(data.protectStatus);

@@ -8,6 +8,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QScrollArea>
+#include <memory>
 #include "batterylistform.h"
 
 class BatteryGridWidget : public QWidget
@@ -76,7 +77,7 @@ private:
     QPushButton *nextButton;
     QLabel *pageInfoLabel;
     
-    QList<BatteryListForm*> batteryWidgets;
+    QList<std::shared_ptr<BatteryListForm>> batteryWidgets;
     
     int rows;
     int cols;
@@ -87,7 +88,7 @@ private:
     int bottomMargin;
     
     bool autoHidePagination;
-    BatteryListForm* selectedBattery;
+    std::shared_ptr<BatteryListForm> selectedBattery;
 };
 
-#endif // BATTERYGRIDWIDGET_H 
+#endif // BATTERYGRIDWIDGET_H

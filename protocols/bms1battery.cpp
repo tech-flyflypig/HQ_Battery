@@ -1,6 +1,7 @@
 ﻿#include "bms1battery.h"
 #include "ModbusHelper.h"
 #include <QDebug>
+#include <QThread>
 // 构造函数初始化
 BMS1Battery::BMS1Battery()
 {
@@ -24,7 +25,7 @@ void BMS1Battery::configure()
 
 void BMS1Battery::processSerialData(const QByteArray &data)
 {
-    qDebug() << "接收：" << data.toHex();
+    // qDebug() << "接收：" << data.toHex();
     // 1. 检查响应的有效性
     if (!ModbusHelper::validateResponse(data, SLAVE_ADDR, READ_HOLDINGS))
     {
@@ -145,7 +146,21 @@ void BMS1Battery::processSerialData(const QByteArray &data)
     // }
 
     // 4. 发送解析后的数据
+    qDebug() << "=== BMS1Battery Signal Emission ===";
+    qDebug() << "Thread ID:" << QThread::currentThreadId();
+    qDebug() << "BMS1Battery object at:" << this;
+    qDebug() << "Parent:" << this->parent();
+    qDebug() << "MetaObject:" << this->metaObject()->className();
+    qDebug() << "Signal Index:" << this->metaObject()->indexOfSignal("batteryDataProcessed(BMS_1)");
+    qDebug() << "Data Values:";
+    qDebug() << "  - SOC:" << batteryData.soc;
+    qDebug() << "  - Voltage:" << batteryData.voltage;
+    qDebug() << "  - Current:" << batteryData.current;
+    qDebug() << "  - Status:" << batteryData.systemStatus;
+    qDebug() << "Emitting signal...";
     emit batteryDataProcessed(batteryData);
+    qDebug() << "Signal emitted";
+    qDebug() << "================================";
 }
 
 QByteArray BMS1Battery::getQueryCommand() const

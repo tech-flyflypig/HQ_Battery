@@ -273,7 +273,7 @@ QLabel{
      <item row="4" column="0">
       <widget class="QLabel" name="label_14">
        <property name="text">
-        <string>放电电流（mA）</string>
+        <string>放电电流（A）</string>
        </property>
       </widget>
      </item>
@@ -297,7 +297,7 @@ QLabel{
      <item row="8" column="0">
       <widget class="QLabel" name="label_18">
        <property name="text">
-        <string>充电输入（mA）</string>
+        <string>充电输入（A）</string>
        </property>
       </widget>
      </item>
@@ -328,7 +328,7 @@ QLabel{
      <item row="6" column="0">
       <widget class="QLabel" name="label_16">
        <property name="text">
-        <string>充电电流（mA）</string>
+        <string>充电电流（A）</string>
        </property>
       </widget>
      </item>
@@ -383,7 +383,7 @@ QLabel{
      <item row="10" column="0">
       <widget class="QLabel" name="label_20">
        <property name="text">
-        <string>电池组电压（mV）</string>
+        <string>电池组电压（V）</string>
        </property>
       </widget>
      </item>

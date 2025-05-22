@@ -116,8 +116,6 @@ bool ModbusHelper::validateResponse(const QByteArray &data, uint8_t expectedSlav
     size_t dataLen = data.size();
     QByteArray dataWithoutCRC = data.left(dataLen - 2);
     quint16 calcCRC = calculateCRC16(dataWithoutCRC);
-    qDebug() << "dataWithoutCRC:" << dataWithoutCRC.toHex();
-
     quint16 recvCRC = (static_cast<uint8_t>(data.at(dataLen - 1)) << 8) |
                       static_cast<uint8_t>(data.at(dataLen - 2));
 
