@@ -69,6 +69,9 @@ QLabel{
 	color: rgb(85, 255, 255);
 	font: 700 12pt &quot;Microsoft YaHei UI&quot;;
 }
+#label_current,#label_loop_time,#label_ratedCapacity,#label_tempMax,#label_temp_environment,#label_voltage,#label_remainCapacity{
+	color: rgb(255, 170, 0);
+}
 </string>
   </property>
   <widget class="QWidget" name="widget_maindetail" native="true">
@@ -219,20 +222,34 @@ QLabel{
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>660</x>
-      <y>20</y>
+      <x>670</x>
+      <y>30</y>
       <width>211</width>
       <height>331</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="8" column="1">
-      <widget class="QLabel" name="label_17">
+     <item row="1" column="0" colspan="2">
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="10" column="1">
+      <widget class="QLabel" name="label_temp_environment">
        <property name="text">
-        <string>35134</string>
+        <string>26.5</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_21">
+       <property name="text">
+        <string>电池组温度（℃）</string>
        </property>
       </widget>
      </item>
@@ -246,17 +263,24 @@ QLabel{
        </property>
       </widget>
      </item>
-     <item row="12" column="0">
-      <widget class="QLabel" name="label_21">
-       <property name="text">
-        <string>电池组温度（℃）</string>
+     <item row="7" column="0" colspan="2">
+      <widget class="Line" name="line_6">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="label_remainCapacity">
+     <item row="6" column="0">
+      <widget class="QLabel" name="label_20">
        <property name="text">
-        <string>7993</string>
+        <string>电池组电压（V）</string>
+       </property>
+      </widget>
+     </item>
+     <item row="8" column="1">
+      <widget class="QLabel" name="label_tempMax">
+       <property name="text">
+        <string>26.5</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -265,20 +289,6 @@ QLabel{
      </item>
      <item row="3" column="0" colspan="2">
       <widget class="Line" name="line_2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_14">
-       <property name="text">
-        <string>放电电流（A）</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0" colspan="2">
-      <widget class="Line" name="line_4">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -294,10 +304,13 @@ QLabel{
        </property>
       </widget>
      </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_18">
+     <item row="6" column="1">
+      <widget class="QLabel" name="label_voltage">
        <property name="text">
-        <string>充电输入（A）</string>
+        <string>27531</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -308,13 +321,27 @@ QLabel{
        </property>
       </widget>
      </item>
-     <item row="12" column="1">
-      <widget class="QLabel" name="label_tempMax">
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_14">
        <property name="text">
-        <string>26.5</string>
+        <string>电流（A）</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_remainCapacity">
+       <property name="text">
+        <string>7993</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="2">
+      <widget class="Line" name="line_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
@@ -325,65 +352,41 @@ QLabel{
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_16">
+     <item row="10" column="0">
+      <widget class="QLabel" name="label_22">
        <property name="text">
-        <string>充电电流（A）</string>
+        <string>环境温度（℃）</string>
        </property>
       </widget>
      </item>
-     <item row="11" column="0" colspan="2">
-      <widget class="Line" name="line_6">
+     <item row="9" column="0" colspan="2">
+      <widget class="Line" name="line_7">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
-      <widget class="QLabel" name="label_current_f">
+     <item row="11" column="0" colspan="2">
+      <widget class="Line" name="line_8">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="0">
+      <widget class="QLabel" name="label_23">
+       <property name="text">
+        <string>循环次数</string>
+       </property>
+      </widget>
+     </item>
+     <item row="12" column="1">
+      <widget class="QLabel" name="label_loop_time">
        <property name="text">
         <string>0</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0" colspan="2">
-      <widget class="Line" name="line_5">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="2">
-      <widget class="Line" name="line">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0" colspan="2">
-      <widget class="Line" name="line_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="1">
-      <widget class="QLabel" name="label_voltage">
-       <property name="text">
-        <string>27531</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0">
-      <widget class="QLabel" name="label_20">
-       <property name="text">
-        <string>电池组电压（V）</string>
        </property>
       </widget>
      </item>

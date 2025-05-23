@@ -169,8 +169,9 @@ void BMS1InfoShowForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &
     ui->label_soc->setText(QString::number(data.soc) + "%");
     ui->label_voltage->setText(QString::number(data.voltage / 100.0, 'f', 2) );
     ui->label_current->setText(QString::number(data.current / 100.0, 'f', 2) );
-    ui->label_current_f->setText(QString::number(data.current / 100.0, 'f', 2));
+    ui->label_temp_environment->setText(QString::number(data.ambientTemp / 10.0, 'f', 1));
     ui->label_tempMax->setText(QString::number(data.tempMax / 10.0, 'f', 1));
+    ui->label_loop_time->setText(QString::number(data.cycleCount));
 
     // 更新其他数据
     ui->label_ratedCapacity->setText(QString::number(data.ratedCapacity / 100.0 * 1000));
@@ -187,7 +188,7 @@ void BMS1InfoShowForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &
 
     // 更新图表数据
     m_temperatureChart->addTemperatureData(temp);
-    m_voltageCurrentChart->addVoltageCurrentData(voltage, current);
+    m_voltageCurrentChart->addVoltageCurrentData(20, 15);
 }
 
 void BMS1InfoShowForm::handleCommunicationError(BatteryListForm *battery, const QString &errorMessage)

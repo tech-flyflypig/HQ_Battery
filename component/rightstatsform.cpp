@@ -5,7 +5,7 @@
 RightStatsForm::RightStatsForm(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::RightStatsForm)
-    // m_currentBattery 现在是 weak_ptr，不需要初始化
+      // m_currentBattery 现在是 weak_ptr，不需要初始化
 {
     ui->setupUi(this);
 }
@@ -21,7 +21,7 @@ void RightStatsForm::setBatteryInfo(BatteryListForm *battery)
 {
     // 如果原来的 weak_ptr 还有效，先断开连接
     auto currentBattery = m_currentBattery.lock(); // 尝试获取强引用
-    if (currentBattery) 
+    if (currentBattery)
     {
         // 断开信号连接
         disconnect(currentBattery.get(), &BatteryListForm::dataReceived,
@@ -33,14 +33,14 @@ void RightStatsForm::setBatteryInfo(BatteryListForm *battery)
     }
 
     // 如果提供了新的电池对象
-    if (battery) 
+    if (battery)
     {
         // 尝试获取 shared_ptr
-        try 
+        try
         {
             auto sharedBattery = battery->getSharedPtr(); // 使用 BatteryListForm 的 shared_from_this()
             m_currentBattery = sharedBattery; // 存储弱引用
-            
+
             // 获取电池信息
             battery_info info = battery->getBatteryInfo();
             BMS_1 lastData = battery->getLastData();
@@ -57,14 +57,14 @@ void RightStatsForm::setBatteryInfo(BatteryListForm *battery)
                     this, &RightStatsForm::handleCommunicationError);
             connect(battery, &BatteryListForm::communicationTimeout,
                     this, &RightStatsForm::handleCommunicationTimeout);
-        } 
-        catch (const std::bad_weak_ptr& e) 
+        }
+        catch (const std::bad_weak_ptr &e)
         {
             // 如果无法获取shared_ptr，这可能是因为对象不是由shared_ptr管理的
             qDebug() << "警告: 无法获取电池对象的shared_ptr: " << e.what();
         }
     }
-    else 
+    else
     {
         // 清除弱引用
         m_currentBattery.reset();
@@ -75,7 +75,7 @@ void RightStatsForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &da
 {
     // 增强的安全检查
     if (!battery) return; // 如果指针为空，直接返回
-    
+
     // 检查弱引用是否指向同一个对象
     auto currentBattery = m_currentBattery.lock();
     if (!currentBattery || currentBattery.get() != battery) return;
@@ -84,12 +84,12 @@ void RightStatsForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &da
     // 更新基本参数
     if (ui && ui->label_ratedCapacity)
     {
-        ui->label_ratedCapacity->setText(QString::number(data.ratedCapacity / 100.0, 'f', 1));
+        ui->label_ratedCapacity->setText(QString::number(data.ratedCapacity / 100.0 * 1000, 'f', 1));
     }
 
     if (ui && ui->label_remainCapacity)
     {
-        ui->label_remainCapacity->setText(QString::number(data.remainCapacity / 100.0, 'f', 1));
+        ui->label_remainCapacity->setText(QString::number(data.remainCapacity / 100.0 * 1000, 'f', 1));
     }
 
     // 电流分为充电电流和放电电流
@@ -103,9 +103,12 @@ void RightStatsForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &da
     {
         ui->label_current_in->setText(current > 0 ? QString::number(current, 'f', 2) : "0.00");
     }
-
+    ui->label_pcbtemp->setText(QString::number(data.ambientTemp / 10.0, 'f', 1));
+    ui->label_voltage->setText(QString::number(data.voltage / 100.0, 'f', 2) );
+    ui->label_tempMax->setText(QString::number(data.tempMax / 10.0, 'f', 1));
     // 更新设备信息 - 只有当对象有效才访问
-    try {
+    try
+    {
         battery_info info = battery->getBatteryInfo();
         if (ui && ui->label_sitecom)
         {
@@ -116,7 +119,9 @@ void RightStatsForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &da
         {
             ui->label_port->setText(info.port_name);
         }
-    } catch (...) {
+    }
+    catch (...)
+    {
         // 安全捕获任何异常，避免崩溃
         qDebug() << "访问电池信息时发生异常";
     }
@@ -127,7 +132,7 @@ void RightStatsForm::handleCommunicationError(BatteryListForm *battery, const QS
     // 检查弱引用是否有效且指向同一个对象
     auto currentBattery = m_currentBattery.lock();
     if (!currentBattery || currentBattery.get() != battery) return;
-    
+
     qDebug() << "通信错误: " << errorMessage;
 }
 
@@ -136,6 +141,6 @@ void RightStatsForm::handleCommunicationTimeout(BatteryListForm *battery)
     // 检查弱引用是否有效且指向同一个对象
     auto currentBattery = m_currentBattery.lock();
     if (!currentBattery || currentBattery.get() != battery) return;
-    
+
     qDebug() << "通信超时";
 }

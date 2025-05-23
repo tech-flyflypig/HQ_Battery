@@ -1,4 +1,4 @@
-#include "batterychartwidget.h"
+﻿#include "batterychartwidget.h"
 #include <QDebug>
 #include <QGraphicsLayout>
 
@@ -146,7 +146,7 @@ void BatteryChartWidget::setupTemperatureChart()
 
     // 设置时间范围（显示最近10分钟的数据）
     QDateTime now = QDateTime::currentDateTime();
-    m_axisX->setRange(now.addSecs(-600), now);
+    m_axisX->setRange(now.addSecs(-120), now);
 }
 
 void BatteryChartWidget::setupVoltageCurrentChart()
@@ -177,6 +177,7 @@ void BatteryChartWidget::setupVoltageCurrentChart()
     m_currentSeries->setPen(QPen(QColor(255, 153, 0), 2));
 
     // 添加系列到图表
+    //m_chart->addSeries(m_currentSeries);
     m_chart->addSeries(m_voltageSeries);
     m_chart->addSeries(m_currentSeries);
 
@@ -194,7 +195,7 @@ void BatteryChartWidget::setupVoltageCurrentChart()
 
     // 设置时间范围（显示最近10分钟的数据）
     QDateTime now = QDateTime::currentDateTime();
-    m_axisX->setRange(now.addSecs(-60), now);
+    m_axisX->setRange(now.addSecs(-120), now);
 }
 
 void BatteryChartWidget::addTemperatureData(double temperature)
@@ -271,7 +272,7 @@ void BatteryChartWidget::clearAllData()
 
     // 重置X轴时间范围
     QDateTime now = QDateTime::currentDateTime();
-    m_axisX->setRange(now.addSecs(-60), now);
+    m_axisX->setRange(now.addSecs(-120), now);
 }
 
 void BatteryChartWidget::startRealTimeUpdate()
@@ -297,7 +298,7 @@ void BatteryChartWidget::updateChart()
     QDateTime now = QDateTime::currentDateTime();
 
     // 更新X轴范围（显示最近1分钟的数据）
-    m_axisX->setRange(now.addSecs(-60), now);
+    m_axisX->setRange(now.addSecs(-120), now);
 
     if (m_chartType == TEMPERATURE_CHART)
     {
