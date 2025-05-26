@@ -14,7 +14,7 @@ LeftStatsForm::LeftStatsForm(QWidget *parent)
     // 连接统计数据变化信号
     connect(BatteryStats::instance(), &BatteryStats::statsChanged, this, &LeftStatsForm::updateStats);
     // 初始化统计显示
-    updateStats();
+    //updateStats();
 }
 
 LeftStatsForm::~LeftStatsForm()
@@ -53,15 +53,21 @@ void LeftStatsForm::updateStats()
 
     // 更新基本统计
     ui->label_total_num->setText(QString::number(stats->getTotalBatteryCount()));
+    ui->verticalSlider_running->setRange(0, stats->getTotalBatteryCount());
+    ui->verticalSlider_stop->setRange(0, stats->getTotalBatteryCount());
+    ui->verticalSlider_fault->setRange(0, stats->getTotalBatteryCount());
+
     ui->label_runing_num->setText(QString::number(stats->getRunningBatteryCount()));
+    ui->verticalSlider_running->setValue(stats->getRunningBatteryCount());
     ui->label_stop_num->setText(QString::number(stats->getStoppedBatteryCount()));
+    ui->verticalSlider_stop->setValue(stats->getStoppedBatteryCount());
     ui->label_fault_num->setText(QString::number(stats->getFaultBatteryCount()));
+    ui->verticalSlider_fault->setValue(stats->getFaultBatteryCount());
 
     // 更新保护状态统计
     // 过压过放
     int over_voltage_discharge_protect = stats->getSingleOvervoltageCount() + stats->getSingleUndervoltageCount() +
                                          stats->getTotalOvervoltageCount() + stats->getTotalUndervoltageCount();
-    over_voltage_discharge_protect = 5;
     ui->label_over_voltage_discharge_protect->setText(QString::number(over_voltage_discharge_protect));
 
     // 温度保护
@@ -79,7 +85,6 @@ void LeftStatsForm::updateStats()
     // 电压告警
     int voltage_alarm = stats->getSingleHighVoltageAlarmCount() + stats->getSingleLowVoltageAlarmCount() +
                         stats->getTotalHighVoltageAlarmCount() + stats->getTotalLowVoltageAlarmCount();
-    voltage_alarm = 10;
     ui->label_voltage_alarm->setText(QString::number(voltage_alarm));
 
     // 温度告警
@@ -104,11 +109,11 @@ void LeftStatsForm::updateStats()
     // 告警标签颜色设置 (有告警时为黄色，无告警时为蓝色)
     QString alarmActiveStyle = "QLabel{color: rgb(246, 233, 47);}";
     QString alarmInactiveStyle = "QLabel{color: rgb(0, 194, 223);}";
-    
+
     // 保护状态标签颜色设置 (有保护时为黄色，无保护时为白色)
     QString protectActiveStyle = "QLabel{color: rgb(246, 233, 47);}";
     QString protectInactiveStyle = "QLabel{color: rgb(255, 255, 255);}";
-    
+
     // 电池图标样式设置
     QString batteryActiveStyle = "#widget_battery_bak{border-image: url(:/image/电源_A.png);background:transparent;}";
     QString batteryInactiveStyle = "#widget_battery_bak{border-image: url(:/image/电源.png);background:transparent;}";
@@ -117,14 +122,14 @@ void LeftStatsForm::updateStats()
     ui->label_voltage_alarm->setStyleSheet(voltage_alarm > 0 ? alarmActiveStyle : alarmInactiveStyle);
     ui->label_current_alarm->setStyleSheet(current_alarm > 0 ? alarmActiveStyle : alarmInactiveStyle);
     ui->label_temperature_alarm->setStyleSheet(temperature_alarm > 0 ? alarmActiveStyle : alarmInactiveStyle);
-    
+
     // 设置保护状态标签颜色
     ui->label_over_voltage_discharge_protect->setStyleSheet(over_voltage_discharge_protect > 0 ? protectActiveStyle : protectInactiveStyle);
     ui->label_tempeture_protect->setStyleSheet(tempeture_protect > 0 ? protectActiveStyle : protectInactiveStyle);
     ui->label_shortCircuitProtect_num->setStyleSheet(short_circuit > 0 ? protectActiveStyle : protectInactiveStyle);
 
     // 设置保护状态对应的电池图标样式
-    ui->widget_battery_bak->setStyleSheet(over_voltage_discharge_protect > 0? batteryActiveStyle : batteryInactiveStyle);
+    ui->widget_battery_bak->setStyleSheet(over_voltage_discharge_protect > 0 ? batteryActiveStyle : batteryInactiveStyle);
     ui->widget_battery_bak_2->setStyleSheet(tempeture_protect > 0 ? batteryActiveStyle : batteryInactiveStyle);
     ui->widget_battery_bak_3->setStyleSheet(short_circuit > 0 ? batteryActiveStyle : batteryInactiveStyle);
 }

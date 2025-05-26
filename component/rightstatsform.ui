@@ -503,7 +503,7 @@ QLabel{
      <rect>
       <x>20</x>
       <y>71</y>
-      <width>191</width>
+      <width>181</width>
       <height>261</height>
      </rect>
     </property>
@@ -526,6 +526,9 @@ QLabel{
        <property name="text">
         <string/>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="1" column="0">
@@ -539,6 +542,9 @@ QLabel{
       <widget class="QLabel" name="label_remainCapacity">
        <property name="text">
         <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -554,6 +560,9 @@ QLabel{
        <property name="text">
         <string/>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="3" column="0">
@@ -567,6 +576,9 @@ QLabel{
       <widget class="QLabel" name="label_current_in">
        <property name="text">
         <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -582,6 +594,9 @@ QLabel{
        <property name="text">
         <string/>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="6" column="0">
@@ -596,12 +611,18 @@ QLabel{
        <property name="text">
         <string/>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="4" column="1">
       <widget class="QLabel" name="label_pcbtemp">
        <property name="text">
         <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>

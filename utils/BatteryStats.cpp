@@ -1,17 +1,18 @@
-#include "BatteryStats.h"
+﻿#include "BatteryStats.h"
 #include <QDebug>
 
-BatteryStats* BatteryStats::m_instance = nullptr;
+BatteryStats *BatteryStats::m_instance = nullptr;
 
-BatteryStats* BatteryStats::instance()
+BatteryStats *BatteryStats::instance()
 {
-    if (!m_instance) {
+    if (!m_instance)
+    {
         m_instance = new BatteryStats();
     }
     return m_instance;
 }
 
-BatteryStats::BatteryStats(QObject* parent)
+BatteryStats::BatteryStats(QObject *parent)
     : QObject(parent)
 {
     // 初始化统计数据
@@ -30,7 +31,7 @@ void BatteryStats::clearStats()
     m_faultCount = 0;
     m_protectStatusCounts.clear();
     m_alarmStatusCounts.clear();
-    
+
     // 发出信号通知统计数据已变化
     emit statsChanged();
 }
@@ -140,7 +141,8 @@ int BatteryStats::getSecondReservedCount() const
 int BatteryStats::getTotalAlarmCount() const
 {
     int totalAlarms = 0;
-    for (int count : m_alarmStatusCounts.values()) {
+    for (int count : m_alarmStatusCounts.values())
+    {
         totalAlarms += count;
     }
     return totalAlarms;
@@ -226,14 +228,14 @@ int BatteryStats::getBatteryLowAlarmCount() const
     return m_alarmStatusCounts.value(0x8000, 0); // BIT15
 }
 
-void BatteryStats::updateBatteryStatus(const QString& batteryId, const BMS_1& data)
+void BatteryStats::updateBatteryStatus(const QString &batteryId, const BMS_1 &data)
 {
     // 保存或更新电池数据
     m_batteryData[batteryId] = data;
-    
+
     // 重新计算统计数据
     calculateStats();
-    
+
     // 发出信号通知统计数据已变化
     emit statsChanged();
 }
@@ -246,20 +248,24 @@ void BatteryStats::calculateStats()
     m_faultCount = 0;
     m_protectStatusCounts.clear();
     m_alarmStatusCounts.clear();
-    
+
     // 遍历所有电池数据进行统计
-    for (const auto& data : m_batteryData) {
+    for (const auto &data : m_batteryData)
+    {
         // 状态统计
-        if (data.systemStatus & 0x0001) { // 运行状态
+        if (data.battery_info.status == 0x00)   // 运行状态
+        {
             m_runningCount++;
-        } else {
+        }
+        else if (data.battery_info.status == 0x01)//停止
+        {
             m_stoppedCount++;
         }
-        
-        if (data.faultStatus > 0) {
+        else if (data.battery_info.status == 0x02) //故障
+        {
             m_faultCount++;
         }
-        
+
         // 保护状态统计 - 根据附表2
         uint16_t protectStatus = data.protectStatus;
         if (protectStatus & 0x0001) m_protectStatusCounts[0x0001]++; // BIT0: 单体过压保护
@@ -278,7 +284,7 @@ void BatteryStats::calculateStats()
         if (protectStatus & 0x2000) m_protectStatusCounts[0x2000]++; // BIT13: 环境(PCB)低温保护
         if (protectStatus & 0x4000) m_protectStatusCounts[0x4000]++; // BIT14: 功率器备温保护
         if (protectStatus & 0x8000) m_protectStatusCounts[0x8000]++; // BIT15: 预留
-        
+
         // 告警状态统计 - 根据附表1
         uint16_t alarmStatus = data.alarmStatus;
         if (alarmStatus & 0x0001) m_alarmStatusCounts[0x0001]++; // BIT0: 单体高压告警
@@ -298,4 +304,4 @@ void BatteryStats::calculateStats()
         if (alarmStatus & 0x4000) m_alarmStatusCounts[0x4000]++; // BIT14: 功率器备高温告警
         if (alarmStatus & 0x8000) m_alarmStatusCounts[0x8000]++; // BIT15: 电量告警
     }
-} 
+}

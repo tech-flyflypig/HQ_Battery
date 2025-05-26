@@ -5,6 +5,7 @@
 #include <QStyleOption>
 #include <QMouseEvent>
 #include <QDebug>
+#include <cstring>
 #include "../utils/BatteryStats.h"
 #include <QElapsedTimer>
 #include <QCoreApplication>
@@ -18,6 +19,9 @@ BatteryListForm::BatteryListForm(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // 初始化m_lastData
+    // memset(&m_lastData, 0, sizeof(BMS_1));
+
     // 设置初始样式
     updateStyle();
 }
@@ -25,7 +29,7 @@ BatteryListForm::BatteryListForm(QWidget *parent)
 BatteryListForm::~BatteryListForm()
 {
     stopCommunication();
-    
+
     // 确保m_serialWorker被正确删除
     if (m_serialWorker)
     {
@@ -34,7 +38,7 @@ BatteryListForm::~BatteryListForm()
         delete m_serialWorker;
         m_serialWorker = nullptr;
     }
-    
+
     delete ui;
 }
 
@@ -101,16 +105,17 @@ void BatteryListForm::stopCommunication()
 
     // 确保断开所有与电池数据相关的连接
     disconnect(m_serialWorker, &SerialWorker::forwardBatteryData,
-              this, &BatteryListForm::onBatteryDataReceived);
-    
+               this, &BatteryListForm::onBatteryDataReceived);
+
     // 停止串口通信
     m_serialWorker->stopReading();
     m_isRunning = false;
-    
+
     // 等待一小段时间确保完成停止
     QElapsedTimer timer;
     timer.start();
-    while (timer.elapsed() < 500) { // 最多等待500毫秒
+    while (timer.elapsed() < 500)   // 最多等待500毫秒
+    {
         QCoreApplication::processEvents();
     }
 }
@@ -200,10 +205,11 @@ void BatteryListForm::onBatteryDataReceived(const BMS_1 &data)
 {
     m_lastData = data;
     updateDisplay(data);
-    
+    m_lastData.battery_info.status = 0x00;
+
     // 更新全局统计信息
-    BatteryStats::instance()->updateBatteryStatus(m_batteryInfo.power_id, data);
-    
+    BatteryStats::instance()->updateBatteryStatus(m_batteryInfo.power_id, m_lastData);
+
     emit dataReceived(this, data);
 }
 
@@ -211,6 +217,17 @@ void BatteryListForm::onBatteryDataReceived(const BMS_1 &data)
 void BatteryListForm::onCommunicationError(const QString &errorMessage)
 {
     qDebug() << "Battery communication error: " << errorMessage;
+
+    // 创建一个故障状态的BMS_1数据
+    BMS_1 errorData = m_lastData;
+    errorData.battery_info.status = 0x02; // 设置故障状态标志
+
+    // 更新全局统计信息
+    BatteryStats::instance()->updateBatteryStatus(m_batteryInfo.power_id, errorData);
+
+    // 设置故障状态图标
+    ui->label_battery_status->setStyleSheet("border-image: url(:/image/故障.png);");
+
     emit communicationError(this, errorMessage);
 }
 
@@ -218,8 +235,17 @@ void BatteryListForm::onCommunicationError(const QString &errorMessage)
 void BatteryListForm::onCommunicationTimeout()
 {
     qDebug() << "Battery communication timeout";
+
+    // 创建一个故障状态的BMS_1数据
+    BMS_1 timeoutData = m_lastData;
+    timeoutData.battery_info.status = 0x02; // 设置超时故障标志
+
+    // 更新全局统计信息
+    BatteryStats::instance()->updateBatteryStatus(m_batteryInfo.power_id, timeoutData);
+
     // 设置超时状态图标
     ui->label_battery_status->setStyleSheet("border-image: url(:/image/停止.png);");
+
     emit communicationTimeout(this);
 }
 

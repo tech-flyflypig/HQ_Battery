@@ -18,7 +18,7 @@ struct battery_info
 //    float voltage;
 //    float current;
 //    float temperature;
-//    int status;
+    int status; // 0: 正常, 1: 通信错误, 2: 超时
 
     int x;
     int y;
