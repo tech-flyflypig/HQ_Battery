@@ -212,31 +212,34 @@ void BMS1InfoShowForm::handleCommunicationTimeout(BatteryListForm *battery)
 void BMS1InfoShowForm::updateProtectionStatus(unsigned int protectStatus)
 {
     // 更新保护状态RadioButton
-    ui->radioButton_OverchargeVoltage_p->setChecked(protectStatus & 0x0001);
-    ui->radioButton_OverdischargeVoltage_p->setChecked(protectStatus & 0x0002);
-    ui->radioButton_ChargingOvercurrent_p->setChecked(protectStatus & 0x0004);
-    ui->radioButton_DischargingOvercurrent_p->setChecked(protectStatus & 0x0008);
-    ui->radioButton_CellHighTemp_p->setChecked(protectStatus & 0x0010);
-    ui->radioButton_CellLowTemp_p->setChecked(protectStatus & 0x0020);
-    ui->radioButton_EnvHighTemp_p->setChecked(protectStatus & 0x0040);
-    ui->radioButton_EnvLowTemp_p->setChecked(protectStatus & 0x0080);
-    ui->radioButton_OutputShortCircuit_p->setChecked(protectStatus & 0x0100);
-    ui->radioButton_PowerTubeHighTemp_p->setChecked(protectStatus & 0x0200);
+    //
+    ui->radioButton_OverchargeVoltage_p->setChecked(protectStatus & 0x0004);
+    ui->radioButton_OverdischargeVoltage_p->setChecked(protectStatus & 0x0008);
+    ui->radioButton_ChargingOvercurrent_p->setChecked(protectStatus & 0x0010);
+    ui->radioButton_DischargingOvercurrent_p->setChecked(protectStatus & 0x0020);
+    ui->radioButton_OutputShortCircuit_p->setChecked(protectStatus & 0x0040);
+
+    ui->radioButton_CellHighTemp_p->setChecked(protectStatus & 0x0300);
+    ui->radioButton_CellLowTemp_p->setChecked(protectStatus & 0x0C00);
+    ui->radioButton_EnvHighTemp_p->setChecked(protectStatus & 0x1000);
+    ui->radioButton_EnvLowTemp_p->setChecked(protectStatus & 0x2000);
+    ui->radioButton_PowerTubeHighTemp_p->setChecked(protectStatus & 0x4000);
+    
 }
 
 void BMS1InfoShowForm::updateAlarmStatus(unsigned int alarmStatus)
 {
     // 更新告警状态RadioButton
-    ui->radioButton_OverchargeVoltage->setChecked(alarmStatus & 0x0001);
-    ui->radioButton_OverdischargeVoltage->setChecked(alarmStatus & 0x0002);
-    ui->radioButton_ChargingOvercurrent->setChecked(alarmStatus & 0x0004);
-    ui->radioButton_DischargingOvercurrent->setChecked(alarmStatus & 0x0008);
-    ui->radioButton_CellHighTemp->setChecked(alarmStatus & 0x0010);
-    ui->radioButton_CellLowTemp->setChecked(alarmStatus & 0x0020);
-    ui->radioButton_EnvHighTemp->setChecked(alarmStatus & 0x0040);
-    ui->radioButton_EnvLowTemp->setChecked(alarmStatus & 0x0080);
-    ui->radioButton_BatteryLevel->setChecked(alarmStatus & 0x0100);
-    ui->radioButton_PowerTubeHighTemp->setChecked(alarmStatus & 0x0200);
+    ui->radioButton_OverchargeVoltage->setChecked(alarmStatus & 0x0004);
+    ui->radioButton_OverdischargeVoltage->setChecked(alarmStatus & 0x0008);
+    ui->radioButton_ChargingOvercurrent->setChecked(alarmStatus & 0x0010);
+    ui->radioButton_DischargingOvercurrent->setChecked(alarmStatus & 0x0020);
+    ui->radioButton_CellHighTemp->setChecked(alarmStatus & 0x0300);
+    ui->radioButton_CellLowTemp->setChecked(alarmStatus & 0x0C00);
+    ui->radioButton_EnvHighTemp->setChecked(alarmStatus & 0x1000);
+    ui->radioButton_EnvLowTemp->setChecked(alarmStatus & 0x2000);
+    ui->radioButton_PowerTubeHighTemp->setChecked(alarmStatus & 0x4000);
+    ui->radioButton_BatteryLevel->setChecked(alarmStatus & 0x8000);
 }
 
 // 初始化RadioButton为只读状态
