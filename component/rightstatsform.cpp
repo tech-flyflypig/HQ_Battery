@@ -132,6 +132,7 @@ void RightStatsForm::handleCommunicationError(BatteryListForm *battery, const QS
     // 检查弱引用是否有效且指向同一个对象
     auto currentBattery = m_currentBattery.lock();
     if (!currentBattery || currentBattery.get() != battery) return;
+    ui->label_battery_status->setStyleSheet("border-image: url(:/image/故障.png);");
 
     qDebug() << "通信错误: " << errorMessage;
 }
@@ -141,6 +142,6 @@ void RightStatsForm::handleCommunicationTimeout(BatteryListForm *battery)
     // 检查弱引用是否有效且指向同一个对象
     auto currentBattery = m_currentBattery.lock();
     if (!currentBattery || currentBattery.get() != battery) return;
-
+    ui->label_battery_status->setStyleSheet("border-image: url(:/image/停止.png);");
     qDebug() << "通信超时";
 }

@@ -357,7 +357,7 @@ border-image: url(:/image/主页_电源.png);
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="label_battery_status">
          <property name="minimumSize">
           <size>
            <width>52</width>

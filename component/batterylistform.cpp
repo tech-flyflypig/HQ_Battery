@@ -158,21 +158,21 @@ void BatteryListForm::updateDisplay(const BMS_1 &data)
     ui->label_tempMax->setText(tempStr);
 
     // 根据状态更新图标
-    if (data.alarmStatus > 0)
-    {
-        // 告警状态
-        ui->label_battery_status->setStyleSheet("border-image: url(:/image/告警.png);");
-    }
-    else if (data.protectStatus > 0)
-    {
-        // 保护状态
-        ui->label_battery_status->setStyleSheet("border-image: url(:/image/保护.png);");
-    }
-    else if (m_isRunning)
-    {
-        // 正常运行状态
-        ui->label_battery_status->setStyleSheet("border-image: url(:/image/运行.png);");
-    }
+    // if (data.alarmStatus > 0)
+    // {
+    //     // 告警状态
+    //     ui->label_battery_status->setStyleSheet("border-image: url(:/image/告警.png);");
+    // }
+    // else if (data.protectStatus > 0)
+    // {
+    //     // 保护状态
+    //     ui->label_battery_status->setStyleSheet("border-image: url(:/image/保护.png);");
+    // }
+    // else if (m_isRunning)
+    // {
+    //     // 正常运行状态
+    //     ui->label_battery_status->setStyleSheet("border-image: url(:/image/运行.png);");
+    // }
 }
 
 // 鼠标点击事件处理

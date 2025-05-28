@@ -102,6 +102,7 @@ void LeftStatsForm::updateStats()
     ui->rbtn_voltage_alarm->setChecked(voltage_alarm > 0);
     ui->rbtn_current_alarm->setChecked(current_alarm > 0);
     ui->rbtn_temperature_alarm->setChecked(temperature_alarm > 0);
+
     ui->rbtn_over_voltage_and_discharge->setChecked(over_voltage_discharge_protect > 0);
     ui->rbtn_tempeture_protect->setChecked(tempeture_protect > 0);
     ui->rbtn_short_circuit->setChecked(short_circuit > 0);
@@ -115,8 +116,8 @@ void LeftStatsForm::updateStats()
     QString protectInactiveStyle = "QLabel{color: rgb(255, 255, 255);}";
 
     // 电池图标样式设置
-    QString batteryActiveStyle = "#widget_battery_bak{border-image: url(:/image/电源_A.png);background:transparent;}";
-    QString batteryInactiveStyle = "#widget_battery_bak{border-image: url(:/image/电源.png);background:transparent;}";
+    QString batteryActiveStyle = ".QWidget{border-image: url(:/image/电源_A.png);background:transparent;}";
+    QString batteryInactiveStyle = ".QWidget{border-image: url(:/image/电源.png);background:transparent;}";
 
     // 设置告警标签颜色
     ui->label_voltage_alarm->setStyleSheet(voltage_alarm > 0 ? alarmActiveStyle : alarmInactiveStyle);
