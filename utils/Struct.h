@@ -4,6 +4,7 @@
 #include <QByteArray>
 #include <QPoint>
 #include <QVariant>
+#include <QDateTime>
 struct battery_info
 {
     QString power_id;
@@ -19,6 +20,7 @@ struct battery_info
 //    float current;
 //    float temperature;
     int status; // 0: 正常, 1: 通信错误, 2: 超时
+    QDateTime last_time; //最后一次数据上报时间
 
     int x;
     int y;

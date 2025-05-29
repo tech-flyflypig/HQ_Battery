@@ -20,6 +20,8 @@
 #include <QMenu>
 #include <QSqlError>
 #include <QMouseEvent>
+#include <QDateTime>
+#include <QTimer>
 #include "batterylistform.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -43,6 +45,14 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    // 停止并清理定时器
+    if (m_timeTimer)
+    {
+        m_timeTimer->stop();
+        delete m_timeTimer;
+        m_timeTimer = nullptr;
+    }
+
     // 清理资源，确保所有动态创建的对象被正确删除
     if (bms1InfoShowForm)
     {
@@ -149,6 +159,14 @@ void MainWindow::initUI()
             qDebug() << "设置电池详情时发生异常: " << e.what();
         }
     });
+    
+    // 初始化时间显示
+    m_timeTimer = new QTimer(this);
+    connect(m_timeTimer, &QTimer::timeout, this, &MainWindow::updateCurrentTime);
+    m_timeTimer->start(1000); // 每秒更新一次
+    
+    // 初始更新一次时间
+    updateCurrentTime();
 }
 
 void MainWindow::connectBatterySignals(BatteryListForm *battery)
@@ -518,5 +536,12 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
 
     // 默认的事件处理
     return QMainWindow::eventFilter(watched, event);
+}
+
+void MainWindow::updateCurrentTime()
+{
+    QDateTime currentTime = QDateTime::currentDateTime();
+    QString timeString = currentTime.toString("yyyy-MM-dd hh:mm:ss");
+    ui->label_current_time->setText(timeString);
 }
 

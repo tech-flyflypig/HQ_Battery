@@ -48,9 +48,11 @@ border-image: url(:/image/top_title.png);
 #label_logo{
 	border-image: url(:/image/logo.png);
 }
-#label_company{
-	
+#label_company{	
 	font: 700 20pt &quot;Microsoft YaHei UI&quot;;
+}
+#label_current_time{
+	font: 700 14pt &quot;Microsoft YaHei UI&quot;;
 }</string>
     </property>
     <widget class="QLabel" name="label_logo">
@@ -152,6 +154,22 @@ QPushButton:hover{
      </property>
      <property name="text">
       <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_current_time">
+     <property name="geometry">
+      <rect>
+       <x>1510</x>
+       <y>20</y>
+       <width>201</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>2025-05-29 08:00:00</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </widget>

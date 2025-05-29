@@ -13,6 +13,15 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#label_current_in,#label_current_out,#label_pcbtemp,#label_ratedCapacity,#label_remainCapacity,#label_tempMax,#label_voltage,#label_ip,#label_sitecom,#label_port{	
+	color: rgb(255, 255, 0);
+}
+#label_upload_time{
+color: rgb(85, 170, 255);
+}
+</string>
+  </property>
   <widget class="QWidget" name="device_info" native="true">
    <property name="geometry">
     <rect>
@@ -227,9 +236,9 @@ QLabel{
    <widget class="QLabel" name="label_upload_time">
     <property name="geometry">
      <rect>
-      <x>30</x>
+      <x>20</x>
       <y>210</y>
-      <width>151</width>
+      <width>171</width>
       <height>20</height>
      </rect>
     </property>
@@ -237,7 +246,7 @@ QLabel{
      <string>2025-05-14 17:00:03</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     <set>Qt::AlignCenter</set>
     </property>
     <property name="wordWrap">
      <bool>true</bool>
@@ -416,9 +425,7 @@ border-image: url(:/image/主页_运行参数.png);
 QLabel{
 	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
 }
-#label_current_in,#label_current_out,#label_pcbtemp,#label_ratedCapacity,#label_remainCapacity,#label_tempMax,#label_voltage{	
-	color: rgb(255, 255, 0);
-}</string>
+</string>
    </property>
    <widget class="Line" name="line_18">
     <property name="geometry">

@@ -6,6 +6,7 @@
 #include "component/bms1infoshowform.h"
 #include "component/rightstatsform.h"
 #include <QPoint>
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui
@@ -43,6 +44,9 @@ private slots:
     
     // 更新右侧信息面板
     void updateRightPanel(BatteryListForm *battery);
+    
+    // 更新当前时间
+    void updateCurrentTime();
 
 private:
     void initUI();
@@ -64,6 +68,9 @@ private:
 
     // 返回按钮和logo标签
     QPushButton *m_backButton;
+    
+    // 时间更新定时器
+    QTimer *m_timeTimer;
     
     // 窗口拖拽相关变量
     bool m_isMoving;

@@ -106,7 +106,9 @@ void RightStatsForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &da
     ui->label_pcbtemp->setText(QString::number(data.ambientTemp / 10.0, 'f', 1));
     ui->label_voltage->setText(QString::number(data.voltage / 100.0, 'f', 2) );
     ui->label_tempMax->setText(QString::number(data.tempMax / 10.0, 'f', 1));
-    // 更新设备信息 - 只有当对象有效才访问
+    // ui->label_sitecom->setText(data.battery_info.site);
+    // ui->label_port->setText(data.battery_info.port_name);
+    ui->label_upload_time->setText(data.battery_info.last_time.toString("yyyy-MM-dd HH:mm:ss"));
     try
     {
         battery_info info = battery->getBatteryInfo();

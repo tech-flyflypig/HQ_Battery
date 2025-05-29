@@ -144,6 +144,7 @@ void BMS1Battery::processSerialData(const QByteArray &data)
     // if (balanceStatusIndex + 3 < registers.size()) {
     //     batteryData.packProductionInfo = registers[balanceStatusIndex + 3];
     // }
+    batteryData.battery_info.last_time = QDateTime::currentDateTime();
 
     // 4. 发送解析后的数据
     qDebug() << "=== BMS1Battery Signal Emission ===";
@@ -158,6 +159,7 @@ void BMS1Battery::processSerialData(const QByteArray &data)
     qDebug() << "  - Current:" << batteryData.current;
     qDebug() << "  - Status:" << batteryData.systemStatus;
     qDebug() << "Emitting signal...";
+
     emit batteryDataProcessed(batteryData);
     qDebug() << "Signal emitted";
     qDebug() << "================================";
