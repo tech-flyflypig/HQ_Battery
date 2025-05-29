@@ -30,6 +30,7 @@ struct battery_info
 };
 struct BMS_1
 {
+
     battery_info battery_info;
     int16_t current;            // 电流, 0.01A, 充电为正，放电为负
     uint16_t voltage;           // 电池组电压, 0.01V
@@ -67,6 +68,22 @@ struct BMS_1
     uint8_t bmsProductionInfo[20]; // BMS生产信息
     //PACK生产信息
     uint8_t packProductionInfo[20]; // PACK生产信息
+
+    BMS_1()
+        : current(0), voltage(0), soc(0), soh(0),
+          remainCapacity(0), fullChargeCapacity(0), ratedCapacity(0), cycleCount(0),
+          alarmStatus(0), protectStatus(0), faultStatus(0), systemStatus(0), functionSwitchStatus(0),
+          cellCount(0), cellVoltageMax(0), cellVoltageMin(0), tempSensorCount(0),
+          tempMax(0), tempMin(0), powerTempValue(0), ambientTemp(0),
+          balanceStatus(0)
+    {
+        // 初始化数组
+        memset(cellVoltage, 0, sizeof(cellVoltage));
+        memset(cellTemp, 0, sizeof(cellTemp));
+        memset(bmsVersionInfo, 0, sizeof(bmsVersionInfo));
+        memset(bmsProductionInfo, 0, sizeof(bmsProductionInfo));
+        memset(packProductionInfo, 0, sizeof(packProductionInfo));
+    }
 
 };
 

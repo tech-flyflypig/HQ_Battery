@@ -6,26 +6,35 @@
 #include <QMutex>
 #include <QTimer>
 #include "batteryinterface.h"
+#include "communicationworker.h"
 
-class SerialWorker : public QThread
+// 使用虚拟继承来解决菱形继承问题
+class SerialWorker : public  QThread, public  CommunicationWorker
 {
     Q_OBJECT
 
 public:
     explicit SerialWorker(QObject *parent = nullptr);
-    ~SerialWorker();
+    ~SerialWorker() override;
 
     void startReading(const QString &portName, const QString &productType);
     void stopReading();
 
-    // 新增：发送控制命令的接口
-    bool sendControlCommand(uint16_t reg, uint16_t value);
+    // 实现CommunicationWorker接口
+    void startCommunication(const QString &address, const QString &productType) override;
+    void stopCommunication() override;
+    bool sendControlCommand(uint16_t reg, uint16_t value) override;
+    bool isRunning() const override { return m_running; }
+    
+    // 实现asQObject方法，返回this作为QObject指针
+    QObject* asQObject() override { return this; }
 
     // 设置通信超时时间（毫秒）
     void setCommunicationTimeout(int timeout)
     {
         m_communicationTimeout = timeout;
     }
+
 signals:
     void error(const QString &errorMessage);
     void dataReceived(const QByteArray &data);

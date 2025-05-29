@@ -14,14 +14,15 @@ BatteryListForm::BatteryListForm(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::BatteryListForm)
     , m_selected(false)
-    , m_serialWorker(nullptr)
+    , m_communicationWorker(nullptr)
     , m_isRunning(false)
+    , m_communicationType(CommunicationType::Serial) // 默认使用串口通信
 {
     ui->setupUi(this);
 
     // 初始化m_lastData
     // memset(&m_lastData, 0, sizeof(BMS_1));
-
+    m_lastData = BMS_1();
     // 设置初始样式
     updateStyle();
 }
@@ -30,13 +31,14 @@ BatteryListForm::~BatteryListForm()
 {
     stopCommunication();
 
-    // 确保m_serialWorker被正确删除
-    if (m_serialWorker)
+    // 确保m_communicationWorker被正确删除
+    if (m_communicationWorker)
     {
         // 断开所有信号连接
-        disconnect(m_serialWorker, nullptr, this, nullptr);
-        delete m_serialWorker;
-        m_serialWorker = nullptr;
+        QObject *worker = m_communicationWorker->asQObject();
+        disconnect(worker, nullptr, this, nullptr);
+        delete m_communicationWorker;
+        m_communicationWorker = nullptr;
     }
 
     delete ui;
@@ -61,14 +63,26 @@ void BatteryListForm::setBatteryInfo(const battery_info &info)
     // 更新UI显示基本信息
     ui->label_address->setText(m_batteryInfo.site); // 显示电池位置
 
-    // 如果串口已经在运行，需要先停止
+    // 如果通信已经在运行，需要先停止
     if (m_isRunning)
     {
         stopCommunication();
     }
 
-    // 初始化串口通信
-    initSerialCommunication();
+    // 确定通信类型
+    if (m_batteryInfo.port_name.contains(":"))
+    {
+        // 如果包含冒号，认为是IP地址:端口格式
+        m_communicationType = CommunicationType::TCP;
+    }
+    else
+    {
+        // 否则认为是串口名称
+        m_communicationType = CommunicationType::Serial;
+    }
+
+    // 初始化通信
+    initCommunication();
 }
 
 battery_info BatteryListForm::getBatteryInfo() const
@@ -76,10 +90,10 @@ battery_info BatteryListForm::getBatteryInfo() const
     return m_batteryInfo;
 }
 
-// 开始串口通信
+// 开始通信
 void BatteryListForm::startCommunication()
 {
-    if (!m_serialWorker || m_isRunning)
+    if (!m_communicationWorker || m_isRunning)
     {
         return;
     }
@@ -87,15 +101,27 @@ void BatteryListForm::startCommunication()
     // 设置为运行状态图标
     ui->label_battery_status->setStyleSheet("border-image: url(:/image/运行.png);");
 
-    // 启动串口通信
-    m_serialWorker->startReading(m_batteryInfo.port_name, m_batteryInfo.type);
+    // 启动通信
+    QString address;
+    if (m_communicationType == CommunicationType::TCP)
+    {
+        // 对于TCP，地址是IP:端口格式
+        address = m_batteryInfo.port_name;
+    }
+    else
+    {
+        // 对于串口，地址就是串口名称
+        address = m_batteryInfo.port_name;
+    }
+
+    m_communicationWorker->startCommunication(address, m_batteryInfo.type);
     m_isRunning = true;
 }
 
-// 停止串口通信
+// 停止通信
 void BatteryListForm::stopCommunication()
 {
-    if (!m_serialWorker || !m_isRunning)
+    if (!m_communicationWorker || !m_isRunning)
     {
         return;
     }
@@ -104,11 +130,12 @@ void BatteryListForm::stopCommunication()
     ui->label_battery_status->setStyleSheet("border-image: url(:/image/停止.png);");
 
     // 确保断开所有与电池数据相关的连接
-    disconnect(m_serialWorker, &SerialWorker::forwardBatteryData,
-               this, &BatteryListForm::onBatteryDataReceived);
+    QObject *worker = m_communicationWorker->asQObject();
+    QObject::disconnect(worker, SIGNAL(forwardBatteryData(const BMS_1&)),
+                      this, SLOT(onBatteryDataReceived(const BMS_1&)));
 
-    // 停止串口通信
-    m_serialWorker->stopReading();
+    // 停止通信
+    m_communicationWorker->stopCommunication();
     m_isRunning = false;
 
     // 等待一小段时间确保完成停止
@@ -120,25 +147,36 @@ void BatteryListForm::stopCommunication()
     }
 }
 
-// 初始化串口通信
-void BatteryListForm::initSerialCommunication()
+// 初始化通信
+void BatteryListForm::initCommunication()
 {
     // 如果已存在，先删除
-    if (m_serialWorker)
+    if (m_communicationWorker)
     {
-        delete m_serialWorker;
+        delete m_communicationWorker;
     }
 
-    // 创建SerialWorker
-    m_serialWorker = new SerialWorker(this);
+    // 使用工厂创建通信工作器
+    m_communicationWorker = CommunicationWorkerFactory::createWorker(m_communicationType, this);
 
-    // 连接信号和槽
-    connect(m_serialWorker, &SerialWorker::forwardBatteryData,
-            this, &BatteryListForm::onBatteryDataReceived);
-    connect(m_serialWorker, &SerialWorker::error,
-            this, &BatteryListForm::onCommunicationError);
-    connect(m_serialWorker, &SerialWorker::communicationTimeout,
-            this, &BatteryListForm::onCommunicationTimeout);
+    if (m_communicationWorker)
+    {
+        // 获取QObject指针用于连接信号和槽
+        QObject *worker = m_communicationWorker->asQObject();
+
+        // 连接信号和槽 - 使用QObject::connect避免歧义
+        QObject::connect(worker, SIGNAL(forwardBatteryData(const BMS_1 &)),
+                         this, SLOT(onBatteryDataReceived(const BMS_1 &)));
+        QObject::connect(worker, SIGNAL(error(const QString &)),
+                         this, SLOT(onCommunicationError(const QString &)));
+        QObject::connect(worker, SIGNAL(communicationTimeout()),
+                         this, SLOT(onCommunicationTimeout()));
+    }
+    else
+    {
+        qDebug() << "Failed to create communication worker for type:"
+                 << CommunicationWorkerFactory::getTypeName(m_communicationType);
+    }
 }
 
 // 更新UI显示

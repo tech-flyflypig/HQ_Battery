@@ -38,8 +38,6 @@ SOURCES += \
     component/exceptionform.cpp \
     component/layoutbatterywidget.cpp \
     component/leftstatsform.cpp \
-    component/leftstatsform.cpp \
-    component/leftstatsform.cpp \
     component/mytreewidget.cpp \
     component/queryform.cpp \
     component/revisepowerform.cpp \
@@ -49,6 +47,7 @@ SOURCES += \
     mainwindow.cpp \
     protocols/batteryport.cpp \
     protocols/bms1battery.cpp \
+    protocols/modbustcpworker.cpp \
     protocols/protocol.cpp \
     protocols/serialworker.cpp \
     utils/BatteryStats.cpp \
@@ -66,8 +65,6 @@ HEADERS += \
     component/exceptionform.h \
     component/layoutbatterywidget.h \
     component/leftstatsform.h \
-    component/leftstatsform.h \
-    component/leftstatsform.h \
     component/mytreewidget.h \
     component/queryform.h \
     component/revisepowerform.h \
@@ -79,6 +76,9 @@ HEADERS += \
     protocols/batteryinterfacefactory.h \
     protocols/batteryport.h \
     protocols/bms1battery.h \
+    protocols/communicationworker.h \
+    protocols/communicationworkerfactory.h \
+    protocols/modbustcpworker.h \
     protocols/protocol.h \
     protocols/serialworker.h \
     utils/BatteryStats.h \
@@ -95,7 +95,6 @@ FORMS += \
     component/bms1infoshowform.ui \
     component/cfdrecordform.ui \
     component/exceptionform.ui \
-    component/leftstatsform.ui \
     component/leftstatsform.ui \
     component/queryform.ui \
     component/revisepowerform.ui \

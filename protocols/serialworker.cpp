@@ -5,17 +5,29 @@
 #include <QEventLoop>
 
 SerialWorker::SerialWorker(QObject *parent)
-    : QThread(parent)
+    : QThread(parent)        // QThread可以传递parent
+    , m_dataBuffer()
     , serialPort(nullptr)
     , m_running(false)
-    , m_batteryInterface(nullptr)
-    , m_queryInterval(1000)  // 默认1秒查询一次
-    , m_communicationTimeout(5000)  // 默认5秒超时
+    , m_batteryInterface(nullptr)  // 默认1秒查询一次
+    , m_queryInterval(1000)  // 默认5秒超时
+    , m_communicationTimeout(5000)
     , m_lastDataTime(0)
     , m_isCommunicationTimeout(false)
-    , m_dataBuffer()
 {
     // 不再需要创建和连接QTimer
+}
+
+// 实现CommunicationWorker接口
+void SerialWorker::startCommunication(const QString &address, const QString &productType)
+{
+    // 对于串口通信，address就是端口名称
+    startReading(address, productType);
+}
+
+void SerialWorker::stopCommunication()
+{
+    stopReading();
 }
 
 void SerialWorker::onBatteryDataProcessed(const BMS_1 &batteryData)
@@ -29,26 +41,29 @@ void SerialWorker::onBatteryDataProcessed(const BMS_1 &batteryData)
 
 void SerialWorker::setupProcessorConnections()
 {
-    if (!m_batteryInterface) {
+    if (!m_batteryInterface)
+    {
         qDebug() << "Error: m_batteryInterface is null in setupProcessorConnections";
         return;
     }
 
     qDebug() << "Setting up processor connections in thread:" << QThread::currentThreadId();
     qDebug() << "m_batteryInterface at:" << m_batteryInterface;
-    qDebug() << "this object at:" << this;
-    
-    // 断开所有之前的连接
-    disconnect(m_batteryInterface, nullptr, this, nullptr);
-    
-    // 连接到中间槽函数
-    bool connected = connect(m_batteryInterface, &BatteryInterface::batteryDataProcessed,
-            this, &SerialWorker::onBatteryDataProcessed,
-            Qt::QueuedConnection);
-            
+    // qDebug() << "this object at:" << this;
+
+    // 断开所有之前的连接 - 使用函数指针方式
+    QObject::disconnect(m_batteryInterface, &BatteryInterface::batteryDataProcessed,
+                        this, &SerialWorker::onBatteryDataProcessed);
+
+    // 连接到中间槽函数 - 使用函数指针方式，避免类型转换
+    bool connected = QObject::connect(m_batteryInterface, &BatteryInterface::batteryDataProcessed,
+                                      this, &SerialWorker::onBatteryDataProcessed,
+                                      Qt::QueuedConnection);
+
     qDebug() << "Signal connection established:" << connected;
-    
-    if (!connected) {
+
+    if (!connected)
+    {
         qDebug() << "Failed to connect BatteryInterface signal to SerialWorker slot";
     }
 }

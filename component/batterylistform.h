@@ -3,7 +3,8 @@
 
 #include <QWidget>
 #include <memory>
-#include "../protocols/serialworker.h"
+#include "../protocols/communicationworker.h"
+#include "../protocols/communicationworkerfactory.h"
 #include "../utils/Struct.h"
 
 namespace Ui
@@ -24,7 +25,7 @@ public:
     void setBatteryInfo(const battery_info &info);
     battery_info getBatteryInfo() const;
 
-    // 开始/停止串口通信
+    // 开始/停止通信
     void startCommunication();
     void stopCommunication();
     
@@ -49,8 +50,8 @@ protected:
 private:
     // 设置初始样式
     void updateStyle();
-    // 初始化串口通信
-    void initSerialCommunication();
+    // 初始化通信
+    void initCommunication();
     // 更新UI显示
     void updateDisplay(const BMS_1 &data);
 
@@ -70,10 +71,11 @@ private slots:
 private:
     Ui::BatteryListForm *ui;
     bool m_selected;
-    SerialWorker *m_serialWorker;
+    CommunicationWorker *m_communicationWorker;
     battery_info m_batteryInfo;
     BMS_1 m_lastData;
     bool m_isRunning;
+    CommunicationType m_communicationType;
 };
 
 #endif // BATTERYLISTFORM_H
