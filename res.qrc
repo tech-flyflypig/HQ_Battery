@@ -58,5 +58,6 @@
         <file>image/undo.png</file>
         <file>image/登录背景_01.png</file>
         <file>image/故障.png</file>
+        <file>image/btn_bak.png</file>
     </qresource>
 </RCC>
