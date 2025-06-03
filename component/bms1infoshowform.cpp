@@ -1,6 +1,11 @@
 ﻿#include "bms1infoshowform.h"
 #include "ui_bms1infoshowform.h"
 #include <QDebug>
+#include <QMessageBox>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QDateTime>
+#include <QVBoxLayout>
 
 BMS1InfoShowForm::BMS1InfoShowForm(QWidget *parent)
     : QWidget(parent)
@@ -224,7 +229,7 @@ void BMS1InfoShowForm::updateProtectionStatus(unsigned int protectStatus)
     ui->radioButton_EnvHighTemp_p->setChecked(protectStatus & 0x1000);
     ui->radioButton_EnvLowTemp_p->setChecked(protectStatus & 0x2000);
     ui->radioButton_PowerTubeHighTemp_p->setChecked(protectStatus & 0x4000);
-    
+
 }
 
 void BMS1InfoShowForm::updateAlarmStatus(unsigned int alarmStatus)
@@ -280,3 +285,89 @@ void BMS1InfoShowForm::initializeRadioButtons()
         radioButton->setFocusPolicy(Qt::NoFocus); // 防止键盘焦点
     }
 }
+
+void BMS1InfoShowForm::on_btn_charge_clicked()
+{
+    // 获取当前电池
+    auto currentBattery = m_currentBattery.lock();
+    if (!currentBattery)
+    {
+        QMessageBox::warning(nullptr, tr("警告"), tr("未选择电池或电池连接已断开"));
+        return;
+    }
+
+    // 获取电池信息
+    battery_info info = currentBattery->getBatteryInfo();
+
+    // 确认操作
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(nullptr, tr("确认操作"),
+                                  tr("确定要启动电池 %1 的充电操作吗?").arg(info.site),
+                                  QMessageBox::Yes | QMessageBox::No);
+    if (reply != QMessageBox::Yes)
+    {
+        return;
+    }
+
+    // 通过通信接口发送控制命令
+    bool success = false;
+    CommunicationWorker *worker = currentBattery->getCommunicationWorker();
+    if (worker)
+    {
+        // 假设CHARGE_REG是0x2000，COMMAND_ENABLE是0xAAAA
+        success = worker->sendControlCommand(0x0001, 0xAAAA);
+    }
+
+    if (success)
+    {
+        QMessageBox::information(nullptr, tr("操作成功"), tr("充电命令已发送，请等待电池状态变化"));
+    }
+    else
+    {
+        QMessageBox::warning(nullptr, tr("操作失败"), tr("充电命令发送失败，请检查电池连接"));
+    }
+}
+
+
+void BMS1InfoShowForm::on_btn_discharge_clicked()
+{
+    // 获取当前电池
+    auto currentBattery = m_currentBattery.lock();
+    if (!currentBattery)
+    {
+        QMessageBox::warning(nullptr, tr("警告"), tr("未选择电池或电池连接已断开"));
+        return;
+    }
+
+    // 获取电池信息
+    battery_info info = currentBattery->getBatteryInfo();
+
+    // 确认操作
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(nullptr, tr("确认操作"),
+                                  tr("确定要启动电池 %1 的放电操作吗?").arg(info.site),
+                                  QMessageBox::Yes | QMessageBox::No);
+    if (reply != QMessageBox::Yes)
+    {
+        return;
+    }
+
+    // 通过通信接口发送控制命令
+    bool success = false;
+    CommunicationWorker *worker = currentBattery->getCommunicationWorker();
+    if (worker)
+    {
+        // 假设DISCHARGE_REG是0x2001，COMMAND_ENABLE是0x0001
+        success = worker->sendControlCommand(0x0002, 0xAAAA);
+    }
+
+    if (success)
+    {
+        QMessageBox::information(nullptr, tr("操作成功"), tr("放电命令已发送，请等待电池状态变化"));
+    }
+    else
+    {
+        QMessageBox::warning(nullptr, tr("操作失败"), tr("放电命令发送失败，请检查电池连接"));
+    }
+}
+

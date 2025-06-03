@@ -408,6 +408,32 @@ QLabel{
      <string/>
     </property>
    </widget>
+   <widget class="QPushButton" name="btn_charge">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>90</y>
+      <width>80</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>充电</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_discharge">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>130</y>
+      <width>80</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>放电</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QWidget" name="widget_templine" native="true">
    <property name="geometry">

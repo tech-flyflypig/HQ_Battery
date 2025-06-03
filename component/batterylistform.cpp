@@ -9,6 +9,9 @@
 #include "../utils/BatteryStats.h"
 #include <QElapsedTimer>
 #include <QCoreApplication>
+#include <QSqlQuery>
+#include <QDateTime>
+#include <QSqlError>
 
 BatteryListForm::BatteryListForm(QWidget *parent)
     : QWidget(parent)
@@ -17,6 +20,8 @@ BatteryListForm::BatteryListForm(QWidget *parent)
     , m_communicationWorker(nullptr)
     , m_isRunning(false)
     , m_communicationType(CommunicationType::Serial) // 默认使用串口通信
+    , m_chargeState(Unknown) // 初始状态为未知
+    , m_lastSystemStatus(0)
 {
     ui->setupUi(this);
 
@@ -131,8 +136,8 @@ void BatteryListForm::stopCommunication()
 
     // 确保断开所有与电池数据相关的连接
     QObject *worker = m_communicationWorker->asQObject();
-    QObject::disconnect(worker, SIGNAL(forwardBatteryData(const BMS_1&)),
-                      this, SLOT(onBatteryDataReceived(const BMS_1&)));
+    QObject::disconnect(worker, SIGNAL(forwardBatteryData(const BMS_1 &)),
+                        this, SLOT(onBatteryDataReceived(const BMS_1 &)));
 
     // 停止通信
     m_communicationWorker->stopCommunication();
@@ -241,12 +246,29 @@ void BatteryListForm::mouseDoubleClickEvent(QMouseEvent *event)
 // 处理电池数据接收
 void BatteryListForm::onBatteryDataReceived(const BMS_1 &data)
 {
+    // 保存上一次的系统状态
+    uint16_t previousSystemStatus = m_lastData.systemStatus;
+
+    // 更新电池数据
     m_lastData = data;
     updateDisplay(data);
     m_lastData.battery_info.status = 0x00;
 
     // 更新全局统计信息
     BatteryStats::instance()->updateBatteryStatus(m_batteryInfo.power_id, m_lastData);
+
+    // 检查系统状态是否变化
+    if (data.systemStatus != previousSystemStatus)
+    {
+        // 根据系统状态确定充放电状态
+        BatteryChargeState newState = determineChargeState(data.systemStatus);
+
+        // 记录状态变化
+        recordChargeStateChange(newState);
+
+        // 更新上一次的系统状态
+        m_lastSystemStatus = data.systemStatus;
+    }
 
     emit dataReceived(this, data);
 }
@@ -313,4 +335,65 @@ void BatteryListForm::paintEvent(QPaintEvent *event)
     opt.init(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+}
+
+// 根据系统状态确定充放电状态
+BatteryListForm::BatteryChargeState BatteryListForm::determineChargeState(uint16_t systemStatus) const
+{
+    // 根据系统状态字的位来判断充放电状态
+    // 这里需要根据实际协议来确定正确的位
+    // 假设：bit0=充电状态，bit1=放电状态
+    const uint16_t CHARGING_BIT = 0x0001;
+    const uint16_t DISCHARGING_BIT = 0x0002;
+
+    if (systemStatus & CHARGING_BIT)
+    {
+        return Charging;
+    }
+    else if (systemStatus & DISCHARGING_BIT)
+    {
+        return Discharging;
+    }
+    else
+    {
+        return Idle;
+    }
+}
+
+// 记录充放电状态变化到数据库
+void BatteryListForm::recordChargeStateChange(BatteryChargeState newState)
+{
+    // 仅在状态确实发生变化且不是未知状态时记录
+    if (newState == Unknown || newState == m_chargeState)
+    {
+        return;
+    }
+
+    // 记录到数据库
+    QSqlQuery query;
+    QString sql = "INSERT INTO power_status_record (power_id, site, charge_status, begin_time, generate_time) "
+                  "VALUES (:power_id, :site, :charge_status, :begin_time, :generate_time)";
+
+    query.prepare(sql);
+    query.bindValue(":power_id", m_batteryInfo.power_id);
+    query.bindValue(":site", m_batteryInfo.site);
+    query.bindValue(":charge_status", static_cast<int>(newState)); // 0=放电，1=充电
+    query.bindValue(":begin_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
+    query.bindValue(":generate_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
+
+    if (!query.exec())
+    {
+        qDebug() << "数据库记录失败:" << query.lastError().text();
+    }
+    else
+    {
+        qDebug() << "电池" << m_batteryInfo.power_id << "充放电状态变更为:"
+                 << (newState == Charging ? "充电" : (newState == Discharging ? "放电" : "空闲"));
+    }
+
+    // 更新当前状态
+    m_chargeState = newState;
+
+    // 发送状态变化信号
+    emit chargeStateChanged(this, newState);
 }

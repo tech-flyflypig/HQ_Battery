@@ -34,6 +34,10 @@ private slots:
     // 处理通信超时
     void handleCommunicationTimeout(BatteryListForm *battery);
 
+    void on_btn_charge_clicked();
+
+    void on_btn_discharge_clicked();
+
 private:
     // 初始化RadioButton为只读状态
     void initializeRadioButtons();

@@ -295,11 +295,13 @@ bool SerialWorker::sendCommand(const QByteArray &cmd)
 
 bool SerialWorker::sendControlCommand(uint16_t reg, uint16_t value)
 {
-    if (!m_batteryInterface || !m_batteryInterface->supportsControl()) return false;
+    if (!m_batteryInterface || !m_batteryInterface->supportsControl())
+        return false;
 
     if (!m_batteryInterface->isValidControlValue(reg, value))
     {
         emit error(tr("Invalid control command"));
+        qDebug() << "Invalid control command";
         return false;
     }
 
@@ -307,6 +309,7 @@ bool SerialWorker::sendControlCommand(uint16_t reg, uint16_t value)
     if (cmd.isEmpty())
     {
         emit error(tr("Failed to create control command"));
+        qDebug() << "Failed to create control command";
         return false;
     }
 
