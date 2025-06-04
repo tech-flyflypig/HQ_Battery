@@ -72,7 +72,9 @@ QLabel{
 #label_current,#label_loop_time,#label_ratedCapacity,#label_tempMax,#label_temp_environment,#label_voltage,#label_remainCapacity{
 	color: rgb(255, 170, 0);
 }
-</string>
+QPushButton{
+ color: white;
+}</string>
   </property>
   <widget class="QWidget" name="widget_maindetail" native="true">
    <property name="geometry">
@@ -392,7 +394,7 @@ QLabel{
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="label_11">
+   <widget class="QLabel" name="label_logo">
     <property name="geometry">
      <rect>
       <x>350</x>
@@ -414,24 +416,62 @@ QLabel{
       <x>560</x>
       <y>90</y>
       <width>80</width>
-      <height>23</height>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    color: white;
+    background-color: rgba(0, 128, 187, 150);
+    border-radius: 5px;
+    border: 1px solid #0080bb;
+    padding: 5px;
+}
+QPushButton:hover {
+    background-color: rgba(0, 255, 255, 200);
+    color: black;
+}
+QPushButton:pressed {
+    background-color: rgba(0, 200, 200, 255);
+}</string>
     </property>
     <property name="text">
      <string>充电</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_discharge">
     <property name="geometry">
      <rect>
       <x>560</x>
-      <y>130</y>
+      <y>150</y>
       <width>80</width>
-      <height>23</height>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QPushButton {
+    color: white;
+    background-color: rgba(0, 128, 187, 150);
+    border-radius: 5px;
+    border: 1px solid #0080bb;
+    padding: 5px;
+}
+QPushButton:hover {
+    background-color: rgba(0, 255, 255, 200);
+    color: black;
+}
+QPushButton:pressed {
+    background-color: rgba(0, 200, 200, 255);
+}</string>
     </property>
     <property name="text">
      <string>放电</string>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>

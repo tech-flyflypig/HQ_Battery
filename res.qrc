@@ -59,5 +59,6 @@
         <file>image/登录背景_01.png</file>
         <file>image/故障.png</file>
         <file>image/btn_bak.png</file>
+        <file>image/battery_discharge.png</file>
     </qresource>
 </RCC>

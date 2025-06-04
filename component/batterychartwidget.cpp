@@ -354,7 +354,7 @@ void BatteryChartWidget::updateChart()
 
             // 确保有足够的边距
             minVoltage = qMax(0.0, minVoltage - 1);
-            maxVoltage = qMin(100.0, maxVoltage + 1);
+            maxVoltage = qMin(100.0, maxVoltage + 2);
 
             m_axisY->setRange(minVoltage, maxVoltage);
         }
