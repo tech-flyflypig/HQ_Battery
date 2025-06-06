@@ -35,6 +35,7 @@ SOURCES += \
     component/batterygridwidget.cpp \
     component/bms1infoshowform.cpp \
     component/cfdrecordform.cpp \
+    component/chargeanddischargerecordform.cpp \
     component/exceptionform.cpp \
     component/layoutbatterywidget.cpp \
     component/leftstatsform.cpp \
@@ -62,6 +63,7 @@ HEADERS += \
     component/batterygridwidget.h \
     component/bms1infoshowform.h \
     component/cfdrecordform.h \
+    component/chargeanddischargerecordform.h \
     component/exceptionform.h \
     component/layoutbatterywidget.h \
     component/leftstatsform.h \
@@ -94,6 +96,7 @@ FORMS += \
     component/batterylistform.ui \
     component/bms1infoshowform.ui \
     component/cfdrecordform.ui \
+    component/chargeanddischargerecordform.ui \
     component/exceptionform.ui \
     component/leftstatsform.ui \
     component/queryform.ui \

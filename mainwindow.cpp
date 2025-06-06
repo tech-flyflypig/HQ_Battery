@@ -146,7 +146,8 @@ void MainWindow::initUI()
         ui->stackedWidget->addWidget(bms1InfoShowForm);
 
         // 设置电池详情
-        try {
+        try
+        {
             // 使用智能指针安全地设置电池信息
             bms1InfoShowForm->setBatteryInfo(battery);
 
@@ -155,16 +156,18 @@ void MainWindow::initUI()
 
             // 显示返回按钮，隐藏logo
             updateWidget2Content(true);
-        } catch (const std::exception& e) {
+        }
+        catch (const std::exception &e)
+        {
             qDebug() << "设置电池详情时发生异常: " << e.what();
         }
     });
-    
+
     // 初始化时间显示
     m_timeTimer = new QTimer(this);
     connect(m_timeTimer, &QTimer::timeout, this, &MainWindow::updateCurrentTime);
     m_timeTimer->start(1000); // 每秒更新一次
-    
+
     // 初始更新一次时间
     updateCurrentTime();
 }
@@ -172,16 +175,17 @@ void MainWindow::initUI()
 void MainWindow::connectBatterySignals(BatteryListForm *battery)
 {
     // 尝试获取shared_ptr
-    try {
+    try
+    {
         auto sharedBattery = battery->getSharedPtr();
-        
+
         // 连接数据接收信号
-        connect(battery, &BatteryListForm::dataReceived, this, [this, weakBattery=std::weak_ptr<BatteryListForm>(sharedBattery)](BatteryListForm * battery, const BMS_1 & data)
+        connect(battery, &BatteryListForm::dataReceived, this, [this, weakBattery = std::weak_ptr<BatteryListForm>(sharedBattery)](BatteryListForm * battery, const BMS_1 & data)
         {
             // 安全检查
             auto currentBattery = weakBattery.lock();
             if (!currentBattery || currentBattery.get() != battery) return;
-            
+
             // 更新状态栏或处理数据
             //ui->statusbar->showMessage(QString("电池: %1, SOC: %2%, 温度: %3°C")
             // .arg(battery->getBatteryInfo().site)
@@ -190,12 +194,12 @@ void MainWindow::connectBatterySignals(BatteryListForm *battery)
         });
 
         // 连接通信错误信号
-        connect(battery, &BatteryListForm::communicationError, this, [this, weakBattery=std::weak_ptr<BatteryListForm>(sharedBattery)](BatteryListForm * battery, const QString & error)
+        connect(battery, &BatteryListForm::communicationError, this, [this, weakBattery = std::weak_ptr<BatteryListForm>(sharedBattery)](BatteryListForm * battery, const QString & error)
         {
             // 安全检查
             auto currentBattery = weakBattery.lock();
             if (!currentBattery || currentBattery.get() != battery) return;
-            
+
             // 显示错误信息
             // QMessageBox::warning(this, "通信错误",
             //                      QString("电池 %1 通信错误: %2")
@@ -205,17 +209,19 @@ void MainWindow::connectBatterySignals(BatteryListForm *battery)
         });
 
         // 连接通信超时信号
-        connect(battery, &BatteryListForm::communicationTimeout, this, [this, weakBattery=std::weak_ptr<BatteryListForm>(sharedBattery)](BatteryListForm * battery)
+        connect(battery, &BatteryListForm::communicationTimeout, this, [this, weakBattery = std::weak_ptr<BatteryListForm>(sharedBattery)](BatteryListForm * battery)
         {
             // 安全检查
             auto currentBattery = weakBattery.lock();
             if (!currentBattery || currentBattery.get() != battery) return;
-            
+
             // 显示超时信息
             // ui->statusbar->showMessage(QString("电池: %1 通信超时")
             //                            .arg(battery->getBatteryInfo().site));
         });
-    } catch (const std::bad_weak_ptr& e) {
+    }
+    catch (const std::bad_weak_ptr &e)
+    {
         qDebug() << "警告: 无法获取电池对象的shared_ptr: " << e.what();
     }
 }
@@ -320,7 +326,8 @@ void MainWindow::init_sql()
                     bms1InfoShowForm = new BMS1InfoShowForm();
                     ui->stackedWidget->addWidget(bms1InfoShowForm);
 
-                    try {
+                    try
+                    {
                         // 设置电池详情
                         bms1InfoShowForm->setBatteryInfo(battery);
 
@@ -329,7 +336,9 @@ void MainWindow::init_sql()
 
                         // 显示返回按钮，隐藏logo
                         updateWidget2Content(true);
-                    } catch (const std::exception& e) {
+                    }
+                    catch (const std::exception &e)
+                    {
                         qDebug() << "设置电池详情时发生异常: " << e.what();
                     }
                 });
@@ -484,7 +493,8 @@ void MainWindow::updateRightPanel(BatteryListForm *battery)
 {
     if (!battery) return;
 
-    try {
+    try
+    {
         // 处理电池选择事件
         qDebug() << "Battery selected, updating right panel";
 
@@ -494,7 +504,9 @@ void MainWindow::updateRightPanel(BatteryListForm *battery)
 
         // 更新右侧信息面板显示
         ui->widget_right->setBatteryInfo(battery);
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception &e)
+    {
         qDebug() << "更新右侧信息面板时发生异常: " << e.what();
     }
 }
@@ -543,5 +555,13 @@ void MainWindow::updateCurrentTime()
     QDateTime currentTime = QDateTime::currentDateTime();
     QString timeString = currentTime.toString("yyyy-MM-dd hh:mm:ss");
     ui->label_current_time->setText(timeString);
+}
+
+
+
+
+void MainWindow::on_btn_history_clicked()
+{
+
 }
 
