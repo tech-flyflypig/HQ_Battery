@@ -21,6 +21,7 @@ BatteryListForm::BatteryListForm(QWidget *parent)
     , m_isRunning(false)
     , m_communicationType(CommunicationType::Serial) // 默认使用串口通信
     , m_chargeState(Unknown) // 初始状态为未知
+    , m_monitoringStatus(Stopped) // 初始监控状态为停止
     , m_lastSystemStatus(0)
 {
     ui->setupUi(this);
@@ -95,6 +96,12 @@ battery_info BatteryListForm::getBatteryInfo() const
     return m_batteryInfo;
 }
 
+// 获取当前监控状态
+BatteryListForm::MonitoringStatus BatteryListForm::getMonitoringStatus() const
+{
+    return m_monitoringStatus;
+}
+
 // 开始通信
 void BatteryListForm::startCommunication()
 {
@@ -102,6 +109,10 @@ void BatteryListForm::startCommunication()
     {
         return;
     }
+    
+    // 重新初始化通信工作器和信号连接
+    // 这确保每次开始监控时都有正确的信号连接
+    initCommunication();
 
     // 设置为运行状态图标
     ui->label_battery_status->setStyleSheet("border-image: url(:/image/运行.png);");
@@ -121,6 +132,10 @@ void BatteryListForm::startCommunication()
 
     m_communicationWorker->startCommunication(address, m_batteryInfo.type);
     m_isRunning = true;
+
+    // 更新监控状态并发送信号
+    m_monitoringStatus = Running;
+    emit monitoringStatusChanged(this, m_monitoringStatus);
 }
 
 // 停止通信
@@ -134,14 +149,25 @@ void BatteryListForm::stopCommunication()
     // 设置为停止状态图标
     ui->label_battery_status->setStyleSheet("border-image: url(:/image/停止.png);");
 
-    // 确保断开所有与电池数据相关的连接
-    QObject *worker = m_communicationWorker->asQObject();
-    QObject::disconnect(worker, SIGNAL(forwardBatteryData(const BMS_1 &)),
-                        this, SLOT(onBatteryDataReceived(const BMS_1 &)));
+    // 创建一个故障状态的BMS_1数据
+    BMS_1 errorData = m_lastData;
+    errorData.battery_info.status = 0x01; // 设置停止状态标志
+
+    // 更新全局统计信息
+    BatteryStats::instance()->updateBatteryStatus(m_batteryInfo.power_id, errorData);
+
+    // 不再需要断开信号连接，因为我们在startCommunication时会重新初始化
+    // QObject *worker = m_communicationWorker->asQObject();
+    // QObject::disconnect(worker, SIGNAL(forwardBatteryData(const BMS_1 &)),
+    //                     this, SLOT(onBatteryDataReceived(const BMS_1 &)));
 
     // 停止通信
     m_communicationWorker->stopCommunication();
     m_isRunning = false;
+
+    // 更新监控状态并发送信号
+    m_monitoringStatus = Stopped;
+    emit monitoringStatusChanged(this, m_monitoringStatus);
 
     // 等待一小段时间确保完成停止
     QElapsedTimer timer;
@@ -200,6 +226,7 @@ void BatteryListForm::updateDisplay(const BMS_1 &data)
     ui->label_remainCapacity->setText(capacityStr);
     ui->label_tempMax->setText(tempStr);
 
+    //ui->label_battery_status->setStyleSheet("border-image: url(:/image/运行.png);");
     // 根据状态更新图标
     // if (data.alarmStatus > 0)
     // {
@@ -249,10 +276,40 @@ void BatteryListForm::onBatteryDataReceived(const BMS_1 &data)
     // 保存上一次的系统状态
     uint16_t previousSystemStatus = m_lastData.systemStatus;
 
+    // 保存之前的监控状态，用于检测是否从故障状态恢复
+    MonitoringStatus previousMonitoringStatus = m_monitoringStatus;
+
     // 更新电池数据
     m_lastData = data;
     updateDisplay(data);
-    m_lastData.battery_info.status = 0x00;
+
+    // 根据当前监控状态设置battery_info.status
+    if (m_isRunning)
+    {
+        m_lastData.battery_info.status = 0x00; // 设置为正常运行状态
+    }
+    else
+    {
+        m_lastData.battery_info.status = 0x01; // 设置为停止状态
+    }
+
+    // 如果之前是故障状态，现在收到正常数据，则恢复为运行状态
+    if (previousMonitoringStatus == Error && m_isRunning)
+    {
+        // 更新监控状态为运行
+        m_monitoringStatus = Running;
+
+        // 设置为运行状态图标
+        ui->label_battery_status->setStyleSheet("border-image: url(:/image/运行.png);");
+
+        // 确保状态标志正确设置为运行状态
+        m_lastData.battery_info.status = 0x00;
+
+        // 发送状态变化信号
+        emit monitoringStatusChanged(this, m_monitoringStatus);
+
+        qDebug() << "电池从故障状态恢复为运行状态";
+    }
 
     // 更新全局统计信息
     BatteryStats::instance()->updateBatteryStatus(m_batteryInfo.power_id, m_lastData);
@@ -288,6 +345,10 @@ void BatteryListForm::onCommunicationError(const QString &errorMessage)
     // 设置故障状态图标
     ui->label_battery_status->setStyleSheet("border-image: url(:/image/故障.png);");
 
+    // 更新监控状态并发送信号
+    m_monitoringStatus = Error;
+    emit monitoringStatusChanged(this, m_monitoringStatus);
+
     emit communicationError(this, errorMessage);
 }
 
@@ -304,7 +365,11 @@ void BatteryListForm::onCommunicationTimeout()
     BatteryStats::instance()->updateBatteryStatus(m_batteryInfo.power_id, timeoutData);
 
     // 设置超时状态图标
-    ui->label_battery_status->setStyleSheet("border-image: url(:/image/停止.png);");
+    ui->label_battery_status->setStyleSheet("border-image: url(:/image/故障.png);");
+
+    // 更新监控状态并发送信号
+    m_monitoringStatus = Error;
+    emit monitoringStatusChanged(this, m_monitoringStatus);
 
     emit communicationTimeout(this);
 }
@@ -322,7 +387,14 @@ void BatteryListForm::updateStyle()
         // 未选中状态样式 - 使用原始背景图
         setStyleSheet("BatteryListForm { border-image: url(:/image/单个电池模块背景.png);}QLabel{ background-color: transparent;}");
     }
-
+    if(m_isRunning)
+    {
+        ui->label_battery_status->setStyleSheet("border-image: url(:/image/运行.png);");
+    }
+    else
+    {
+        ui->label_battery_status->setStyleSheet("border-image: url(:/image/停止.png);");
+    }
     // 强制重绘
     update();
 }
@@ -342,9 +414,9 @@ BatteryListForm::BatteryChargeState BatteryListForm::determineChargeState(uint16
 {
     // 根据系统状态字的位来判断充放电状态
     // 这里需要根据实际协议来确定正确的位
-    // 假设：bit0=充电状态，bit1=放电状态
-    const uint16_t CHARGING_BIT = 0x0001;
-    const uint16_t DISCHARGING_BIT = 0x0002;
+    // 假设：bit1=充电状态，bit2=放电状态
+    const uint16_t CHARGING_BIT = 0x0002;
+    const uint16_t DISCHARGING_BIT = 0x0004;
 
     if (systemStatus & CHARGING_BIT)
     {

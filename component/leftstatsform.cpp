@@ -1,6 +1,7 @@
 ﻿#include "leftstatsform.h"
 #include "ui_leftstatsform.h"
 #include "BatteryStats.h"
+#include <QDebug>
 
 LeftStatsForm::LeftStatsForm(QWidget *parent)
     : QWidget(parent)
@@ -13,8 +14,9 @@ LeftStatsForm::LeftStatsForm(QWidget *parent)
 
     // 连接统计数据变化信号
     connect(BatteryStats::instance(), &BatteryStats::statsChanged, this, &LeftStatsForm::updateStats);
+    
     // 初始化统计显示
-    //updateStats();
+    updateStats(); // 确保立即更新统计数据
 }
 
 LeftStatsForm::~LeftStatsForm()
@@ -50,6 +52,12 @@ void LeftStatsForm::initializeRadioButtons()
 void LeftStatsForm::updateStats()
 {
     BatteryStats *stats = BatteryStats::instance();
+
+    // 输出当前统计信息
+    qDebug() << "更新左侧统计信息 - 总数:" << stats->getTotalBatteryCount()
+             << "运行:" << stats->getRunningBatteryCount()
+             << "停止:" << stats->getStoppedBatteryCount()
+             << "故障:" << stats->getFaultBatteryCount();
 
     // 更新基本统计
     ui->label_total_num->setText(QString::number(stats->getTotalBatteryCount()));

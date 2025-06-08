@@ -25,6 +25,13 @@ public:
         Idle = 2         // 空闲状态
     };
 
+    // 监控状态枚举
+    enum MonitoringStatus {
+        Stopped = 0,     // 停止监控
+        Running = 1,     // 正在监控
+        Error = 2        // 错误状态
+    };
+
     explicit BatteryListForm(QWidget *parent = nullptr);
     ~BatteryListForm();
     void setSelected(bool selected);
@@ -45,6 +52,9 @@ public:
 
     // 获取当前充放电状态
     BatteryChargeState getChargeState() const { return m_chargeState; }
+
+    // 获取当前监控状态
+    MonitoringStatus getMonitoringStatus() const;
 
     // 静态方法创建shared_ptr
     static std::shared_ptr<BatteryListForm> create(QWidget *parent = nullptr) {
@@ -81,6 +91,7 @@ signals:
     void communicationTimeout(BatteryListForm *);
     void dataReceived(BatteryListForm *, const BMS_1 &);
     void chargeStateChanged(BatteryListForm *, BatteryChargeState); // 充放电状态变化信号
+    void monitoringStatusChanged(BatteryListForm *, MonitoringStatus); // 监控状态变化信号
 
 private slots:
     void onBatteryDataReceived(const BMS_1 &data);
@@ -96,6 +107,7 @@ private:
     bool m_isRunning;
     CommunicationType m_communicationType;
     BatteryChargeState m_chargeState; // 当前充放电状态
+    MonitoringStatus m_monitoringStatus; // 当前监控状态
     uint16_t m_lastSystemStatus; // 上一次的系统状态值
 };
 

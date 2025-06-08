@@ -29,6 +29,9 @@ private slots:
     
     // 处理通信超时
     void handleCommunicationTimeout(BatteryListForm *battery);
+    
+    // 处理监控状态变化
+    void handleMonitoringStatusChanged(BatteryListForm *battery, BatteryListForm::MonitoringStatus status);
 
 private:
     Ui::RightStatsForm *ui;

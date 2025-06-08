@@ -159,7 +159,7 @@ QLabel{
      </rect>
     </property>
     <property name="text">
-     <string>IP地址</string>
+     <string>安装地址</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_9">

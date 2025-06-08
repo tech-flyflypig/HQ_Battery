@@ -138,12 +138,12 @@ QPushButton{
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>IP地址</string>
+        <string>安装地址</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="label_site">
        <property name="text">
         <string>192.168.0.83</string>
        </property>
@@ -160,7 +160,7 @@ QPushButton{
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLabel" name="label_4">
+      <widget class="QLabel" name="label_com">
        <property name="text">
         <string>10123</string>
        </property>
@@ -177,7 +177,7 @@ QPushButton{
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLabel" name="label_6">
+      <widget class="QLabel" name="label_site_num">
        <property name="text">
         <string>01</string>
        </property>
@@ -194,7 +194,7 @@ QPushButton{
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QLabel" name="label_8">
+      <widget class="QLabel" name="label_remark">
        <property name="text">
         <string>无</string>
        </property>

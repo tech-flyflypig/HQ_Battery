@@ -30,6 +30,8 @@ void RightStatsForm::setBatteryInfo(BatteryListForm *battery)
                    this, &RightStatsForm::handleCommunicationError);
         disconnect(currentBattery.get(), &BatteryListForm::communicationTimeout,
                    this, &RightStatsForm::handleCommunicationTimeout);
+        disconnect(currentBattery.get(), &BatteryListForm::monitoringStatusChanged,
+                   this, &RightStatsForm::handleMonitoringStatusChanged);
     }
 
     // 如果提供了新的电池对象
@@ -57,6 +59,11 @@ void RightStatsForm::setBatteryInfo(BatteryListForm *battery)
                     this, &RightStatsForm::handleCommunicationError);
             connect(battery, &BatteryListForm::communicationTimeout,
                     this, &RightStatsForm::handleCommunicationTimeout);
+            connect(battery, &BatteryListForm::monitoringStatusChanged,
+                    this, &RightStatsForm::handleMonitoringStatusChanged);
+                    
+            // 立即同步监控状态
+            handleMonitoringStatusChanged(battery, battery->getMonitoringStatus());
         }
         catch (const std::bad_weak_ptr &e)
         {
@@ -112,15 +119,10 @@ void RightStatsForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &da
     try
     {
         battery_info info = battery->getBatteryInfo();
-        if (ui && ui->label_sitecom)
-        {
-            ui->label_sitecom->setText(info.site);
-        }
+        ui->label_ip->setText(info.site);
+        // ui->label_sitecom->setText(info.site);
+        ui->label_port->setText(info.port_name);
 
-        if (ui && ui->label_port)
-        {
-            ui->label_port->setText(info.port_name);
-        }
     }
     catch (...)
     {
@@ -144,6 +146,30 @@ void RightStatsForm::handleCommunicationTimeout(BatteryListForm *battery)
     // 检查弱引用是否有效且指向同一个对象
     auto currentBattery = m_currentBattery.lock();
     if (!currentBattery || currentBattery.get() != battery) return;
-    ui->label_battery_status->setStyleSheet("border-image: url(:/image/停止.png);");
+    ui->label_battery_status->setStyleSheet("border-image: url(:/image/故障.png);");
     qDebug() << "通信超时";
+}
+
+void RightStatsForm::handleMonitoringStatusChanged(BatteryListForm *battery, BatteryListForm::MonitoringStatus status)
+{
+    // 检查弱引用是否有效且指向同一个对象
+    auto currentBattery = m_currentBattery.lock();
+    if (!currentBattery || currentBattery.get() != battery) return;
+    
+    // 根据监控状态更新UI
+    switch (status) {
+        case BatteryListForm::Running:
+            ui->label_battery_status->setStyleSheet("border-image: url(:/image/运行.png);");
+            break;
+        case BatteryListForm::Stopped:
+            ui->label_battery_status->setStyleSheet("border-image: url(:/image/停止.png);");
+            break;
+        case BatteryListForm::Error:
+            ui->label_battery_status->setStyleSheet("border-image: url(:/image/故障.png);");
+            break;
+        default:
+            break;
+    }
+    
+    qDebug() << "电池监控状态变化: " << status;
 }

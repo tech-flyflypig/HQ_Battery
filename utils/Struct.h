@@ -19,7 +19,7 @@ struct battery_info
 //    float voltage;
 //    float current;
 //    float temperature;
-    int status; // 0: 正常, 1: 通信错误, 2: 超时
+    int status; // 0: 正常, 1: 停止, 2: 故障
     QDateTime last_time; //最后一次数据上报时间
 
     int x;

@@ -170,6 +170,11 @@ void BMS1InfoShowForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &
     auto currentBattery = m_currentBattery.lock();
     if (!currentBattery || currentBattery.get() != battery) return;
 
+    battery_info info = battery->getBatteryInfo();
+    ui->label_site->setText(info.site);
+    ui->label_com->setText(info.port_name);
+
+
     // 更新电池信息显示
     ui->label_soc->setText(QString::number(data.soc) + "%");
     ui->label_voltage->setText(QString::number(data.voltage / 100.0, 'f', 2) );

@@ -230,6 +230,22 @@ int BatteryStats::getBatteryLowAlarmCount() const
 
 void BatteryStats::updateBatteryStatus(const QString &batteryId, const BMS_1 &data)
 {
+    // 检查是否有状态变化
+    if (m_batteryData.contains(batteryId))
+    {
+        const BMS_1 &oldData = m_batteryData[batteryId];
+        if (oldData.battery_info.status != data.battery_info.status)
+        {
+            qDebug() << "电池状态变化 - ID:" << batteryId
+                     << "原状态:" << oldData.battery_info.status
+                     << "新状态:" << data.battery_info.status;
+        }
+    }
+    else
+    {
+        qDebug() << "新增电池 - ID:" << batteryId << "状态:" << data.battery_info.status;
+    }
+
     // 保存或更新电池数据
     m_batteryData[batteryId] = data;
 
