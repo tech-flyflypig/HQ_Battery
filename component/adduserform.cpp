@@ -4,7 +4,7 @@
 #include "adduser.h"
 #include "Struct.h"
 #include <QMessageBox>
-AddUserForm::AddUserForm(QWidget* parent) :
+AddUserForm::AddUserForm(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::AddUserForm)
 {
@@ -16,12 +16,14 @@ AddUserForm::~AddUserForm()
 {
     delete ui;
 }
-void AddUserForm::mousePressEvent(QMouseEvent* e)
+
+void AddUserForm::mousePressEvent(QMouseEvent *e)
 {
     if(e->button() == Qt::LeftButton)
         clickPos = e->pos();
 }
-void AddUserForm::mouseMoveEvent(QMouseEvent* e)
+
+void AddUserForm::mouseMoveEvent(QMouseEvent *e)
 {
     if(e->buttons()&Qt::LeftButton)
         move(e->pos() + pos() - clickPos);
@@ -109,7 +111,7 @@ void AddUserForm::on_pushButton_clicked()
 void AddUserForm::on_btn_add_user_clicked()
 {
     USER  user;
-    adduser* add = new adduser(user);
+    adduser *add = new adduser(user);
     connect(add, &adduser::sig_init, this, &AddUserForm::on_pushButton_clicked);
     add->show();
 }
@@ -124,7 +126,7 @@ void AddUserForm::on_btn_revise_user_clicked()
     user.user_name = ui->tableWidget->item(row, 1)->text();
     user.password = ui->tableWidget->item(row, 2)->text();
     user.privilege = ui->tableWidget->item(row, 3)->text().toInt();
-    adduser* add = new adduser(user);
+    adduser *add = new adduser(user);
     connect(add, &adduser::sig_init, this, &AddUserForm::on_pushButton_clicked);
     add->show();
 }

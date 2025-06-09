@@ -82,6 +82,8 @@ private:
     BatteryChargeState determineChargeState(uint16_t systemStatus) const;
     // 记录充放电状态变化到数据库
     void recordChargeStateChange(BatteryChargeState newState);
+    // 更新状态图标
+    void updateStatusIcon();
 
 signals:
     void selectedChanged(bool);

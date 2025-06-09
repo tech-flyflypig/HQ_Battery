@@ -3,8 +3,9 @@
 
 #include <QWidget>
 
-namespace Ui {
-class ChargeAndDischargeRecordForm;
+namespace Ui
+{
+    class ChargeAndDischargeRecordForm;
 }
 
 class ChargeAndDischargeRecordForm : public QWidget
@@ -14,6 +15,13 @@ class ChargeAndDischargeRecordForm : public QWidget
 public:
     explicit ChargeAndDischargeRecordForm(QWidget *parent = nullptr);
     ~ChargeAndDischargeRecordForm();
+
+private slots:
+    void on_btn_search_clicked();
+
+    void on_btn_out_excel_clicked();
+
+    void on_btn_delete_clicked();
 
 private:
     Ui::ChargeAndDischargeRecordForm *ui;

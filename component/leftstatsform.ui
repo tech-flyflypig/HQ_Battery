@@ -231,14 +231,17 @@ QSlider::handle:vertical {
    <widget class="QLabel" name="label_total_num">
     <property name="geometry">
      <rect>
-      <x>170</x>
+      <x>155</x>
       <y>20</y>
-      <width>16</width>
+      <width>41</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
      <string>0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

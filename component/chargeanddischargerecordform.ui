@@ -14,17 +14,33 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QLabel{
+   <string notr="true">QLabel,QCheckBox,QLineEdit,QDateTimeEdit{
 	font: 11pt &quot;Microsoft YaHei UI&quot;;
+	color: rgb(255, 255, 255);
 }
-QPushButton{
+QLineEdit,QDateTimeEdit{	
+	background-color: rgb(25, 32, 48);
+}
+QPushButton {
 	font: 11pt &quot;Microsoft YaHei UI&quot;;
+    color: white;
+    background-color: rgba(0, 128, 187, 150);
+    border-radius: 5px;
+    border: 1px solid #0080bb;
+    padding: 5px;
+}
+QPushButton:hover {
+    background-color: rgba(0, 255, 255, 200);
+    color: black;
+}
+QPushButton:pressed {
+    background-color: rgba(0, 200, 200, 255);
 }</string>
   </property>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>480</x>
+     <x>720</x>
      <y>20</y>
      <width>51</width>
      <height>16</height>
@@ -37,9 +53,9 @@ QPushButton{
   <widget class="QDateTimeEdit" name="dtt_st">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>10</y>
-     <width>151</width>
+     <x>110</x>
+     <y>14</y>
+     <width>171</width>
      <height>31</height>
     </rect>
    </property>
@@ -50,7 +66,7 @@ QPushButton{
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>20</y>
      <width>61</width>
      <height>16</height>
@@ -63,7 +79,7 @@ QPushButton{
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>400</x>
      <y>20</y>
      <width>61</width>
      <height>16</height>
@@ -76,8 +92,8 @@ QPushButton{
   <widget class="QLineEdit" name="lineEdit">
    <property name="geometry">
     <rect>
-     <x>550</x>
-     <y>18</y>
+     <x>780</x>
+     <y>14</y>
      <width>141</width>
      <height>25</height>
     </rect>
@@ -86,7 +102,7 @@ QPushButton{
   <widget class="QCheckBox" name="cbx_fd">
    <property name="geometry">
     <rect>
-     <x>780</x>
+     <x>1090</x>
      <y>20</y>
      <width>61</width>
      <height>18</height>
@@ -102,9 +118,9 @@ QPushButton{
   <widget class="QDateTimeEdit" name="dtt_et">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>10</y>
-     <width>151</width>
+     <x>470</x>
+     <y>14</y>
+     <width>161</width>
      <height>31</height>
     </rect>
    </property>
@@ -115,7 +131,7 @@ QPushButton{
   <widget class="QCheckBox" name="cbx_cd">
    <property name="geometry">
     <rect>
-     <x>710</x>
+     <x>1020</x>
      <y>20</y>
      <width>61</width>
      <height>18</height>
@@ -131,7 +147,7 @@ QPushButton{
   <widget class="QPushButton" name="btn_search">
    <property name="geometry">
     <rect>
-     <x>1570</x>
+     <x>1550</x>
      <y>20</y>
      <width>101</width>
      <height>28</height>
@@ -159,7 +175,7 @@ QPushButton{
   <widget class="QPushButton" name="btn_delete">
    <property name="geometry">
     <rect>
-     <x>1804</x>
+     <x>1790</x>
      <y>20</y>
      <width>101</width>
      <height>28</height>
@@ -187,7 +203,7 @@ QPushButton{
   <widget class="QPushButton" name="btn_out_excel">
    <property name="geometry">
     <rect>
-     <x>1690</x>
+     <x>1670</x>
      <y>20</y>
      <width>101</width>
      <height>28</height>
@@ -217,7 +233,7 @@ QPushButton{
     <rect>
      <x>10</x>
      <y>70</y>
-     <width>1900</width>
+     <width>1881</width>
      <height>841</height>
     </rect>
    </property>

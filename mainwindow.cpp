@@ -23,6 +23,7 @@
 #include <QDateTime>
 #include <QTimer>
 #include "batterylistform.h"
+#include "component/chargeanddischargerecordform.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -133,6 +134,13 @@ void MainWindow::initUI()
     connect(batteryGrid, &BatteryGridWidget::batteryDoubleClicked, this, [this](BatteryListForm * battery)
     {
         qDebug() << "Battery double clicked";
+        
+        // 检查电池状态，只有运行状态才允许进入详情界面
+        if (battery->getMonitoringStatus() != BatteryListForm::Running) {
+            qDebug() << "电池不在运行状态，无法查看详情";
+            QMessageBox::information(this, "提示", "只有运行状态的电池才能查看详情！");
+            return;
+        }
 
         // 如果已有实例，先删除
         if (bms1InfoShowForm)
@@ -143,7 +151,7 @@ void MainWindow::initUI()
 
         // 创建新的电池详情页面
         bms1InfoShowForm = new BMS1InfoShowForm();
-        ui->stackedWidget->addWidget(bms1InfoShowForm);
+        int detailIndex = ui->stackedWidget->addWidget(bms1InfoShowForm);
 
         // 设置电池详情
         try
@@ -152,7 +160,7 @@ void MainWindow::initUI()
             bms1InfoShowForm->setBatteryInfo(battery);
 
             // 切换到详情页
-            ui->stackedWidget->setCurrentIndex(1);  // 详情页索引为1
+            ui->stackedWidget->setCurrentIndex(detailIndex);
 
             // 显示返回按钮，隐藏logo
             updateWidget2Content(true);
@@ -314,6 +322,13 @@ void MainWindow::init_sql()
 
                 connect(detailAction, &QAction::triggered, this, [this, battery]()
                 {
+                    // 检查电池状态，只有运行状态才允许进入详情界面
+                    if (battery->getMonitoringStatus() != BatteryListForm::Running) {
+                        qDebug() << "电池不在运行状态，无法查看详情";
+                        QMessageBox::information(this, "提示", "只有运行状态的电池才能查看详情！");
+                        return;
+                    }
+                    
                     // 如果已有实例，先删除
                     if (bms1InfoShowForm)
                     {
@@ -324,7 +339,7 @@ void MainWindow::init_sql()
 
                     // 创建新的电池详情页面
                     bms1InfoShowForm = new BMS1InfoShowForm();
-                    ui->stackedWidget->addWidget(bms1InfoShowForm);
+                    int detailIndex = ui->stackedWidget->addWidget(bms1InfoShowForm);
 
                     try
                     {
@@ -332,7 +347,7 @@ void MainWindow::init_sql()
                         bms1InfoShowForm->setBatteryInfo(battery);
 
                         // 切换到详情页
-                        ui->stackedWidget->setCurrentIndex(1);  // 详情页索引为1
+                        ui->stackedWidget->setCurrentIndex(detailIndex);
 
                         // 显示返回按钮，隐藏logo
                         updateWidget2Content(true);
@@ -434,17 +449,26 @@ void MainWindow::updateWidget2Content(bool showBackButton)
 
 void MainWindow::onBackButtonClicked()
 {
+    // 获取当前显示的widget
+    QWidget *currentWidget = ui->stackedWidget->currentWidget();
+    
     // 先切换到主页面，防止stackedWidget继续引用即将删除的组件
     ui->stackedWidget->setCurrentIndex(0);
 
     // 从stackedWidget中移除详情页面
-    if (bms1InfoShowForm)
+    if (bms1InfoShowForm && bms1InfoShowForm == currentWidget)
     {
         ui->stackedWidget->removeWidget(bms1InfoShowForm);
-
+        
         // 标记为删除
         bms1InfoShowForm->deleteLater();
         bms1InfoShowForm = nullptr;
+    }
+    // 检查当前widget是否为ChargeAndDischargeRecordForm
+    else if (qobject_cast<ChargeAndDischargeRecordForm*>(currentWidget))
+    {
+        ui->stackedWidget->removeWidget(currentWidget);
+        currentWidget->deleteLater();
     }
 
     // 更新widget_2，隐藏返回按钮
@@ -557,11 +581,29 @@ void MainWindow::updateCurrentTime()
     ui->label_current_time->setText(timeString);
 }
 
-
-
-
 void MainWindow::on_btn_history_clicked()
 {
-
+    qDebug() << "on_btn_history_clicked";
+    
+    // 检查是否已存在充放电记录表单
+    ChargeAndDischargeRecordForm *existingForm = nullptr;
+    for (int i = 0; i < ui->stackedWidget->count(); i++) {
+        existingForm = qobject_cast<ChargeAndDischargeRecordForm*>(ui->stackedWidget->widget(i));
+        if (existingForm) {
+            break;
+        }
+    }
+    
+    // 如果不存在则创建新的
+    if (!existingForm) {
+        existingForm = new ChargeAndDischargeRecordForm();
+        ui->stackedWidget->addWidget(existingForm);
+    }
+    
+    // 切换到该界面
+    ui->stackedWidget->setCurrentWidget(existingForm);
+    
+    // 显示返回按钮，隐藏logo
+    updateWidget2Content(true);
 }
 
