@@ -175,14 +175,30 @@ QPushButton:hover{
     <widget class="QPushButton" name="btn_history">
      <property name="geometry">
       <rect>
-       <x>1440</x>
-       <y>20</y>
-       <width>41</width>
-       <height>41</height>
+       <x>1360</x>
+       <y>10</y>
+       <width>51</width>
+       <height>51</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">border-image: url(:/image/btn_history.png);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_settings">
+     <property name="geometry">
+      <rect>
+       <x>1420</x>
+       <y>10</y>
+       <width>51</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-image: url(:/image/设置.png);</string>
      </property>
      <property name="text">
       <string/>

@@ -61,5 +61,6 @@
         <file>image/btn_bak.png</file>
         <file>image/battery_discharge.png</file>
         <file>image/btn_history.png</file>
+        <file>image/设置.png</file>
     </qresource>
 </RCC>
