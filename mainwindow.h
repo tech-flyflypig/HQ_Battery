@@ -49,6 +49,9 @@ private slots:
     void updateCurrentTime();
 
     void on_btn_history_clicked();
+    
+    // 处理设置按钮点击
+    void on_btn_settings_clicked();
 
 private:
     void initUI();
@@ -65,6 +68,7 @@ private:
 private:
     Ui::MainWindow *ui;
     QMenu *menu_list, *menu_about;
+    QMenu *m_settingsMenu; // 设置菜单
     BatteryGridWidget *batteryGrid;
     BMS1InfoShowForm *bms1InfoShowForm;
 
