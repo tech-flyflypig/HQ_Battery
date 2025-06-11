@@ -76,6 +76,34 @@ MainWindow::~MainWindow()
 void MainWindow::initUI()
 {
     ui->label_company->setVisible(false);
+
+    // 初始化设置菜单
+    m_settingsMenu = new QMenu(this);
+    QAction *userSettingsAction = new QAction("用户设置", this);
+    QAction *deviceSettingsAction = new QAction("设备设置", this);
+    QAction *systemSettingsAction = new QAction("系统设置", this);
+
+    m_settingsMenu->addAction(userSettingsAction);
+    m_settingsMenu->addAction(deviceSettingsAction);
+    m_settingsMenu->addAction(systemSettingsAction);
+
+    // 连接菜单项的信号
+    connect(userSettingsAction, &QAction::triggered, this, [this]()
+    {
+        user_manage_action();
+    });
+
+    connect(deviceSettingsAction, &QAction::triggered, this, [this]()
+    {
+        // 打开设备管理界面
+        device_manage_action();
+    });
+
+    connect(systemSettingsAction, &QAction::triggered, this, [this]()
+    {
+        QMessageBox::information(this, "系统设置", "系统设置功能将在未来版本中实现");
+    });
+
     // 创建电池网格组件
     batteryGrid = new BatteryGridWidget(ui->widget_center);
 
@@ -134,9 +162,10 @@ void MainWindow::initUI()
     connect(batteryGrid, &BatteryGridWidget::batteryDoubleClicked, this, [this](BatteryListForm * battery)
     {
         qDebug() << "Battery double clicked";
-        
+
         // 检查电池状态，只有运行状态才允许进入详情界面
-        if (battery->getMonitoringStatus() != BatteryListForm::Running) {
+        if (battery->getMonitoringStatus() != BatteryListForm::Running)
+        {
             qDebug() << "电池不在运行状态，无法查看详情";
             QMessageBox::information(this, "提示", "只有运行状态的电池才能查看详情！");
             return;
@@ -323,12 +352,13 @@ void MainWindow::init_sql()
                 connect(detailAction, &QAction::triggered, this, [this, battery]()
                 {
                     // 检查电池状态，只有运行状态才允许进入详情界面
-                    if (battery->getMonitoringStatus() != BatteryListForm::Running) {
+                    if (battery->getMonitoringStatus() != BatteryListForm::Running)
+                    {
                         qDebug() << "电池不在运行状态，无法查看详情";
                         QMessageBox::information(this, "提示", "只有运行状态的电池才能查看详情！");
                         return;
                     }
-                    
+
                     // 如果已有实例，先删除
                     if (bms1InfoShowForm)
                     {
@@ -451,7 +481,7 @@ void MainWindow::onBackButtonClicked()
 {
     // 获取当前显示的widget
     QWidget *currentWidget = ui->stackedWidget->currentWidget();
-    
+
     // 先切换到主页面，防止stackedWidget继续引用即将删除的组件
     ui->stackedWidget->setCurrentIndex(0);
 
@@ -459,13 +489,13 @@ void MainWindow::onBackButtonClicked()
     if (bms1InfoShowForm && bms1InfoShowForm == currentWidget)
     {
         ui->stackedWidget->removeWidget(bms1InfoShowForm);
-        
+
         // 标记为删除
         bms1InfoShowForm->deleteLater();
         bms1InfoShowForm = nullptr;
     }
     // 检查当前widget是否为ChargeAndDischargeRecordForm
-    else if (qobject_cast<ChargeAndDischargeRecordForm*>(currentWidget))
+    else if (qobject_cast<ChargeAndDischargeRecordForm *>(currentWidget))
     {
         ui->stackedWidget->removeWidget(currentWidget);
         currentWidget->deleteLater();
@@ -584,26 +614,36 @@ void MainWindow::updateCurrentTime()
 void MainWindow::on_btn_history_clicked()
 {
     qDebug() << "on_btn_history_clicked";
-    
+
     // 检查是否已存在充放电记录表单
     ChargeAndDischargeRecordForm *existingForm = nullptr;
-    for (int i = 0; i < ui->stackedWidget->count(); i++) {
-        existingForm = qobject_cast<ChargeAndDischargeRecordForm*>(ui->stackedWidget->widget(i));
-        if (existingForm) {
+    for (int i = 0; i < ui->stackedWidget->count(); i++)
+    {
+        existingForm = qobject_cast<ChargeAndDischargeRecordForm *>(ui->stackedWidget->widget(i));
+        if (existingForm)
+        {
             break;
         }
     }
-    
+
     // 如果不存在则创建新的
-    if (!existingForm) {
+    if (!existingForm)
+    {
         existingForm = new ChargeAndDischargeRecordForm();
         ui->stackedWidget->addWidget(existingForm);
     }
-    
+
     // 切换到该界面
     ui->stackedWidget->setCurrentWidget(existingForm);
-    
+
     // 显示返回按钮，隐藏logo
     updateWidget2Content(true);
+}
+
+void MainWindow::on_btn_settings_clicked()
+{
+    // 在设置按钮旁边显示菜单
+    QPoint pos = ui->btn_settings->mapToGlobal(QPoint(0, ui->btn_settings->height()));
+    m_settingsMenu->popup(pos);
 }
 
