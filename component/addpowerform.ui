@@ -14,10 +14,23 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">font: 10pt &quot;微软雅黑&quot;;
-background-color: #121A27;
+   <string notr="true">QWidget
+{
+font: 11pt &quot;微软雅黑&quot;;
+background-color: #0f1228;
 color: rgb(255, 255, 255);
-</string>
+}
+.QPushButton{
+font: 9pt &quot;微软雅黑&quot;;
+border-radius:3px;
+border-style:none;
+	color: rgb(255, 255, 255);
+background-color: #005AFF;
+}
+.QPushButton:hover{
+padding:4px 4px 2px 4px;
+background-color: #005AFF;
+}</string>
   </property>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
@@ -29,7 +42,7 @@ color: rgb(255, 255, 255);
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color:rgb(34, 44, 65);</string>
+    <string notr="true">background-color:#192755;</string>
    </property>
    <widget class="QPushButton" name="btn_close">
     <property name="geometry">
@@ -65,7 +78,7 @@ QPushButton:hover{
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="res.qrc">:/image/icons8_charging_battery_32.png</pixmap>
+     <pixmap resource="../res.qrc">:/image/battery_discharge.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -394,17 +407,7 @@ QPushButton:hover{
     </property>
     <item>
      <property name="text">
-      <string>交换机电源</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>老UPS电源</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>新UPS电源</string>
+      <string>BMS_1</string>
      </property>
     </item>
    </widget>
@@ -451,11 +454,14 @@ QPushButton:hover{
   <widget class="QPushButton" name="btn_sure">
    <property name="geometry">
     <rect>
-     <x>260</x>
+     <x>269</x>
      <y>460</y>
-     <width>80</width>
+     <width>71</width>
      <height>21</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: #005AFF;</string>
    </property>
    <property name="text">
     <string>确定</string>
@@ -463,7 +469,7 @@ QPushButton:hover{
   </widget>
  </widget>
  <resources>
-  <include location="res.qrc"/>
+  <include location="../res.qrc"/>
  </resources>
  <connections/>
 </ui>

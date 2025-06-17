@@ -64,7 +64,7 @@ QPushButton:hover{
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="res.qrc">:/image/icons8_charging_battery_32.png</pixmap>
+     <pixmap resource="../res.qrc">:/image/battery_discharge.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -155,7 +155,7 @@ QPushButton:hover{
   </widget>
  </widget>
  <resources>
-  <include location="res.qrc"/>
+  <include location="../res.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -47,7 +47,7 @@ background-color: #005AFF;
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>30</x>
       <y>10</y>
       <width>231</width>
       <height>21</height>
@@ -215,7 +215,7 @@ color: white;
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>860</x>
@@ -237,7 +237,7 @@ color: white;
        <string>搜索</string>
       </property>
       <property name="icon">
-       <iconset resource="res.qrc">
+       <iconset>
         <normaloff>:/image/search_50px.png</normaloff>:/image/search_50px.png</iconset>
       </property>
      </widget>
@@ -254,7 +254,7 @@ color: white;
        <string>导出</string>
       </property>
       <property name="icon">
-       <iconset resource="res.qrc">
+       <iconset>
         <normaloff>:/image/file_excel_24px.png</normaloff>:/image/file_excel_24px.png</iconset>
       </property>
      </widget>
@@ -271,7 +271,7 @@ color: white;
        <string>一键删除</string>
       </property>
       <property name="icon">
-       <iconset resource="res.qrc">
+       <iconset>
         <normaloff>:/image/delete_60px.png</normaloff>:/image/delete_60px.png</iconset>
       </property>
      </widget>
@@ -279,8 +279,6 @@ color: white;
    </layout>
   </widget>
  </widget>
- <resources>
-  <include location="res.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

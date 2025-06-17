@@ -39,6 +39,7 @@ SOURCES += \
     component/exceptionform.cpp \
     component/layoutbatterywidget.cpp \
     component/leftstatsform.cpp \
+    component/logininform.cpp \
     component/mytreewidget.cpp \
     component/queryform.cpp \
     component/revisepowerform.cpp \
@@ -67,6 +68,7 @@ HEADERS += \
     component/exceptionform.h \
     component/layoutbatterywidget.h \
     component/leftstatsform.h \
+    component/logininform.h \
     component/mytreewidget.h \
     component/queryform.h \
     component/revisepowerform.h \
@@ -99,6 +101,7 @@ FORMS += \
     component/chargeanddischargerecordform.ui \
     component/exceptionform.ui \
     component/leftstatsform.ui \
+    component/logininform.ui \
     component/queryform.ui \
     component/revisepowerform.ui \
     component/rightstatsform.ui \

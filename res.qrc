@@ -62,5 +62,8 @@
         <file>image/battery_discharge.png</file>
         <file>image/btn_history.png</file>
         <file>image/设置.png</file>
+        <file>image/登录窗口.png</file>
+        <file>image/登录框.png</file>
+        <file>image/登录框_非选中.png</file>
     </qresource>
 </RCC>

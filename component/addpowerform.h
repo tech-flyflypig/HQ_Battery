@@ -1,4 +1,4 @@
-#ifndef ADDPOWERFORM_H
+﻿#ifndef ADDPOWERFORM_H
 #define ADDPOWERFORM_H
 
 #include <QWidget>
@@ -14,7 +14,7 @@ class AddPowerForm : public QWidget
     Q_OBJECT
 
 public:
-    explicit AddPowerForm(QWidget* parent = nullptr);
+    explicit AddPowerForm(QWidget *parent = nullptr);
     ~AddPowerForm();
 
 private slots:
@@ -25,18 +25,17 @@ private slots:
     void initForm();
     void on_btn_sure_clicked();
 
-    void on_cbt_com_currentIndexChanged(const QString& arg1);
+    void on_cbt_com_currentIndexChanged(const QString &arg1);
 
-    void on_comboBox_currentIndexChanged(const QString& arg1);
 
 protected:
-    void mousePressEvent(QMouseEvent* e);
-    void mouseMoveEvent(QMouseEvent* e);
+    void mousePressEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e);
 signals:
     void sig_init_sql();
 
 private:
-    Ui::AddPowerForm* ui;
+    Ui::AddPowerForm *ui;
     QPoint clickPos;
 };
 

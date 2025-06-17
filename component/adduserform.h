@@ -3,10 +3,14 @@
 
 #include <QWidget>
 #include <QMouseEvent>
+#include <QResizeEvent>
+
 namespace Ui
 {
     class AddUserForm;
 }
+
+class USER;
 
 class AddUserForm : public QWidget
 {
@@ -16,27 +20,26 @@ public:
     explicit AddUserForm(QWidget* parent = nullptr);
     ~AddUserForm();
 
+signals:
+    void init_sql();
+
 private slots:
-    void initForm();
-
     void on_pushButton_2_clicked();
-
     void on_pushButton_clicked();
-
     void on_btn_add_user_clicked();
-
     void on_btn_revise_user_clicked();
-
     void on_btn_delete_user_clicked();
 
-private:
-    Ui::AddUserForm* ui;
-    QPoint clickPos;
-
 protected:
-    void mousePressEvent(QMouseEvent* e);
-    void mouseMoveEvent(QMouseEvent* e);
+    void mousePressEvent(QMouseEvent* e) override;
+    void mouseMoveEvent(QMouseEvent* e) override;
+    void resizeEvent(QResizeEvent* event) override;
 
+private:
+    void initForm();
+    void adjustColumnWidths();
+    Ui::AddUserForm *ui;
+    QPoint clickPos;
 };
 
 #endif // ADDUSERFORM_H

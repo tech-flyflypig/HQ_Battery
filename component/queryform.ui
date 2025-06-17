@@ -17,7 +17,7 @@
    <string notr="true">QWidget
 {
 font: 11pt &quot;微软雅黑&quot;;
-background-color: #121A27;
+background-color: #0f1228;
 color: rgb(255, 255, 255);
 }
 .QPushButton{
@@ -42,7 +42,7 @@ background-color: #005AFF;
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color:rgb(34, 44, 65);</string>
+    <string notr="true">background-color:rgb(25, 39, 85);</string>
    </property>
    <widget class="QLabel" name="label">
     <property name="geometry">
@@ -91,7 +91,7 @@ QPushButton:hover{
    <property name="styleSheet">
     <string notr="true">QTableWidget
 {
-background-color: rgb(25, 32, 48);
+background-color:#111a39;
 color: rgb(255, 255, 255);
 border: 1px solid #255990;
 }
@@ -131,7 +131,7 @@ color: white;
     <string>搜索</string>
    </property>
    <property name="icon">
-    <iconset resource="res.qrc">
+    <iconset>
      <normaloff>:/image/search_50px.png</normaloff>:/image/search_50px.png</iconset>
    </property>
   </widget>
@@ -200,7 +200,7 @@ color: white;
     <string>一键导出</string>
    </property>
    <property name="icon">
-    <iconset resource="res.qrc">
+    <iconset>
      <normaloff>:/image/export_csv_24px.png</normaloff>:/image/export_csv_24px.png</iconset>
    </property>
   </widget>
@@ -217,13 +217,11 @@ color: white;
     <string>一键导入</string>
    </property>
    <property name="icon">
-    <iconset resource="res.qrc">
+    <iconset>
      <normaloff>:/image/import_csv_24px.png</normaloff>:/image/import_csv_24px.png</iconset>
    </property>
   </widget>
  </widget>
- <resources>
-  <include location="res.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

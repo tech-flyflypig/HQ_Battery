@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>861</width>
-    <height>585</height>
+    <width>915</width>
+    <height>633</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <string notr="true">QWidget
 {
 font: 11pt &quot;微软雅黑&quot;;
-background-color: #121A27;
+background-color: #0f1228;
 color: rgb(255, 255, 255);
 }
 .QPushButton{
@@ -61,8 +61,8 @@ background-color: #005AFF;
   <widget class="QPushButton" name="btn_delete_user">
    <property name="geometry">
     <rect>
-     <x>780</x>
-     <y>550</y>
+     <x>830</x>
+     <y>590</y>
      <width>70</width>
      <height>26</height>
     </rect>
@@ -76,17 +76,17 @@ background-color: #005AFF;
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>861</width>
+     <width>921</width>
      <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-color:rgb(34, 44, 65);</string>
+    <string notr="true">background-color:rgb(25, 39, 85);</string>
    </property>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>40</x>
       <y>10</y>
       <width>231</width>
       <height>21</height>
@@ -99,7 +99,7 @@ background-color: #005AFF;
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>830</x>
+      <x>880</x>
       <y>10</y>
       <width>21</width>
       <height>21</height>
@@ -117,20 +117,39 @@ QPushButton:hover{
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap resource="../res.qrc">:/image/battery_discharge.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>90</y>
-     <width>841</width>
-     <height>451</height>
+     <width>891</width>
+     <height>481</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">QTableWidget
 {
-background-color: rgb(25, 32, 48);
+background-color: #111a39;
 color: rgb(255, 255, 255);
 border: 1px solid #255990;
 }
@@ -150,8 +169,8 @@ color: white;
   <widget class="QPushButton" name="btn_revise_user">
    <property name="geometry">
     <rect>
-     <x>700</x>
-     <y>550</y>
+     <x>750</x>
+     <y>590</y>
      <width>70</width>
      <height>26</height>
     </rect>
@@ -163,8 +182,8 @@ color: white;
   <widget class="QPushButton" name="btn_add_user">
    <property name="geometry">
     <rect>
-     <x>620</x>
-     <y>550</y>
+     <x>670</x>
+     <y>590</y>
      <width>70</width>
      <height>26</height>
     </rect>
@@ -184,6 +203,8 @@ color: white;
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res.qrc"/>
+ </resources>
  <connections/>
 </ui>

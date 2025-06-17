@@ -44,23 +44,55 @@ void AddUserForm::initForm()
 
     ui->tableWidget->setColumnCount(header.size());
     ui->tableWidget->setHorizontalHeaderLabels(header);
-    ui->tableWidget->setColumnWidth(0, 50);
-//    for (int i = 0; i < header.size(); i++)
-//    {
-//        ui->tableWidget->setColumnWidth(i, 170);
-//    }
+    
+    // 设置基本的列宽比例
+    int tableWidth = ui->tableWidget->width();
+    int totalWidth = tableWidth - 20; // 减去一些边距
+    
+    // 设置各列的宽度比例：序号占5%，用户名和密码各占15%，用户等级占10%，两个时间列各占27.5%
+    ui->tableWidget->setColumnWidth(0, totalWidth * 0.05); // 序号列
+    ui->tableWidget->setColumnWidth(1, totalWidth * 0.15); // 用户名列
+    ui->tableWidget->setColumnWidth(2, totalWidth * 0.15); // 密码列
+    ui->tableWidget->setColumnWidth(3, totalWidth * 0.10); // 用户等级列
+    ui->tableWidget->setColumnWidth(4, totalWidth * 0.275); // 创建时间列
+    ui->tableWidget->setColumnWidth(5, totalWidth * 0.275); // 修改时间列
+    
+    // 对所有列应用交互式调整模式，允许用户调整
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    
+    // 设置最后一列拉伸填充剩余空间
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
-//    ui->tableWidget->setAlternatingRowColors(true);
-    //ui->tableWidget->resizeColumnsToContents();
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//根据容器调整大小
+    
     ui->tableWidget->verticalHeader()->setHidden(true);
     ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    
+    // 立即调整一次列宽
+    adjustColumnWidths();
+    
     this->on_pushButton_clicked();
-//    ui->dtt_st->setDateTime(QDateTime::currentDateTime().addMonths(-1));
-//    ui->dtt_et->setDateTime(QDateTime::currentDateTime());
+}
 
+// 添加窗口大小改变事件处理
+void AddUserForm::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    adjustColumnWidths();
+}
+
+// 添加调整列宽的辅助方法
+void AddUserForm::adjustColumnWidths()
+{
+    int tableWidth = ui->tableWidget->width();
+    int totalWidth = tableWidth - 20; // 减去一些边距
+    
+    ui->tableWidget->setColumnWidth(0, totalWidth * 0.05);
+    ui->tableWidget->setColumnWidth(1, totalWidth * 0.15);
+    ui->tableWidget->setColumnWidth(2, totalWidth * 0.15);
+    ui->tableWidget->setColumnWidth(3, totalWidth * 0.10);
+    ui->tableWidget->setColumnWidth(4, totalWidth * 0.275);
+    // 最后一列会自动拉伸
 }
 
 void AddUserForm::on_pushButton_clicked()
@@ -69,10 +101,6 @@ void AddUserForm::on_pushButton_clicked()
     QString sql = QString( "select * from power_user");
     if(!ui->lineEdit->text().isEmpty())
         sql += QString(" where user_name like '%1%'").arg(ui->lineEdit->text());
-//    if(!ui->cbx_cd->isChecked())
-//        sql += " and charge_status!=1";
-//    if(!ui->cbx_fd->isChecked())
-//        sql += " and charge_status!=0";
     sql += ";";
     qDebug() << sql;
     query.exec(sql);
@@ -90,14 +118,22 @@ void AddUserForm::on_pushButton_clicked()
     {
         for (int i = 0; i < nColumn; i++)
         {
-            if(i == 4 || i == 5)
+            if(i == 4 || i == 5) // 时间列
             {
                 QDateTime time = query.value(i).toDateTime();
-                ui->tableWidget->setItem(j, i, new QTableWidgetItem(time.toString("yyyy-MM-dd hh:mm:ss")));
+                QString timeStr = time.toString("yyyy-MM-dd hh:mm:ss");
+                QTableWidgetItem *item = new QTableWidgetItem(timeStr);
+                // 添加tooltip，以便鼠标悬停时显示完整内容
+                item->setToolTip(timeStr);
+                ui->tableWidget->setItem(j, i, item);
             }
             else
             {
-                ui->tableWidget->setItem(j, i, new QTableWidgetItem(query.value(i).toString()));
+                QString cellText = query.value(i).toString();
+                QTableWidgetItem *item = new QTableWidgetItem(cellText);
+                // 为其他列也添加tooltip，以便内容过长时显示
+                item->setToolTip(cellText);
+                ui->tableWidget->setItem(j, i, item);
             }
 
             ui->tableWidget->item(j, i)->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);

@@ -4,7 +4,7 @@
 #include <QMouseEvent>
 #include <QSerialPortInfo>
 #include <QMessageBox>
-AddPowerForm::AddPowerForm(QWidget* parent) :
+AddPowerForm::AddPowerForm(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::AddPowerForm)
 {
@@ -23,7 +23,7 @@ void AddPowerForm::initForm()
     this->on_comboBox_currentIndexChanged(0);
 
     QStringList m_serialPortName;
-    foreach(const QSerialPortInfo& info, QSerialPortInfo::availablePorts())
+    foreach(const QSerialPortInfo &info, QSerialPortInfo::availablePorts())
     {
 
         m_serialPortName << info.portName();
@@ -33,13 +33,13 @@ void AddPowerForm::initForm()
     ui->comboBox->setCurrentIndex(0);
 }
 
-void AddPowerForm::mousePressEvent(QMouseEvent* e)
+void AddPowerForm::mousePressEvent(QMouseEvent *e)
 {
     if(e->button() == Qt::LeftButton)
         clickPos = e->pos();
 }
 
-void AddPowerForm::mouseMoveEvent(QMouseEvent* e)
+void AddPowerForm::mouseMoveEvent(QMouseEvent *e)
 {
     if(e->buttons()&Qt::LeftButton)
     {
@@ -64,12 +64,12 @@ void AddPowerForm::on_comboBox_currentIndexChanged(int index)
     {
         case 0:
             //sql = "select MAX(SPLIT_PART(power_id, '_', 2))  from power_source where power_id like 'JHJ%';"; //pgsql
-            sql = "select MAX(cast(substr(power_id, 5) as int))  from power_source where power_id like 'JHJ%';"; //sqlite3
+            sql = "select MAX(cast(substr(power_id, 5) as int))  from power_source where power_id like 'BMS1%';"; //sqlite3
             if(query.exec(sql))
             {
                 while (query.next())
                 {
-                    power_id = QString("JHJ_%1").arg(query.value(0).toInt() + 1);
+                    power_id = "BMS1" + QString("%1").arg(query.value(0).toInt() + 1, 3, 10, QChar('0'));
                 }
             }
             break;
@@ -96,6 +96,7 @@ void AddPowerForm::on_comboBox_currentIndexChanged(int index)
             }
             break;
     }
+    qDebug() << power_id;
     ui->led_power_id->setText(power_id);
 }
 
@@ -111,7 +112,7 @@ void AddPowerForm::on_btn_sure_clicked()
           .arg(ui->cbt_databits->currentText().toUInt());
     if(ui->comboBox->currentIndex() == 0)
     {
-        sql += "'JHJ',";
+        sql += "'BMS_1',";
     }
     else if(ui->comboBox->currentIndex() == 1)
     {
@@ -164,7 +165,7 @@ void AddPowerForm::on_btn_sure_clicked()
     }
 }
 
-void AddPowerForm::on_cbt_com_currentIndexChanged(const QString& arg1)
+void AddPowerForm::on_cbt_com_currentIndexChanged(const QString &arg1)
 {
     QString sql = QString("select count(*) from power_source where port_name='%1';").arg(arg1);
     QSqlQuery query;
@@ -186,15 +187,4 @@ void AddPowerForm::on_cbt_com_currentIndexChanged(const QString& arg1)
 }
 
 
-
-
-void AddPowerForm::on_comboBox_currentIndexChanged(const QString& arg1)
-{
-    if(arg1 == "交换机电源")
-    {
-        ui->cbt_baudrate->setCurrentIndex(3);
-        ui->cbt_databits->setCurrentIndex(3);
-        ui->cbt_parity->setCurrentIndex(2);
-    }
-}
 
