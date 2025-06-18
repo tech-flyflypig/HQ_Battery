@@ -288,8 +288,17 @@ struct USER
 {
     int rowid;
     QString user_name;
-    QString password;
-    int privilege;
+    QString password;      // 密码明文，用于界面显示，不存储实际密码
+    QString password_hash; // 密码的MD5哈希值
+    int privilege;         // 权限级别  0: 普通用户 1: 高级用户 9: 管理员/超级用户
+    QString real_name;     // 真实姓名
+    QString email;         // 电子邮箱
+    QString phone;         // 电话号码
+    int status;            // 账户状态：0-禁用，1-正常，2-锁定
+    int login_attempts;    // 登录尝试次数
+    QDateTime last_login_time; // 最后登录时间
+    QDateTime create_time;     // 账户创建时间
+    QDateTime update_time;     // 账户更新时间
 };
 struct SetParam
 {

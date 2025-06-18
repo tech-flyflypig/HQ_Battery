@@ -65,5 +65,7 @@
         <file>image/登录窗口.png</file>
         <file>image/登录框.png</file>
         <file>image/登录框_非选中.png</file>
+        <file>image/用户.png</file>
+        <file>image/password.png</file>
     </qresource>
 </RCC>

@@ -29,6 +29,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     , m_isMoving(false) // 初始化拖拽状态
+    , m_currentUser("")
+    , m_userPrivilege(0) // 默认为0，即最高权限(管理员)
 {
     ui->setupUi(this);
     this->setWindowTitle("HQ_Battery");
@@ -82,15 +84,21 @@ void MainWindow::initUI()
     QAction *userSettingsAction = new QAction("用户设置", this);
     QAction *deviceSettingsAction = new QAction("设备设置", this);
     QAction *systemSettingsAction = new QAction("系统设置", this);
+    QAction *userManageAction = new QAction("用户管理", this);
 
     m_settingsMenu->addAction(userSettingsAction);
     m_settingsMenu->addAction(deviceSettingsAction);
     m_settingsMenu->addAction(systemSettingsAction);
+    m_settingsMenu->addAction(userManageAction);
+
+    // 默认情况下，用户管理只对管理员可见
+    userManageAction->setVisible(m_userPrivilege == 0);
 
     // 连接菜单项的信号
     connect(userSettingsAction, &QAction::triggered, this, [this]()
     {
-        user_manage_action();
+        // 用户设置功能，后续实现
+        QMessageBox::information(this, "用户设置", "用户设置功能将在未来版本中实现");
     });
 
     connect(deviceSettingsAction, &QAction::triggered, this, [this]()
@@ -103,6 +111,8 @@ void MainWindow::initUI()
     {
         QMessageBox::information(this, "系统设置", "系统设置功能将在未来版本中实现");
     });
+
+    connect(userManageAction, &QAction::triggered, this, &MainWindow::user_manage_action);
 
     // 创建电池网格组件
     batteryGrid = new BatteryGridWidget(ui->widget_center);
@@ -444,22 +454,6 @@ void MainWindow::user_manage_action()
     userform->show();
 }
 
-void MainWindow::on_btn_menu_clicked()
-{
-#if 0
-    menu_list->move(QCursor::pos());
-    menu_list->show();
-#endif
-}
-
-
-void MainWindow::on_btn_about_clicked()
-{
-#if 0
-    menu_about->move(QCursor::pos());
-    menu_about->show();
-#endif
-}
 
 void MainWindow::updateWidget2Content(bool showBackButton)
 {
@@ -645,5 +639,52 @@ void MainWindow::on_btn_settings_clicked()
     // 在设置按钮旁边显示菜单
     QPoint pos = ui->btn_settings->mapToGlobal(QPoint(0, ui->btn_settings->height()));
     m_settingsMenu->popup(pos);
+}
+
+void MainWindow::setUserPrivilege(int privilege)
+{
+    m_userPrivilege = privilege;
+
+    // 根据权限级别设置界面元素的可见性或启用状态
+    // 例如：管理员可以看到所有功能，普通用户只能看到部分功能
+    if (m_settingsMenu)
+    {
+        QList<QAction *> actions = m_settingsMenu->actions();
+
+        // 假设actions[3]是"用户管理"选项，只有管理员(privilege=0)可见
+        if (actions.size() > 3)
+        {
+            actions[3]->setVisible(privilege == 9);
+        }
+    }
+
+    // 更新界面显示的用户名和权限
+    if (ui->label_current_user)
+    {
+        QString privilegeText = (privilege == 9) ? "管理员" : "普通用户";
+        ui->label_current_user->setText(m_currentUser + " (" + privilegeText + ")");
+    }
+}
+
+void MainWindow::setCurrentUser(const QString &username)
+{
+    m_currentUser = username;
+
+    // 更新界面显示
+    if (ui->label_current_user)
+    {
+        QString privilegeText = (m_userPrivilege == 9) ? "管理员" : "普通用户";
+        ui->label_current_user->setText(m_currentUser + " (" + privilegeText + ")");
+    }
+}
+
+int MainWindow::getUserPrivilege() const
+{
+    return m_userPrivilege;
+}
+
+QString MainWindow::getCurrentUser() const
+{
+    return m_currentUser;
 }
 

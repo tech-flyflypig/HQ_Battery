@@ -23,13 +23,23 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    // 设置当前用户的权限级别
+    void setUserPrivilege(int privilege);
+
+    // 设置当前登录用户名
+    void setCurrentUser(const QString &username);
+
+    // 获取当前用户的权限级别
+    int getUserPrivilege() const;
+
+    // 获取当前登录用户名
+    QString getCurrentUser() const;
+
 protected:
     // 事件过滤器，可为指定控件添加自定义事件处理
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 private slots:
-    void on_btn_menu_clicked();
-    void on_btn_about_clicked();
 
     // 切换到主界面
     void switchToMainView();
@@ -49,7 +59,7 @@ private slots:
     void updateCurrentTime();
 
     void on_btn_history_clicked();
-    
+
     // 处理设置按钮点击
     void on_btn_settings_clicked();
 
@@ -81,5 +91,9 @@ private:
     // 窗口拖拽相关变量
     bool m_isMoving;
     QPoint m_lastPos;
+
+    // 当前登录用户及权限相关变量
+    QString m_currentUser;
+    int m_userPrivilege;
 };
 #endif // MAINWINDOW_H 

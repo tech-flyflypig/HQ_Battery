@@ -61,6 +61,8 @@ public:
     static QString UserName;
     static QString Password;
     static QString BackGroundPath;
+    static int LogFileCount;
+    static QString CurrentLogFileName;
 
     //modbus ip
     static QString ModbusIp;
@@ -84,5 +86,9 @@ public:
     static bool alarm_ban;//一键屏蔽所有报警
     static bool modbus_mode;//modbus开启 对接龙软大屏modbus-tcp协议
 };
+void ManageLogFile();
+void outputMessage(QtMsgType                 type,
+                   const QMessageLogContext &context,
+                   const QString            &msg);
 
 #endif // MYAPP_H

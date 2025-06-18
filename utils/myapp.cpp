@@ -4,6 +4,9 @@
 #include <QApplication>
 #include <QSqlQuery>
 #include <QTimer>
+#include <QDir>
+#include <QMutex>
+#include <iostream>
 QString myApp::AppPath = "";
 QString myApp::HostName = "127.0.0.1";
 int myApp::Port = 5432;
@@ -11,7 +14,8 @@ QString myApp::DatabaseName = "battery";
 QString myApp::UserName = "postgres";
 QString myApp::Password = "123";
 QString myApp::BackGroundPath = "";
-
+int     myApp::LogFileCount = 30;       /* 默认30天 */
+QString myApp::CurrentLogFileName = ""; /* 当前日志文件名 */
 
 QList<battery_info> myApp::back_up_battery;
 
@@ -95,4 +99,102 @@ void myApp::Sleep(int msec)
     QEventLoop loop;
     QTimer::singleShot(msec, &loop, SLOT(quit()));
     loop.exec();
+}
+
+// 此函数里不能打印日志信息
+void ManageLogFile()
+{
+    int i = 0;
+    QString str = myApp::AppPath + "//log//";
+    QDir    dir(str);
+    if (dir.exists() == false) /* 不存在 */
+    {
+        dir.mkdir(str);
+    }
+    QString tmpstr;
+    QStringList logfilelist;
+
+    logfilelist.clear();
+    foreach(QFileInfo mfi, dir.entryInfoList())
+    {
+        if (mfi.isFile())
+        {
+            tmpstr = mfi.fileName();
+
+            if (tmpstr.count() > 4)
+            {
+                if (tmpstr.right(4) == ".txt")
+                {
+                    logfilelist.append(mfi.fileName());
+                }
+            }
+        }
+    }
+    logfilelist.sort();
+
+    if (logfilelist.count() > myApp::LogFileCount)
+    {
+        for (i = 0; i < (logfilelist.count() - myApp::LogFileCount); i++)
+        {
+            QFile::remove(str + "/" + logfilelist.at(i));
+        }
+    }
+}
+
+// 此函数里不能打印日志信息
+void outputMessage(QtMsgType                 type,
+                   const QMessageLogContext &context,
+                   const QString            &msg)
+{
+    static QMutex mutex;
+
+    mutex.lock();
+    QString text;
+
+    switch (type)
+    {
+        case QtDebugMsg:
+            text = QString("Debug:");
+            break;
+
+        case QtWarningMsg:
+            text = QString("Warning:");
+            break;
+
+        case QtCriticalMsg:
+            text = QString("Critical:");
+            break;
+
+        case QtFatalMsg:
+            text = QString("Fatal:");
+    }
+    QString context_info = QString("File:(%1) Line:(%2)").arg(QString(
+                               context.file)).
+                           arg(context.line);
+    QString current_time = QTime::currentTime().toString("hh:mm:ss");
+
+    // QString message = QString("[%1] %2 {%3
+    // %4}").arg(current_time).arg(msg).arg(text).arg(context_info);
+    QString message = QString("[%1] %2").arg(current_time).arg(msg);
+    QString logfilename = QDate::currentDate().toString("yyyyMMdd") + ".txt";
+
+    if (logfilename != myApp::CurrentLogFileName)
+    {
+        ManageLogFile();
+        myApp::CurrentLogFileName = logfilename;
+    }
+
+    //    QString str = myApp::FILEPATH;
+    //QString str = myApp::AppPath + "log/";
+    QFile   file(myApp::AppPath + "//log//" + logfilename);
+
+    file.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream text_stream(&file);
+      text_stream.setCodec("UTF-8");
+
+    text_stream << message << "\r\n";
+    std::cout << QString(message.constData()).toStdString() << std::endl;
+    file.flush();
+    file.close();
+    mutex.unlock();
 }

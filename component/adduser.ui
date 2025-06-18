@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>246</width>
-    <height>250</height>
+    <width>300</width>
+    <height>380</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@ color: rgb(255, 255, 255);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>261</width>
+     <width>300</width>
      <height>31</height>
     </rect>
    </property>
@@ -33,7 +33,7 @@ color: rgb(255, 255, 255);</string>
    <widget class="QPushButton" name="btn_close">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>270</x>
       <y>6</y>
       <width>20</width>
       <height>20</height>
@@ -90,10 +90,10 @@ QPushButton:hover{
   <widget class="QPushButton" name="btn_sure">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>210</y>
+     <x>170</x>
+     <y>340</y>
      <width>80</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="text">
@@ -105,8 +105,8 @@ QPushButton:hover{
     <rect>
      <x>20</x>
      <y>50</y>
-     <width>201</width>
-     <height>151</height>
+     <width>260</width>
+     <height>280</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout" columnstretch="1,2">
@@ -128,7 +128,11 @@ QPushButton:hover{
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLineEdit" name="led_password"/>
+     <widget class="QLineEdit" name="led_password">
+      <property name="echoMode">
+       <enum>QLineEdit::Password</enum>
+      </property>
+     </widget>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_5">
@@ -138,18 +142,47 @@ QPushButton:hover{
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QComboBox" name="cbx_privilege">
-      <item>
-       <property name="text">
-        <string>管理员</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>操作员</string>
-       </property>
-      </item>
+     <widget class="QComboBox" name="cbx_privilege"/>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>真实姓名</string>
+      </property>
      </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="led_real_name"/>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_7">
+      <property name="text">
+       <string>邮箱</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLineEdit" name="led_email"/>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_8">
+      <property name="text">
+       <string>电话</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="led_phone"/>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_9">
+      <property name="text">
+       <string>账户状态</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QComboBox" name="cbx_status"/>
     </item>
    </layout>
   </widget>

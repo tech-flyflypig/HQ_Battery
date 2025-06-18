@@ -159,7 +159,7 @@ QPushButton:hover{
     <widget class="QLabel" name="label_current_time">
      <property name="geometry">
       <rect>
-       <x>1510</x>
+       <x>1430</x>
        <y>20</y>
        <width>201</width>
        <height>31</height>
@@ -172,10 +172,29 @@ QPushButton:hover{
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
+    <widget class="QLabel" name="label_current_user">
+     <property name="geometry">
+      <rect>
+       <x>1220</x>
+       <y>20</y>
+       <width>201</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 700 14pt &quot;Microsoft YaHei UI&quot;;</string>
+     </property>
+     <property name="text">
+      <string>未登录</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
     <widget class="QPushButton" name="btn_history">
      <property name="geometry">
       <rect>
-       <x>1360</x>
+       <x>1630</x>
        <y>10</y>
        <width>51</width>
        <height>51</height>
@@ -191,7 +210,7 @@ QPushButton:hover{
     <widget class="QPushButton" name="btn_settings">
      <property name="geometry">
       <rect>
-       <x>1420</x>
+       <x>1680</x>
        <y>10</y>
        <width>51</width>
        <height>51</height>
