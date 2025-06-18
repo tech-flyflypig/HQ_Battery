@@ -190,10 +190,9 @@ void outputMessage(QtMsgType                 type,
 
     file.open(QIODevice::WriteOnly | QIODevice::Append);
     QTextStream text_stream(&file);
-      text_stream.setCodec("UTF-8");
-
     text_stream << message << "\r\n";
-    std::cout << QString(message.constData()).toStdString() << std::endl;
+    // 使用toLocal8Bit()将Unicode字符串转换为本地编码
+    std::cout << message.toLocal8Bit().constData() << std::endl;
     file.flush();
     file.close();
     mutex.unlock();

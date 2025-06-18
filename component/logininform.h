@@ -47,6 +47,8 @@ private slots:
     // 登录按钮点击事件
     void onLoginButtonClicked();
 
+    void on_btn_close_clicked();
+
 private:
     Ui::LoginInForm *ui;
     QPoint clickPos;       // 用于实现窗口拖动
