@@ -316,3 +316,9 @@ bool LoginInForm::eventFilter(QObject *watched, QEvent *event)
     // 继续传递事件
     return QWidget::eventFilter(watched, event);
 }
+
+void LoginInForm::on_btn_close_clicked()
+{
+    this->close();
+}
+

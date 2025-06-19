@@ -14,7 +14,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    
+
     // // 设置编码，解决中文乱码问题
     // #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
     //     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     //     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
     //     QTextCodec::setCodecForLocale(codec);
     // #endif
-    
+
     myApp::init_param();
     ManageLogFile();    //管理日志
     qInstallMessageHandler(outputMessage);    // 注册MessageHandler
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
 
     // 连接登录成功信号到槽函数
     QObject::connect(loginForm, &LoginInForm::loginSuccess,
-                     [mainWindow, loginForm](const QString &username, int privilege)
+                     [mainWindow, loginForm](const QString & username, int privilege)
     {
         qDebug() << "用户" << username << "登录成功，权限级别:" << privilege;
 
