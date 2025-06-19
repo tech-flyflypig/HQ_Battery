@@ -1,4 +1,4 @@
-﻿#ifndef LOGININFORM_H
+#ifndef LOGININFORM_H
 #define LOGININFORM_H
 
 #include <QWidget>
@@ -46,6 +46,8 @@ protected:
 private slots:
     // 登录按钮点击事件
     void onLoginButtonClicked();
+
+    void on_btn_close_clicked();
 
 private:
     Ui::LoginInForm *ui;
