@@ -48,5 +48,6 @@ Makefile*
 .Trash-*
 Thumbs.db
 
-
+/release
 /build
+/publish

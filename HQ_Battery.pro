@@ -12,12 +12,12 @@ QMAKE_CFLAGS += /utf-8
 QMAKE_CXXFLAGS += /utf-8
 }
 
-CONFIG(release, debug|release){
-LIBS += -L$$PWD/lib -llwdesigner
-}else
-{
-LIBS += -L$$PWD/lib -llwdesignerd
-}
+# CONFIG(release, debug|release){
+# LIBS += -L$$PWD/lib -llwdesigner
+# }else
+# {
+# LIBS += -L$$PWD/lib -llwdesignerd
+# }
 
 
 
@@ -37,7 +37,6 @@ SOURCES += \
     component/cfdrecordform.cpp \
     component/chargeanddischargerecordform.cpp \
     component/exceptionform.cpp \
-    component/layoutbatterywidget.cpp \
     component/leftstatsform.cpp \
     component/logininform.cpp \
     component/mytreewidget.cpp \
@@ -47,7 +46,6 @@ SOURCES += \
     component/batterychartwidget.cpp \
     main.cpp \
     mainwindow.cpp \
-    protocols/batteryport.cpp \
     protocols/bms1battery.cpp \
     protocols/modbustcpworker.cpp \
     protocols/protocol.cpp \
@@ -66,7 +64,6 @@ HEADERS += \
     component/cfdrecordform.h \
     component/chargeanddischargerecordform.h \
     component/exceptionform.h \
-    component/layoutbatterywidget.h \
     component/leftstatsform.h \
     component/logininform.h \
     component/mytreewidget.h \
@@ -75,10 +72,8 @@ HEADERS += \
     component/rightstatsform.h \
     component/batterychartwidget.h \
     mainwindow.h \
-    protocols/battery.h \
     protocols/batteryinterface.h \
     protocols/batteryinterfacefactory.h \
-    protocols/batteryport.h \
     protocols/bms1battery.h \
     protocols/communicationworker.h \
     protocols/communicationworkerfactory.h \
