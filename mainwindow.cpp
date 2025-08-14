@@ -77,7 +77,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initUI()
 {
-    ui->label_company->setVisible(false);
+    //ui->label_company->setVisible(false);
 
     // 初始化设置菜单
     m_settingsMenu = new QMenu(this);
