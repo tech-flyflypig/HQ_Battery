@@ -82,31 +82,31 @@ void MainWindow::initUI()
 
     // 初始化设置菜单
     m_settingsMenu = new QMenu(this);
-    QAction *userSettingsAction = new QAction("用户设置", this);
+    // QAction *userSettingsAction = new QAction("用户设置", this);
     QAction *deviceSettingsAction = new QAction("设备设置", this);
-    QAction *systemSettingsAction = new QAction("系统设置", this);
+    // QAction *systemSettingsAction = new QAction("系统设置", this);
     QAction *userManageAction = new QAction("用户管理", this);
 
-    m_settingsMenu->addAction(userSettingsAction);
+    // m_settingsMenu->addAction(userSettingsAction);
     m_settingsMenu->addAction(deviceSettingsAction);
-    m_settingsMenu->addAction(systemSettingsAction);
+    // m_settingsMenu->addAction(systemSettingsAction);
     m_settingsMenu->addAction(userManageAction);
 
     m_historyMenu = new QMenu(this);
     QAction *cfdRecordAction = new QAction("充放电记录", this);
     QAction *abnormalRecordAction = new QAction("异常记录", this);
     m_historyMenu->addAction(cfdRecordAction);
-    m_historyMenu->addAction(abnormalRecordAction); 
+    m_historyMenu->addAction(abnormalRecordAction);
 
     // 默认情况下，用户管理只对管理员可见
     userManageAction->setVisible(m_userPrivilege == 9);
 
     // 连接菜单项的信号
-    connect(userSettingsAction, &QAction::triggered, this, [this]()
-    {
-        // 用户设置功能，后续实现
-        QMessageBox::information(this, "用户设置", "用户设置功能将在未来版本中实现");
-    });
+    // connect(userSettingsAction, &QAction::triggered, this, [this]()
+    // {
+    //     // 用户设置功能，后续实现
+    //     QMessageBox::information(this, "用户设置", "用户设置功能将在未来版本中实现");
+    // });
 
     connect(deviceSettingsAction, &QAction::triggered, this, [this]()
     {
@@ -114,10 +114,10 @@ void MainWindow::initUI()
         device_manage_action();
     });
 
-    connect(systemSettingsAction, &QAction::triggered, this, [this]()
-    {
-        QMessageBox::information(this, "系统设置", "系统设置功能将在未来版本中实现");
-    });
+    // connect(systemSettingsAction, &QAction::triggered, this, [this]()
+    // {
+    //     QMessageBox::information(this, "系统设置", "系统设置功能将在未来版本中实现");
+    // });
 
     connect(userManageAction, &QAction::triggered, this, &MainWindow::user_manage_action);
 
@@ -143,31 +143,20 @@ void MainWindow::initUI()
     // 创建返回按钮，放在与Logo相同的位置
     m_backButton = new QPushButton(ui->widget_2);
     m_backButton->setStyleSheet("QPushButton { border-image: url(:/image/undo.png);}");
-    m_backButton->setFixedSize(60, 30);
+    m_backButton->setFixedSize(51, 51); // 与logo相同的尺寸
 
     // 初始显示Logo，隐藏返回按钮
     m_backButton->hide();
     ui->label_logo->show();
 
-    // 找到widget_2当前的布局并添加返回按钮
-    // 注意：返回按钮和Logo占用相同位置
-    if (ui->widget_2->layout())
+    // 将返回按钮添加到布局中，替换logo的位置
+    QHBoxLayout *hlayout = qobject_cast<QHBoxLayout *>(ui->widget_2->layout());
+    if (layout)
     {
-        // 已有布局，在原布局中添加返回按钮
-        ui->widget_2->layout()->addWidget(m_backButton);
+        // 在布局的第一个位置插入返回按钮（与logo相同位置）
+        hlayout->insertWidget(0, m_backButton);
+        m_backButton->raise(); // 确保返回按钮在最前面
     }
-    else
-    {
-        // 无布局，创建新布局
-        QHBoxLayout *headerLayout = new QHBoxLayout(ui->widget_2);
-        headerLayout->setContentsMargins(10, 5, 10, 5);
-        headerLayout->addWidget(m_backButton);
-        headerLayout->addStretch();
-    }
-
-    // 确保返回按钮与Logo对齐
-    QRect logoRect = ui->label_logo->geometry();
-    m_backButton->setGeometry(logoRect);
 
     // 连接返回按钮信号
     connect(m_backButton, &QPushButton::clicked, this, &MainWindow::onBackButtonClicked);
@@ -444,7 +433,7 @@ void MainWindow::cfd_record_action()
     // CfdRecordForm *cfd_form = new CfdRecordForm();
     // cfd_form->show();
     qDebug() << "cfd_record_action";
-        // 检查是否已存在充放电记录表单
+    // 检查是否已存在充放电记录表单
     ChargeAndDischargeRecordForm *existingForm = nullptr;
     for (int i = 0; i < ui->stackedWidget->count(); i++)
     {
@@ -497,7 +486,7 @@ void MainWindow::abnormal_record_action()
 
     // 显示返回按钮，隐藏logo
     updateWidget2Content(true);
-}   
+}
 
 void MainWindow::device_manage_action()
 {

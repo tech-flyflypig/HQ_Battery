@@ -102,9 +102,9 @@ QPushButton:pressed {
   <widget class="QCheckBox" name="cbx_common">
    <property name="geometry">
     <rect>
-     <x>1020</x>
+     <x>1000</x>
      <y>20</y>
-     <width>61</width>
+     <width>81</width>
      <height>18</height>
     </rect>
    </property>
@@ -133,7 +133,7 @@ QPushButton:pressed {
     <rect>
      <x>1090</x>
      <y>20</y>
-     <width>61</width>
+     <width>91</width>
      <height>18</height>
     </rect>
    </property>
@@ -147,9 +147,9 @@ QPushButton:pressed {
   <widget class="QCheckBox" name="cbx_battery">
    <property name="geometry">
     <rect>
-     <x>1160</x>
+     <x>1180</x>
      <y>20</y>
-     <width>61</width>
+     <width>81</width>
      <height>18</height>
     </rect>
    </property>
@@ -276,4 +276,4 @@ color: white;
  </widget>
  <resources/>
  <connections/>
-</ui> 
+</ui>
