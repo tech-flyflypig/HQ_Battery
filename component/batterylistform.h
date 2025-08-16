@@ -111,6 +111,14 @@ private:
     BatteryChargeState m_chargeState; // 当前充放电状态
     MonitoringStatus m_monitoringStatus; // 当前监控状态
     uint16_t m_lastSystemStatus; // 上一次的系统状态值
+    
+    // 状态缓存，用于避免重复记录异常
+    uint16_t m_lastAlarmStatus;    // 上一次的报警状态
+    uint16_t m_lastProtectStatus;  // 上一次的保护状态
+    uint16_t m_lastFaultStatus;    // 上一次的故障状态
+    
+    // 充放电状态变化时间
+    QDateTime m_lastChargeStateChangeTime; // 上次充放电状态变化时间
 };
 
 #endif // BATTERYLISTFORM_H

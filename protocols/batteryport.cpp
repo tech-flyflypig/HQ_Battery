@@ -71,7 +71,7 @@ void BatteryPort::initThread()
         // TODO : 串口打开失败具体原因
     });
     connect(m_serial,&SerialWorker::communicationTimeout,this,[=]{
-    // TODO : 电池通信超时问题
+        // TODO : 电池通信超时问题
     });
     qDebug()<<m_batteryInfo.port_name;
     // TODO : 电池的打开和关闭 用于一键开启监控功能

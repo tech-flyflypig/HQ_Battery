@@ -4,6 +4,12 @@
 #include <QWidget>
 #include <QMouseEvent>
 
+/************************************
+ * @ Name   : exceptionform.h
+ * @ Author : Wei.Liu
+ * @ Created: 2021-11-24
+ ***********************************/
+
 namespace Ui
 {
     class ExceptionForm;

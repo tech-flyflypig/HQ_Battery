@@ -37,6 +37,7 @@ SOURCES += \
     component/cfdrecordform.cpp \
     component/chargeanddischargerecordform.cpp \
     component/exceptionform.cpp \
+    component/exceptionrecordform.cpp \
     component/leftstatsform.cpp \
     component/logininform.cpp \
     component/mytreewidget.cpp \
@@ -52,7 +53,8 @@ SOURCES += \
     protocols/serialworker.cpp \
     utils/BatteryStats.cpp \
     utils/ModbusHelper.cpp \
-    utils/myapp.cpp
+    utils/myapp.cpp \
+    utils/RecordManager.cpp
 
 HEADERS += \
     component/addpowerform.h \
@@ -64,6 +66,7 @@ HEADERS += \
     component/cfdrecordform.h \
     component/chargeanddischargerecordform.h \
     component/exceptionform.h \
+    component/exceptionrecordform.h \
     component/leftstatsform.h \
     component/logininform.h \
     component/mytreewidget.h \
@@ -82,6 +85,7 @@ HEADERS += \
     protocols/serialworker.h \
     utils/BatteryStats.h \
     utils/ModbusHelper.h \
+    utils/RecordManager.h \
     utils/Struct.h \
     utils/myapp.h \
     config.h
@@ -95,6 +99,7 @@ FORMS += \
     component/cfdrecordform.ui \
     component/chargeanddischargerecordform.ui \
     component/exceptionform.ui \
+    component/exceptionrecordform.ui \
     component/leftstatsform.ui \
     component/logininform.ui \
     component/queryform.ui \

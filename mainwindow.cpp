@@ -22,6 +22,7 @@
 #include <QMouseEvent>
 #include <QDateTime>
 #include <QTimer>
+#include <ExceptionRecordForm.h>
 #include "batterylistform.h"
 #include "component/chargeanddischargerecordform.h"
 
@@ -474,10 +475,10 @@ void MainWindow::abnormal_record_action()
     // exceptionform->show();
     qDebug() << "abnormal_record_action";
     // 检查是否已存在异常记录表单
-    ExceptionForm *existingForm = nullptr;
+    ExceptionRecordForm *existingForm = nullptr;
     for (int i = 0; i < ui->stackedWidget->count(); i++)
     {
-        existingForm = qobject_cast<ExceptionForm *>(ui->stackedWidget->widget(i));
+        existingForm = qobject_cast<ExceptionRecordForm *>(ui->stackedWidget->widget(i));
         if (existingForm)
         {
             break;
@@ -487,7 +488,7 @@ void MainWindow::abnormal_record_action()
     // 如果不存在则创建新的
     if (!existingForm)
     {
-        existingForm = new ExceptionForm();
+        existingForm = new ExceptionRecordForm();
         ui->stackedWidget->addWidget(existingForm);
     }
 

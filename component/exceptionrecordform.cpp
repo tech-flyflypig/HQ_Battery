@@ -1,46 +1,32 @@
-﻿#include "exceptionform.h"
-#include "ui_exceptionform.h"
-#include <QtSql>
-#include "QtXlsx/QtXlsx"
+#include "exceptionrecordform.h"
+#include "ui_exceptionrecordform.h"
+
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSqlQuery>
+#include "QtXlsx/QtXlsx"
+
 /*
- @ Name   : exceptionform.cpp
+ @ Name   : exceptionrecordform.cpp
  @ Author : Wei.Liu
  @ brief  : 异常记录查询界面
  @ Created: 2022-05-30
 */
 
-ExceptionForm::ExceptionForm(QWidget* parent) :
-    QWidget(parent),
-    ui(new Ui::ExceptionForm)
+ExceptionRecordForm::ExceptionRecordForm(QWidget *parent)
+    : QWidget(parent)
+    , ui(new Ui::ExceptionRecordForm)
 {
     ui->setupUi(this);
     this->initForm();
 }
 
-ExceptionForm::~ExceptionForm()
+ExceptionRecordForm::~ExceptionRecordForm()
 {
     delete ui;
 }
 
-void ExceptionForm::mousePressEvent(QMouseEvent* e)
-{
-    if(e->button() == Qt::LeftButton)
-    {
-        clickPos = e->pos();
-    }
-}
-
-void ExceptionForm::mouseMoveEvent(QMouseEvent* e)
-{
-    if(e->buttons()&Qt::LeftButton)
-    {
-        move(e->pos() + pos() - clickPos);
-    }
-}
-
-void ExceptionForm::initForm()
+void ExceptionRecordForm::initForm()
 {
     this->setWindowFlags(Qt::FramelessWindowHint);
     this->setWindowTitle("异常记录查询");
@@ -50,13 +36,7 @@ void ExceptionForm::initForm()
     ui->tableWidget->setColumnCount(header.size());
     ui->tableWidget->setHorizontalHeaderLabels(header);
     ui->tableWidget->setColumnWidth(0, 50);
-//    for (int i = 0; i < header.size(); i++)
-//    {
-//        ui->tableWidget->setColumnWidth(i, 170);
-//    }
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
-//    ui->tableWidget->setAlternatingRowColors(true);
-    //ui->tableWidget->resizeColumnsToContents();
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//根据容器调整大小
     ui->tableWidget->verticalHeader()->setHidden(true);
     ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -67,12 +47,7 @@ void ExceptionForm::initForm()
     ui->dtt_et->setDateTime(QDateTime::currentDateTime());
 }
 
-void ExceptionForm::on_pushButton_2_clicked()
-{
-    this->close();
-}
-
-void ExceptionForm::on_pushButton_clicked()
+void ExceptionRecordForm::on_btn_search_clicked()
 {
     QSqlQuery query;
     QString sql = QString( "select * from power_exception_record where generate_time>='%1' and generate_time<'%2'").arg(ui->dtt_st->dateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(ui->dtt_et->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
@@ -92,6 +67,7 @@ void ExceptionForm::on_pushButton_clicked()
     {
         sql += " and exception_type!=2";
     }
+
     sql += " ORDER BY ID DESC LIMIT 100 OFFSET 0;";
     qDebug() << sql;
     query.exec(sql);
@@ -147,7 +123,7 @@ void ExceptionForm::on_pushButton_clicked()
  * @date   2022-02-24
  * @script 列表导出
  */
-void ExceptionForm::on_btn_out_excel_clicked()
+void ExceptionRecordForm::on_btn_out_excel_clicked()
 {
     QString filepath = QFileDialog::getSaveFileName(this, tr("保存异常记录"), QString("异常记录_%1~%2").arg(ui->dtt_st->dateTime().toString("yyyyMMdd-hhmmss")).arg(ui->dtt_et->dateTime().toString("yyyyMMdd-hhmmss")), tr(" (*.xlsx)"));
     if(!filepath.isEmpty())
@@ -187,3 +163,16 @@ void ExceptionForm::on_btn_out_excel_clicked()
     }
 }
 
+void ExceptionRecordForm::on_btn_delete_clicked()
+{
+    QString sql = "delete from power_exception_record;";
+    QSqlQuery query;
+    if(QMessageBox::information(nullptr, "警告", "异常记录删除不可恢复,确认删除？", QMessageBox::Ok | QMessageBox::No) == QMessageBox::Ok)
+    {
+        if(query.exec(sql))
+        {
+            QMessageBox::information(nullptr, "提示", "异常记录已删除成功", QMessageBox::Ok);
+        }
+        qInfo() << "主动将异常记录删除";
+    }
+} 

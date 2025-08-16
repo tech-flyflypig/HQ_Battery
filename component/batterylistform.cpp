@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <cstring>
 #include "../utils/BatteryStats.h"
+#include "../utils/RecordManager.h"
 #include <QElapsedTimer>
 #include <QCoreApplication>
 #include <QSqlQuery>
@@ -23,6 +24,10 @@ BatteryListForm::BatteryListForm(QWidget *parent)
     , m_chargeState(Unknown) // 初始状态为未知
     , m_monitoringStatus(Stopped) // 初始监控状态为停止
     , m_lastSystemStatus(0)
+    , m_lastAlarmStatus(0)    // 初始报警状态
+    , m_lastProtectStatus(0)  // 初始保护状态
+    , m_lastFaultStatus(0)    // 初始故障状态
+    , m_lastChargeStateChangeTime(QDateTime::currentDateTime()) // 初始充放电状态变化时间
 {
     ui->setupUi(this);
 
@@ -340,6 +345,48 @@ void BatteryListForm::onBatteryDataReceived(const BMS_1 &data)
     // 更新全局统计信息
     BatteryStats::instance()->updateBatteryStatus(m_batteryInfo.power_id, m_lastData);
 
+    // 检查报警状态并记录异常（仅在状态变化时记录）
+    if (data.alarmStatus != 0 && data.alarmStatus != m_lastAlarmStatus)
+    {
+        QString alarmInfo = QString("报警状态: 0x%1").arg(data.alarmStatus, 0, 16);
+        RecordManager::instance()->exception_record(m_batteryInfo.power_id, m_batteryInfo.site, 2, alarmInfo);
+        m_lastAlarmStatus = data.alarmStatus;
+    }
+    else if (data.alarmStatus == 0 && m_lastAlarmStatus != 0)
+    {
+        // 报警状态从非零变为零，记录恢复正常
+        RecordManager::instance()->exception_record(m_batteryInfo.power_id, m_batteryInfo.site, 2, "报警状态恢复正常");
+        m_lastAlarmStatus = 0;
+    }
+    
+    // 检查保护状态并记录异常（仅在状态变化时记录）
+    if (data.protectStatus != 0 && data.protectStatus != m_lastProtectStatus)
+    {
+        QString protectInfo = QString("保护状态: 0x%1").arg(data.protectStatus, 0, 16);
+        RecordManager::instance()->exception_record(m_batteryInfo.power_id, m_batteryInfo.site, 2, protectInfo);
+        m_lastProtectStatus = data.protectStatus;
+    }
+    else if (data.protectStatus == 0 && m_lastProtectStatus != 0)
+    {
+        // 保护状态从非零变为零，记录恢复正常
+        RecordManager::instance()->exception_record(m_batteryInfo.power_id, m_batteryInfo.site, 2, "保护状态恢复正常");
+        m_lastProtectStatus = 0;
+    }
+    
+    // 检查故障状态并记录异常（仅在状态变化时记录）
+    if (data.faultStatus != 0 && data.faultStatus != m_lastFaultStatus)
+    {
+        QString faultInfo = QString("故障状态: 0x%1").arg(data.faultStatus, 0, 16);
+        RecordManager::instance()->exception_record(m_batteryInfo.power_id, m_batteryInfo.site, 2, faultInfo);
+        m_lastFaultStatus = data.faultStatus;
+    }
+    else if (data.faultStatus == 0 && m_lastFaultStatus != 0)
+    {
+        // 故障状态从非零变为零，记录恢复正常
+        RecordManager::instance()->exception_record(m_batteryInfo.power_id, m_batteryInfo.site, 2, "故障状态恢复正常");
+        m_lastFaultStatus = 0;
+    }
+
     // 检查系统状态是否变化
     if (data.systemStatus != previousSystemStatus)
     {
@@ -349,8 +396,9 @@ void BatteryListForm::onBatteryDataReceived(const BMS_1 &data)
         // 记录状态变化
         recordChargeStateChange(newState);
 
-        // 更新上一次的系统状态
+        // 更新上一次的系统状态和时间
         m_lastSystemStatus = data.systemStatus;
+        m_lastChargeStateChangeTime = QDateTime::currentDateTime();
     }
 
     emit dataReceived(this, data);
@@ -360,6 +408,9 @@ void BatteryListForm::onBatteryDataReceived(const BMS_1 &data)
 void BatteryListForm::onCommunicationError(const QString &errorMessage)
 {
     qDebug() << "Battery communication error: " << errorMessage;
+
+    // 记录通信错误异常
+    RecordManager::instance()->exception_record(m_batteryInfo.power_id, m_batteryInfo.site, 1, "通信错误: " + errorMessage);
 
     // 创建一个故障状态的BMS_1数据
     BMS_1 errorData = m_lastData;
@@ -383,6 +434,9 @@ void BatteryListForm::onCommunicationError(const QString &errorMessage)
 void BatteryListForm::onCommunicationTimeout()
 {
     qDebug() << "Battery communication timeout";
+
+    // 记录通信超时异常
+    RecordManager::instance()->exception_record(m_batteryInfo.power_id, m_batteryInfo.site, 1, "通信超时");
 
     // 创建一个故障状态的BMS_1数据
     BMS_1 timeoutData = m_lastData;
@@ -465,27 +519,14 @@ void BatteryListForm::recordChargeStateChange(BatteryChargeState newState)
         return;
     }
 
-    // 记录到数据库
-    QSqlQuery query;
-    QString sql = "INSERT INTO power_status_record (power_id, site, charge_status, begin_time, generate_time) "
-                  "VALUES (:power_id, :site, :charge_status, :begin_time, :generate_time)";
-
-    query.prepare(sql);
-    query.bindValue(":power_id", m_batteryInfo.power_id);
-    query.bindValue(":site", m_batteryInfo.site);
-    query.bindValue(":charge_status", static_cast<int>(newState)); // 0=放电，1=充电
-    query.bindValue(":begin_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
-    query.bindValue(":generate_time", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
-
-    if (!query.exec())
-    {
-        qDebug() << "数据库记录失败:" << query.lastError().text();
-    }
-    else
-    {
-        qDebug() << "电池" << m_batteryInfo.power_id << "充放电状态变更为:"
-                 << (newState == Charging ? "充电" : (newState == Discharging ? "放电" : "空闲"));
-    }
+    // 使用RecordManager记录充放电状态
+    int chargeStatus = (newState == Charging) ? 1 : 0; // 1=充电，0=放电
+    // 使用实际的状态变化时间，而不是假设的时间
+    RecordManager::instance()->cfd_record(m_batteryInfo.power_id, m_batteryInfo.site, chargeStatus, m_lastChargeStateChangeTime);
+    
+    qDebug() << "电池" << m_batteryInfo.power_id << "充放电状态变更为:"
+             << (newState == Charging ? "充电" : (newState == Discharging ? "放电" : "空闲"))
+             << " - 已通过RecordManager记录，开始时间:" << m_lastChargeStateChangeTime.toString("yyyy-MM-dd hh:mm:ss");
 
     // 更新当前状态
     m_chargeState = newState;
