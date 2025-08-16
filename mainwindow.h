@@ -78,6 +78,7 @@ private:
 private:
     Ui::MainWindow *ui;
     QMenu *menu_list, *menu_about;
+    QMenu *m_historyMenu;
     QMenu *m_settingsMenu; // 设置菜单
     BatteryGridWidget *batteryGrid;
     BMS1InfoShowForm *bms1InfoShowForm;

@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
     , m_isMoving(false) // 初始化拖拽状态
     , m_currentUser("")
-    , m_userPrivilege(0) // 默认为0，即最高权限(管理员)
+    , m_userPrivilege(9) // 默认为9，即最高权限(管理员)
 {
     ui->setupUi(this);
     this->setWindowTitle("HQ_Battery");
@@ -91,8 +91,14 @@ void MainWindow::initUI()
     m_settingsMenu->addAction(systemSettingsAction);
     m_settingsMenu->addAction(userManageAction);
 
+    m_historyMenu = new QMenu(this);
+    QAction *cfdRecordAction = new QAction("充放电记录", this);
+    QAction *abnormalRecordAction = new QAction("异常记录", this);
+    m_historyMenu->addAction(cfdRecordAction);
+    m_historyMenu->addAction(abnormalRecordAction); 
+
     // 默认情况下，用户管理只对管理员可见
-    userManageAction->setVisible(m_userPrivilege == 0);
+    userManageAction->setVisible(m_userPrivilege == 9);
 
     // 连接菜单项的信号
     connect(userSettingsAction, &QAction::triggered, this, [this]()
@@ -113,6 +119,9 @@ void MainWindow::initUI()
     });
 
     connect(userManageAction, &QAction::triggered, this, &MainWindow::user_manage_action);
+
+    connect(cfdRecordAction, &QAction::triggered, this, &MainWindow::cfd_record_action);
+    connect(abnormalRecordAction, &QAction::triggered, this, &MainWindow::abnormal_record_action);
 
     // 创建电池网格组件
     batteryGrid = new BatteryGridWidget(ui->widget_center);
@@ -431,15 +440,63 @@ void MainWindow::init_sql()
 
 void MainWindow::cfd_record_action()
 {
-    CfdRecordForm *cfd_form = new CfdRecordForm();
-    cfd_form->show();
+    // CfdRecordForm *cfd_form = new CfdRecordForm();
+    // cfd_form->show();
+    qDebug() << "cfd_record_action";
+        // 检查是否已存在充放电记录表单
+    ChargeAndDischargeRecordForm *existingForm = nullptr;
+    for (int i = 0; i < ui->stackedWidget->count(); i++)
+    {
+        existingForm = qobject_cast<ChargeAndDischargeRecordForm *>(ui->stackedWidget->widget(i));
+        if (existingForm)
+        {
+            break;
+        }
+    }
+
+    // 如果不存在则创建新的
+    if (!existingForm)
+    {
+        existingForm = new ChargeAndDischargeRecordForm();
+        ui->stackedWidget->addWidget(existingForm);
+    }
+
+    // 切换到该界面
+    ui->stackedWidget->setCurrentWidget(existingForm);
+
+    // 显示返回按钮，隐藏logo
+    updateWidget2Content(true);
 }
 
 void MainWindow::abnormal_record_action()
 {
-    ExceptionForm *exceptionform = new ExceptionForm();
-    exceptionform->show();
-}
+    // ExceptionForm *exceptionform = new ExceptionForm();
+    // exceptionform->show();
+    qDebug() << "abnormal_record_action";
+    // 检查是否已存在异常记录表单
+    ExceptionForm *existingForm = nullptr;
+    for (int i = 0; i < ui->stackedWidget->count(); i++)
+    {
+        existingForm = qobject_cast<ExceptionForm *>(ui->stackedWidget->widget(i));
+        if (existingForm)
+        {
+            break;
+        }
+    }
+
+    // 如果不存在则创建新的
+    if (!existingForm)
+    {
+        existingForm = new ExceptionForm();
+        ui->stackedWidget->addWidget(existingForm);
+    }
+
+    // 切换到该界面
+    ui->stackedWidget->setCurrentWidget(existingForm);
+
+    // 显示返回按钮，隐藏logo
+    updateWidget2Content(true);
+}   
 
 void MainWindow::device_manage_action()
 {
@@ -609,29 +666,10 @@ void MainWindow::on_btn_history_clicked()
 {
     qDebug() << "on_btn_history_clicked";
 
-    // 检查是否已存在充放电记录表单
-    ChargeAndDischargeRecordForm *existingForm = nullptr;
-    for (int i = 0; i < ui->stackedWidget->count(); i++)
-    {
-        existingForm = qobject_cast<ChargeAndDischargeRecordForm *>(ui->stackedWidget->widget(i));
-        if (existingForm)
-        {
-            break;
-        }
-    }
+    QPoint pos = ui->btn_history->mapToGlobal(QPoint(0, ui->btn_history->height()));
+    m_historyMenu->popup(pos);
 
-    // 如果不存在则创建新的
-    if (!existingForm)
-    {
-        existingForm = new ChargeAndDischargeRecordForm();
-        ui->stackedWidget->addWidget(existingForm);
-    }
 
-    // 切换到该界面
-    ui->stackedWidget->setCurrentWidget(existingForm);
-
-    // 显示返回按钮，隐藏logo
-    updateWidget2Content(true);
 }
 
 void MainWindow::on_btn_settings_clicked()
