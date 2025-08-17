@@ -38,6 +38,7 @@ public:
 protected:
     // 事件过滤器，可为指定控件添加自定义事件处理
     bool eventFilter(QObject *watched, QEvent *event) override;
+    
 
 private slots:
 
@@ -74,6 +75,16 @@ private:
 
     // 更新widget_2内容（返回按钮或logo）
     void updateWidget2Content(bool showBackButton);
+
+    // 根据窗口状态更新上边距
+    void updateTopMargin();
+
+    // 重写changeEvent以处理窗口状态变化
+    void changeEvent(QEvent *event) override;
+
+    // 保存初始的widget_center宽度和整个窗口的初始大小
+    int m_initialCenterWidth;
+    QSize m_initialWindowSize;
 
 private:
     Ui::MainWindow *ui;

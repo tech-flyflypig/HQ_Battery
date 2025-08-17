@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1920</width>
-    <height>1038</height>
+    <width>1700</width>
+    <height>1050</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,17 +32,11 @@ QFrame[frameShape=&quot;4&quot;] {
 	background-color: rgb(23, 54, 133);
 }</string>
    </property>
-   <widget class="QWidget" name="widget_2" native="true">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>1916</width>
-      <height>76</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">#widget_2{
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QWidget" name="widget_2" native="true">
+      <property name="styleSheet">
+       <string notr="true">#widget_2{
 border-image: url(:/image/top_title.png);
 }
 #label_logo{
@@ -54,104 +48,21 @@ border-image: url(:/image/top_title.png);
 #label_current_time{
 	font: 700 14pt &quot;Microsoft YaHei UI&quot;;
 }</string>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QLabel" name="label_logo">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>51</width>
-         <height>51</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_company">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>324</width>
-         <height>51</height>
-        </size>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string>徐州华强电器制造有限公司</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>922</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <property name="spacing">
-        <number>20</number>
-       </property>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QLabel" name="label_current_user">
-         <property name="styleSheet">
-          <string notr="true">font: 700 14pt &quot;Microsoft YaHei UI&quot;;</string>
+        <widget class="QLabel" name="label_logo">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="text">
-          <string>未登录</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_current_time">
-         <property name="text">
-          <string>2025-05-29 08:00:00</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QPushButton" name="btn_history">
          <property name="minimumSize">
           <size>
            <width>51</width>
            <height>51</height>
           </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">border-image: url(:/image/btn_history.png);</string>
          </property>
          <property name="text">
           <string/>
@@ -159,160 +70,255 @@ border-image: url(:/image/top_title.png);
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_settings">
+        <widget class="QLabel" name="label_company">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>51</width>
+           <width>324</width>
            <height>51</height>
           </size>
          </property>
          <property name="styleSheet">
-          <string notr="true">border-image: url(:/image/设置.png);</string>
+          <string notr="true"/>
          </property>
          <property name="text">
-          <string/>
+          <string>徐州华强电器制造有限公司</string>
          </property>
         </widget>
        </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QPushButton" name="btn_min">
-         <property name="minimumSize">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
           <size>
-           <width>56</width>
-           <height>56</height>
+           <width>922</width>
+           <height>20</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>56</height>
-          </size>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <property name="spacing">
+          <number>20</number>
          </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton{	
+         <item>
+          <widget class="QLabel" name="label_current_user">
+           <property name="styleSheet">
+            <string notr="true">font: 700 14pt &quot;Microsoft YaHei UI&quot;;</string>
+           </property>
+           <property name="text">
+            <string>未登录</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_current_time">
+           <property name="text">
+            <string>2025-05-29 08:00:00</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QPushButton" name="btn_history">
+           <property name="minimumSize">
+            <size>
+             <width>51</width>
+             <height>51</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/image/btn_history.png);</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_settings">
+           <property name="minimumSize">
+            <size>
+             <width>51</width>
+             <height>51</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border-image: url(:/image/设置.png);</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QPushButton" name="btn_min">
+           <property name="minimumSize">
+            <size>
+             <width>56</width>
+             <height>56</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>56</height>
+            </size>
+           </property>
+           <property name="layoutDirection">
+            <enum>Qt::LeftToRight</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{	
 	border-image: url(:/image/min.png);
 }
 QPushButton:hover{
 	border-image: url(:/image/min_hover.png);
 }</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_max">
-         <property name="minimumSize">
-          <size>
-           <width>56</width>
-           <height>56</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton{
-	border-image: url(:/image/max.png);
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_max">
+           <property name="minimumSize">
+            <size>
+             <width>56</width>
+             <height>56</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#btn_max:checked
+{
+	border-image: url(:/image/normal_hover.png);
+ background-color: transparent; 
 }
-QPushButton:hover{
+QPushButton#btn_max:!checked
+{
 	border-image: url(:/image/max_hover.png);
+	background-color: transparent;
 }</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="btn_close">
-         <property name="minimumSize">
-          <size>
-           <width>56</width>
-           <height>56</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QPushButton{
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_close">
+           <property name="minimumSize">
+            <size>
+             <width>56</width>
+             <height>56</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton{
 	border-image: url(:/image/close.png);
 }
 QPushButton:hover{
 	border-image: url(:/image/close_hover.png);
 }</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QStackedWidget" name="stackedWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>90</y>
-      <width>1911</width>
-      <height>951</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="page">
-     <widget class="LeftStatsForm" name="widget_left" native="true">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>231</width>
-        <height>931</height>
-       </rect>
-      </property>
      </widget>
-     <widget class="QWidget" name="widget_center" native="true">
-      <property name="geometry">
-       <rect>
-        <x>250</x>
-        <y>0</y>
-        <width>1401</width>
-        <height>921</height>
-       </rect>
+    </item>
+    <item>
+     <widget class="QStackedWidget" name="stackedWidget">
+      <property name="currentIndex">
+       <number>0</number>
       </property>
-      <property name="styleSheet">
-       <string notr="true">#widget_center{
+      <widget class="QWidget" name="page">
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="LeftStatsForm" name="widget_left" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>231</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="widget_center" native="true">
+            <property name="styleSheet">
+             <string notr="true">#widget_center{
 border-image: url(:/image/主页_中间.png);
 }
 QLabel{
 	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
 }</string>
-      </property>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="RightStatsForm" name="widget_right" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>231</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
-     <widget class="RightStatsForm" name="widget_right" native="true">
-      <property name="geometry">
-       <rect>
-        <x>1670</x>
-        <y>0</y>
-        <width>231</width>
-        <height>931</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-   </widget>
+    </item>
+   </layout>
    <zorder>stackedWidget</zorder>
    <zorder>widget_2</zorder>
   </widget>

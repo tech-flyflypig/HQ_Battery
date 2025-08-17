@@ -19,6 +19,16 @@ QMAKE_CXXFLAGS += /utf-8
 # LIBS += -L$$PWD/lib -llwdesignerd
 # }
 
+# 默认情况下，在 Release 模式下禁用 qDebug 输出
+# CONFIG(release, debug|release) 表示：
+# 如果当前配置是 Release 模式（第一个参数），并且它不是 Debug 模式（在 debug|release 模式中），则执行下一行
+# 这确保了只有在 Release 构建时才添加 QT_NO_DEBUG_OUTPUT
+CONFIG(release, debug|release) {
+    DEFINES += QT_NO_DEBUG_OUTPUT
+}
+
+# 如果你想在所有构建模式下都禁用 qDebug 输出，可以直接这样：
+# DEFINES += QT_NO_DEBUG_OUTPUT
 
 
 INCLUDEPATH +=\

@@ -23,6 +23,9 @@
 #include <QDateTime>
 #include <QTimer>
 #include <ExceptionRecordForm.h>
+#include <QScreen>
+#include <QWindowStateChangeEvent>
+#include <QGuiApplication>
 #include "batterylistform.h"
 #include "component/chargeanddischargerecordform.h"
 
@@ -128,7 +131,7 @@ void MainWindow::initUI()
     batteryGrid = new BatteryGridWidget(ui->widget_center);
 
     // 设置网格大小，调整为合适的行列数
-    batteryGrid->setGridSize(7, 6); // 每页最多4行4列
+    batteryGrid->setGridSize(7, 6); // 初始设置
 
     // 设置底部空间和分页控件自动隐藏
     batteryGrid->setBottomMargin(30);  // 设置30像素的底部间距
@@ -136,7 +139,7 @@ void MainWindow::initUI()
 
     // 将电池网格添加到 widget_center，设置合适的边距让组件不会占满整个区域
     QVBoxLayout *layout = new QVBoxLayout(ui->widget_center);
-    layout->setContentsMargins(20, 20, 20, 20); // 设置上下左右的边距
+    layout->setContentsMargins(20, 20, 20, 20); // 初始设置上下左右的边距
     layout->addWidget(batteryGrid, 0, Qt::AlignLeft | Qt::AlignTop); // 设置左上角对齐
     layout->addStretch(); // 添加弹性空间，确保组件靠上靠左
 
@@ -151,7 +154,7 @@ void MainWindow::initUI()
 
     // 将返回按钮添加到布局中，替换logo的位置
     QHBoxLayout *hlayout = qobject_cast<QHBoxLayout *>(ui->widget_2->layout());
-    if (layout)
+    if (hlayout)
     {
         // 在布局的第一个位置插入返回按钮（与logo相同位置）
         hlayout->insertWidget(0, m_backButton);
@@ -216,6 +219,12 @@ void MainWindow::initUI()
 
     // 初始更新一次时间
     updateCurrentTime();
+
+    // 初始化上边距
+    updateTopMargin();
+
+    m_initialWindowSize = this->size();
+    qDebug() << "m_initialWindowSize" << m_initialWindowSize;
 }
 
 void MainWindow::connectBatterySignals(BatteryListForm *battery)
@@ -560,16 +569,35 @@ void MainWindow::on_btn_max_clicked(bool checked)
 {
     if(checked)
     {
-        this->showFullScreen();
-        ui->btn_max->setStyleSheet("QPushButton{ border-image: url(:/image/normal.png);}"
-                                   "QPushButton:hover{border-image: url(:/image/normal_hover.png);}");
+        qDebug() << "Maximizing window";
+        // 对于无边框窗口，需要手动设置最大化状态
+        this->setWindowState(Qt::WindowMaximized);
+        // 强制更新窗口状态
+        this->show();
 
+        // 延迟更新布局，确保窗口状态已经生效
+        QTimer::singleShot(50, this, [this]()
+        {
+            updateTopMargin();
+        });
     }
     else
     {
-        this->showNormal();
-        ui->btn_max->setStyleSheet("QPushButton{ border-image: url(:/image/max.png);}"
-                                   "QPushButton:hover{border-image: url(:/image/max_hover.png);}");
+        qDebug() << "Restoring window to normal state";
+        // 对于无边框窗口，需要手动设置正常状态
+        this->setWindowState(Qt::WindowNoState);
+
+        // 恢复到初始窗口大小
+        this->resize(m_initialWindowSize);
+
+        // 强制更新窗口状态
+        this->show();
+
+        // 延迟更新布局，确保窗口状态已经生效
+        QTimer::singleShot(50, this, [this]()
+        {
+            updateTopMargin();
+        });
     }
 }
 
@@ -629,7 +657,49 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if (m_isMoving && (mouseEvent->buttons() & Qt::LeftButton))
             {
-                this->move(mouseEvent->globalPos() - m_lastPos);
+                // 如果当前是最大化状态，退出最大化
+                if (this->isMaximized() || this->windowState() == Qt::WindowMaximized || ui->btn_max->isChecked())
+                {
+                    qDebug() << "Exiting maximized state due to drag";
+
+                    // 计算鼠标在窗口中的相对位置比例
+                    QPoint globalMousePos = mouseEvent->globalPos();
+                    QRect screenGeometry = this->frameGeometry();
+                    double relativeX = (double)(globalMousePos.x() - screenGeometry.left()) / screenGeometry.width();
+
+                    // 设置窗口为正常状态
+                    ui->btn_max->setChecked(false);
+                    this->setWindowState(Qt::WindowNoState);
+
+                    // 恢复到初始窗口大小
+                    this->resize(m_initialWindowSize);
+
+                    // 根据鼠标相对位置重新计算窗口位置，确保鼠标仍在标题栏区域
+                    int newX = globalMousePos.x() - (int)(m_initialWindowSize.width() * relativeX);
+                    int newY = globalMousePos.y() - m_lastPos.y();
+
+                    // 确保窗口不会移出屏幕
+                    QScreen *screen = QGuiApplication::primaryScreen();
+                    if (screen)
+                    {
+                        QRect screenRect = screen->availableGeometry();
+                        newX = qMax(0, qMin(newX, screenRect.width() - m_initialWindowSize.width()));
+                        newY = qMax(0, qMin(newY, screenRect.height() - m_initialWindowSize.height()));
+                    }
+
+                    this->move(newX, newY);
+
+                    // 更新布局
+                    updateTopMargin();
+
+                    // 更新拖拽偏移量，基于新的窗口位置
+                    m_lastPos = globalMousePos - this->frameGeometry().topLeft();
+                }
+                else
+                {
+                    // 正常拖拽移动
+                    this->move(mouseEvent->globalPos() - m_lastPos);
+                }
                 return true;  // 事件已处理
             }
         }
@@ -644,6 +714,35 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     // 默认的事件处理
     return QMainWindow::eventFilter(watched, event);
 }
+
+void MainWindow::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::WindowStateChange)
+    {
+        QWindowStateChangeEvent *stateChangeEvent = static_cast<QWindowStateChangeEvent *>(event);
+        Qt::WindowStates oldState = stateChangeEvent->oldState();
+        Qt::WindowStates newState = this->windowState();
+
+        qDebug() << "Window state changed from" << oldState << "to" << newState;
+
+        // 确保按钮状态与窗口状态同步
+        bool isMaximized = (newState & Qt::WindowMaximized) != 0;
+        if (ui->btn_max->isChecked() != isMaximized)
+        {
+            ui->btn_max->setChecked(isMaximized);
+        }
+
+        // 延迟更新布局，确保窗口状态变化完成
+        QTimer::singleShot(100, this, [this]()
+        {
+            updateTopMargin();
+        });
+    }
+
+    QMainWindow::changeEvent(event);
+}
+
+
 
 void MainWindow::updateCurrentTime()
 {
@@ -716,3 +815,110 @@ QString MainWindow::getCurrentUser() const
     return m_currentUser;
 }
 
+void MainWindow::updateTopMargin()
+{
+    // 获取widget_center的布局
+    QVBoxLayout *layout = qobject_cast<QVBoxLayout *>(ui->widget_center->layout());
+    if (!layout) return;
+
+    // 根据窗口状态和大小动态调整上边距和网格大小
+    int topMargin = 20;
+    int gridCols = 7;  // 默认列数（与初始化时保持一致）
+    int gridRows = 6;  // 默认行数（与初始化时保持一致）
+
+    if (this->isMaximized())
+    {
+        // 最大化状态：根据屏幕分辨率动态调整
+        QScreen *screen = QGuiApplication::primaryScreen();
+        if (screen)
+        {
+            QSize screenSize = screen->size();
+            int height = screenSize.height();
+            int width = screenSize.width();
+
+            // 分辨率越高，上边距越大
+            if (height >= 1440)
+            {
+                topMargin = 40;
+                // 高分辨率屏幕，可以显示更多列
+                if (width >= 2560)  // 2K及以上
+                {
+                    gridCols = 10;
+                    gridRows = 8;
+                }
+                else
+                {
+                    gridCols = 8;
+                    gridRows = 7;
+                }
+            }
+            else if (height >= 1080)
+            {
+                topMargin = 30;
+                // 1080p屏幕
+                if (width >= 1920)  // 宽屏
+                {
+                    gridCols = 8;
+                    gridRows = 6;
+                }
+                else
+                {
+                    gridCols = 7;
+                    gridRows = 6;
+                }
+            }
+            else
+            {
+                topMargin = 20;
+                gridCols = 6;
+                gridRows = 5;
+            }
+        }
+    }
+    else
+    {
+        // 正常状态：根据当前窗口大小调整
+        QSize currentSize = this->size();
+        int windowWidth = currentSize.width();
+        int windowHeight = currentSize.height();
+
+        // 基于窗口大小计算合适的网格尺寸
+        // 假设每个电池项目大小约为 120x100 像素，加上间距
+        int availableWidth = windowWidth - 40;  // 减去左右边距
+        int availableHeight = windowHeight - 200; // 减去标题栏、状态栏等
+
+        // 计算可容纳的列数和行数
+        gridCols = qMax(3, qMin(10, availableWidth / 140));  // 最少3列，最多10列
+        gridRows = qMax(3, qMin(8, availableHeight / 120));   // 最少3行，最多8行
+
+        // 根据窗口大小调整上边距
+        if (windowHeight >= 800)
+        {
+            topMargin = 30;
+        }
+        else if (windowHeight >= 600)
+        {
+            topMargin = 20;
+        }
+        else
+        {
+            topMargin = 10;
+        }
+    }
+
+    // qDebug() << "updateTopMargin - isMaximized:" << this->isMaximized()
+    //          << "topMargin:" << topMargin
+    //          << "gridCols:" << gridCols
+    //          << "gridRows:" << gridRows
+    //          << "windowSize:" << this->size();
+
+    // 更新布局的上边距
+    layout->setContentsMargins(20, topMargin, 20, 20);
+
+    // 更新网格大小
+    if (batteryGrid)
+    {
+        batteryGrid->setGridSize(gridCols, gridRows);
+        batteryGrid->refreshLayout();
+    }
+}
