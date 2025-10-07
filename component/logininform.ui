@@ -63,6 +63,30 @@ border-image: url(:/image/登录窗口.png);
      <string>密码</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="checkBox_rememberPassword">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>180</y>
+      <width>120</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QCheckBox {
+    color: white;
+    font: 10pt &quot;微软雅黑&quot;;
+}
+
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+}</string>
+    </property>
+    <property name="text">
+     <string>记住密码</string>
+    </property>
+   </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>

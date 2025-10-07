@@ -12,6 +12,7 @@
 #include <QSqlError>
 #include <QCryptographicHash>
 #include <QDateTime>
+#include <QSettings>
 
 // 最大允许的登录失败次数
 const int MAX_LOGIN_ATTEMPTS = 5;
@@ -103,6 +104,9 @@ LoginInForm::LoginInForm(QWidget *parent)
     // 设置回车键触发登录
     ui->lineEdit_user->setPlaceholderText("请输入用户名");
     ui->lineEdit_password->setPlaceholderText("请输入密码");
+
+    // 加载记住密码设置
+    loadRememberPassword();
 }
 
 LoginInForm::~LoginInForm()
@@ -222,6 +226,9 @@ void LoginInForm::onLoginButtonClicked()
                 qDebug() << "更新登录信息失败：" << updateQuery.lastError().text();
             }
 
+            // 保存记住密码设置
+            saveRememberPassword(username, password, ui->checkBox_rememberPassword->isChecked());
+
             // 发送登录成功信号，并携带用户名和权限级别
             emit loginSuccess(username, userPrivilege);
             this->close();
@@ -320,5 +327,61 @@ bool LoginInForm::eventFilter(QObject *watched, QEvent *event)
 void LoginInForm::on_btn_close_clicked()
 {
     this->close();
+}
+
+// 保存记住密码设置
+void LoginInForm::saveRememberPassword(const QString &username, const QString &password, bool remember)
+{
+    QSettings settings("HQ_Battery", "LoginInfo");
+
+    if (remember)
+    {
+        // 使用Base64编码密码（简单加密，避免明文存储）
+        QByteArray passwordBytes = password.toUtf8();
+        QString encodedPassword = QString(passwordBytes.toBase64());
+
+        settings.setValue("rememberPassword", true);
+        settings.setValue("username", username);
+        settings.setValue("password", encodedPassword);
+
+        qDebug() << "已保存记住密码设置";
+    }
+    else
+    {
+        // 取消记住密码，清除保存的信息
+        settings.setValue("rememberPassword", false);
+        settings.remove("username");
+        settings.remove("password");
+
+        qDebug() << "已清除记住密码设置";
+    }
+}
+
+// 加载记住密码设置
+void LoginInForm::loadRememberPassword()
+{
+    QSettings settings("HQ_Battery", "LoginInfo");
+
+    bool rememberPassword = settings.value("rememberPassword", false).toBool();
+
+    if (rememberPassword)
+    {
+        QString savedUsername = settings.value("username", "").toString();
+        QString encodedPassword = settings.value("password", "").toString();
+
+        if (!savedUsername.isEmpty() && !encodedPassword.isEmpty())
+        {
+            // 解码密码
+            QByteArray passwordBytes = QByteArray::fromBase64(encodedPassword.toUtf8());
+            QString savedPassword = QString::fromUtf8(passwordBytes);
+
+            // 自动填充用户名和密码
+            ui->lineEdit_user->setText(savedUsername);
+            ui->lineEdit_password->setText(savedPassword);
+            ui->checkBox_rememberPassword->setChecked(true);
+
+            qDebug() << "已加载记住的用户名和密码";
+        }
+    }
 }
 

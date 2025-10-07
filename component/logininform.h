@@ -50,6 +50,11 @@ private slots:
     void on_btn_close_clicked();
 
 private:
+    // 保存记住密码设置
+    void saveRememberPassword(const QString &username, const QString &password, bool remember);
+    // 加载记住密码设置
+    void loadRememberPassword();
+
     Ui::LoginInForm *ui;
     QPoint clickPos;       // 用于实现窗口拖动
 
