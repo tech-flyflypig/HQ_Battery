@@ -125,7 +125,7 @@ void MainWindow::initUI()
 
 
     // widget_center 已是 BatteryGridWidget 类型，直接配置即可
-    ui->widget_center->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    ui->widget_center->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     ui->widget_center->setGridSize(6, 6); // 初始设置
     ui->widget_center->setBottomMargin(30);  // 设置30像素的底部间距
     ui->widget_center->setAutoHidePagination(true);  // 当电池数量不足一页时自动隐藏分页控件
@@ -667,7 +667,7 @@ void MainWindow::changeEvent(QEvent *event)
         }
 
         // 延迟更新布局，确保窗口状态变化完成
-        // QTimer::singleShot(100, this, &MainWindow::updateTopMargin);
+        QTimer::singleShot(100, this, &MainWindow::updateTopMargin);
     }
 
     QMainWindow::changeEvent(event);
@@ -748,13 +748,20 @@ QString MainWindow::getCurrentUser() const
 
 void MainWindow::updateTopMargin()
 {
-    // 根据窗口状态和大小动态调整网格大小
-    int gridCols = 7;  // 默认列数（与初始化时保持一致）
-    int gridRows = 6;  // 默认行数（与初始化时保持一致）
+    int gridCols = 7;
+    int gridRows = 6;
+
+    QVBoxLayout *mainLayout = qobject_cast<QVBoxLayout *>(ui->widget_center->layout());
 
     if (this->isMaximized())
     {
-        // 最大化状态：根据屏幕分辨率动态调整
+        // 最大化时增加上边距
+        if (mainLayout)
+        {
+            mainLayout->setContentsMargins(9, 30, 9, 9);
+        }
+
+        // 根据屏幕分辨率动态调整网格大小
         QScreen *screen = QGuiApplication::primaryScreen();
         if (screen)
         {
@@ -762,11 +769,9 @@ void MainWindow::updateTopMargin()
             int height = screenSize.height();
             int width = screenSize.width();
 
-            // 根据分辨率调整网格大小
             if (height >= 1440)
             {
-                // 高分辨率屏幕，可以显示更多列
-                if (width >= 2560)  // 2K及以上
+                if (width >= 2560)
                 {
                     gridCols = 10;
                     gridRows = 8;
@@ -779,8 +784,7 @@ void MainWindow::updateTopMargin()
             }
             else if (height >= 1080)
             {
-                // 1080p屏幕
-                if (width >= 1920)  // 宽屏
+                if (width >= 1920)
                 {
                     gridCols = 8;
                     gridRows = 6;
@@ -800,22 +804,30 @@ void MainWindow::updateTopMargin()
     }
     else
     {
-        // 正常状态：根据当前窗口大小调整
-        QSize currentSize = this->size();
-        int windowWidth = currentSize.width();
-        int windowHeight = currentSize.height();
-
-        // 基于窗口大小计算合适的网格尺寸
-        // 假设每个电池项目大小约为 120x100 像素，加上间距
-        int availableWidth = windowWidth - 40;  // 减去左右边距
-        int availableHeight = windowHeight - 200; // 减去标题栏、状态栏等
-
-        // 计算可容纳的列数和行数
-        gridCols = qMax(3, qMin(10, availableWidth / 140));  // 最少3列，最多10列
-        gridRows = qMax(3, qMin(8, availableHeight / 120));   // 最少3行，最多8行
-
-
+        // 正常状态恢复默认边距和网格
+        if (mainLayout)
+        {
+            mainLayout->setContentsMargins(9, 9, 9, 9);
+        }
     }
+    // else
+    // {
+    //     // 正常状态：根据当前窗口大小调整
+    //     QSize currentSize = this->size();
+    //     int windowWidth = currentSize.width();
+    //     int windowHeight = currentSize.height();
+
+    //     // 基于窗口大小计算合适的网格尺寸
+    //     // 假设每个电池项目大小约为 120x100 像素，加上间距
+    //     int availableWidth = windowWidth - 40;  // 减去左右边距
+    //     int availableHeight = windowHeight - 200; // 减去标题栏、状态栏等
+
+    //     // 计算可容纳的列数和行数
+    //     gridCols = qMax(3, qMin(10, availableWidth / 140));  // 最少3列，最多10列
+    //     gridRows = qMax(3, qMin(8, availableHeight / 120));   // 最少3行，最多8行
+
+
+    // }
 
     // qDebug() << "updateTopMargin - isMaximized:" << this->isMaximized()
     //          << "topMargin:" << topMargin

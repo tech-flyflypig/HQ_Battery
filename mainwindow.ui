@@ -266,6 +266,9 @@ QPushButton:hover{
       </property>
       <widget class="QWidget" name="page">
        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <property name="spacing">
+         <number>9</number>
+        </property>
         <item>
          <widget class="LeftStatsForm" name="widget_left" native="true">
           <property name="sizePolicy">

@@ -34,7 +34,7 @@ void BatteryGridWidget::setupUI()
     // 创建容器和网格布局
     containerWidget = new QWidget(this);
     gridLayout = new QGridLayout(containerWidget);
-    containerWidget->setMinimumSize(1152, 932);
+    containerWidget->setMinimumSize(1452, 932);
     // 调整网格间距，使电池显示更紧凑
     gridLayout->setSpacing(10);
     gridLayout->setContentsMargins(30, 40, 30, 10);
