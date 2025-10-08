@@ -289,10 +289,11 @@ QPushButton:hover{
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="widget_center" native="true">
+         <widget class="BatteryGridWidget" name="widget_center" native="true">
           <property name="styleSheet">
            <string notr="true">#widget_center{
 border-image: url(:/image/主页_中间.png);
+
 }
 QLabel{
 	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
@@ -342,6 +343,12 @@ QLabel{
    <class>RightStatsForm</class>
    <extends>QWidget</extends>
    <header>rightstatsform.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>BatteryGridWidget</class>
+   <extends>QWidget</extends>
+   <header>batterygridwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

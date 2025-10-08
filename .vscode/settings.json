@@ -18,6 +18,13 @@
         "type_traits": "cpp",
         "limits": "cpp",
         "ratio": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "string": "cpp",
+        "__split_buffer": "cpp",
+        "deque": "cpp",
+        "ios": "cpp",
+        "unordered_map": "cpp",
+        "istream": "cpp",
+        "locale": "cpp"
     }
 }

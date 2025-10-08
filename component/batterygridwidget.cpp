@@ -1,5 +1,7 @@
 ﻿#include "batterygridwidget.h"
 #include <QDebug>
+#include <QPainter>
+#include <QStyleOption>
 
 BatteryGridWidget::BatteryGridWidget(QWidget *parent)
     : QWidget(parent),
@@ -24,6 +26,7 @@ BatteryGridWidget::~BatteryGridWidget()
 
 void BatteryGridWidget::setupUI()
 {
+    //this->setStyleSheet("background-color: rgb(85, 170, 255);");
     // 创建主布局
     mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(0, 0, 0, 0);
@@ -31,10 +34,10 @@ void BatteryGridWidget::setupUI()
     // 创建容器和网格布局
     containerWidget = new QWidget(this);
     gridLayout = new QGridLayout(containerWidget);
-
+    containerWidget->setMinimumSize(1152, 932);
     // 调整网格间距，使电池显示更紧凑
     gridLayout->setSpacing(10);
-    gridLayout->setContentsMargins(10, 10, 10, 10);
+    gridLayout->setContentsMargins(30, 40, 30, 10);
 
     // 设置网格布局的对齐方式为左上角对齐，而不是默认的居中对齐
     gridLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -53,11 +56,11 @@ void BatteryGridWidget::setupUI()
     pageControlLayout->addWidget(nextButton);
     pageControlLayout->addStretch();
 
-    // 添加布局到主布局
-    mainLayout->addSpacing(10);
+    // 添加布局到主布局，确保所有内容都左上角对齐
     mainLayout->addWidget(containerWidget, 0, Qt::AlignLeft | Qt::AlignTop);
-    mainLayout->addWidget(pageControlWidget);
-    mainLayout->addStretch(); // 添加弹性空间，确保内容靠上靠左
+    mainLayout->addWidget(pageControlWidget, 0, Qt::AlignLeft | Qt::AlignTop);
+    mainLayout->addStretch(); // 添加弹性空间，确保内容靠上
+
 
     // 默认添加底部空白区域
     mainLayout->addSpacing(bottomMargin);
@@ -69,6 +72,14 @@ void BatteryGridWidget::setupUI()
     // 初始化按钮状态
     prevButton->setEnabled(false);
     nextButton->setEnabled(false);
+}
+
+void BatteryGridWidget::paintEvent(QPaintEvent *)
+{
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
 void BatteryGridWidget::setGridSize(int rows, int cols)
@@ -101,7 +112,7 @@ void BatteryGridWidget::setTotalItems(int count)
     for (int i = 0; i < totalItems; ++i)
     {
         auto batteryPtr = BatteryListForm::create(containerWidget);
-        
+
         // 设置电池组件的固定大小，防止变得过大
         batteryPtr->setFixedSize(220, 110); // 设置更紧凑的宽度和高度
 
@@ -113,9 +124,9 @@ void BatteryGridWidget::setTotalItems(int count)
         {
             onBatteryClicked(ptr);
         });
-        
+
         // 连接双击信号
-        connect(batteryPtr.get(), &BatteryListForm::doubleclicked, this, [this, ptr = batteryPtr.get()](BatteryListForm* battery)
+        connect(batteryPtr.get(), &BatteryListForm::doubleclicked, this, [this, ptr = batteryPtr.get()](BatteryListForm * battery)
         {
             onBatteryDoubleClicked(ptr);
         });
@@ -145,7 +156,8 @@ BatteryListForm *BatteryGridWidget::getSelectedBattery() const
 QList<BatteryListForm *> BatteryGridWidget::getBatteryWidgets() const
 {
     QList<BatteryListForm *> result;
-    for (const auto& ptr : batteryWidgets) {
+    for (const auto &ptr : batteryWidgets)
+    {
         result.append(ptr.get());
     }
     return result;
@@ -206,7 +218,7 @@ void BatteryGridWidget::onNextPageClicked()
 void BatteryGridWidget::onBatteryClicked(BatteryListForm *battery)
 {
     // 清除之前选中的电池
-    for (const auto& widget : batteryWidgets)
+    for (const auto &widget : batteryWidgets)
     {
         if (widget.get() != battery)
         {
@@ -215,8 +227,10 @@ void BatteryGridWidget::onBatteryClicked(BatteryListForm *battery)
     }
 
     // 找到对应的shared_ptr
-    for (const auto& ptr : batteryWidgets) {
-        if (ptr.get() == battery) {
+    for (const auto &ptr : batteryWidgets)
+    {
+        if (ptr.get() == battery)
+        {
             selectedBattery = ptr;
             break;
         }
@@ -230,7 +244,7 @@ void BatteryGridWidget::onBatteryDoubleClicked(BatteryListForm *battery)
 {
     // 先确保电池被选中
     onBatteryClicked(battery);
-    
+
     // 发送双击信号
     emit batteryDoubleClicked(battery);
 }
@@ -257,7 +271,8 @@ void BatteryGridWidget::updatePage()
         auto widget = batteryWidgets[startIdx + i].get();
 
         // 添加到布局，并指定左上角对齐方式
-        if (widget) {
+        if (widget)
+        {
             widget->setParent(containerWidget);
             widget->setVisible(true);
             gridLayout->addWidget(widget, row, col, 1, 1, Qt::AlignLeft | Qt::AlignTop);

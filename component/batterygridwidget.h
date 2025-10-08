@@ -46,6 +46,8 @@ signals:
     // 当电池被双击时发出的信号
     void batteryDoubleClicked(BatteryListForm* battery);
 
+protected:
+    void paintEvent(QPaintEvent *);
 private slots:
     // 处理页面切换
     void onPrevPageClicked();

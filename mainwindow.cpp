@@ -69,12 +69,7 @@ MainWindow::~MainWindow()
         bms1InfoShowForm = nullptr;
     }
 
-    // 删除电池网格
-    if (batteryGrid)
-    {
-        delete batteryGrid;
-        batteryGrid = nullptr;
-    }
+    // widget_center 现在是 UI 文件中定义的 BatteryGridWidget，由 Qt 自动管理
 
     delete ui;
 }
@@ -127,21 +122,13 @@ void MainWindow::initUI()
     connect(cfdRecordAction, &QAction::triggered, this, &MainWindow::cfd_record_action);
     connect(abnormalRecordAction, &QAction::triggered, this, &MainWindow::abnormal_record_action);
 
-    // 创建电池网格组件
-    batteryGrid = new BatteryGridWidget(ui->widget_center);
 
-    // 设置网格大小，调整为合适的行列数
-    batteryGrid->setGridSize(7, 6); // 初始设置
 
-    // 设置底部空间和分页控件自动隐藏
-    batteryGrid->setBottomMargin(30);  // 设置30像素的底部间距
-    batteryGrid->setAutoHidePagination(true);  // 当电池数量不足一页时自动隐藏分页控件
-
-    // 将电池网格添加到 widget_center，设置合适的边距让组件不会占满整个区域
-    QVBoxLayout *layout = new QVBoxLayout(ui->widget_center);
-    layout->setContentsMargins(20, 20, 20, 20); // 初始设置上下左右的边距
-    layout->addWidget(batteryGrid, 0, Qt::AlignLeft | Qt::AlignTop); // 设置左上角对齐
-    layout->addStretch(); // 添加弹性空间，确保组件靠上靠左
+    // widget_center 已是 BatteryGridWidget 类型，直接配置即可
+    ui->widget_center->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    ui->widget_center->setGridSize(6, 6); // 初始设置
+    ui->widget_center->setBottomMargin(30);  // 设置30像素的底部间距
+    ui->widget_center->setAutoHidePagination(true);  // 当电池数量不足一页时自动隐藏分页控件
 
     // 创建返回按钮，放在与Logo相同的位置
     m_backButton = new QPushButton(ui->widget_2);
@@ -168,10 +155,10 @@ void MainWindow::initUI()
     bms1InfoShowForm = nullptr;
 
     // 连接电池选择信号
-    connect(batteryGrid, &BatteryGridWidget::batterySelected, this, &MainWindow::updateRightPanel);
+    connect(ui->widget_center, &BatteryGridWidget::batterySelected, this, &MainWindow::updateRightPanel);
 
     // 连接电池双击信号
-    connect(batteryGrid, &BatteryGridWidget::batteryDoubleClicked, this, [this](BatteryListForm * battery)
+    connect(ui->widget_center, &BatteryGridWidget::batteryDoubleClicked, this, [this](BatteryListForm * battery)
     {
         qDebug() << "Battery double clicked";
 
@@ -221,7 +208,7 @@ void MainWindow::initUI()
     updateCurrentTime();
 
     // 初始化上边距
-    updateTopMargin();
+    //updateTopMargin();
 
     m_initialWindowSize = this->size();
     qDebug() << "m_initialWindowSize" << m_initialWindowSize;
@@ -332,10 +319,10 @@ void MainWindow::init_sql()
         }
 
         // 设置电池网格的总数量，根据数据库中读取到的电池数量来设置
-        batteryGrid->setTotalItems(batteryList.size());
+        ui->widget_center->setTotalItems(batteryList.size());
 
         // 更新每个电池控件的信息
-        QList<BatteryListForm *> batteryWidgets = batteryGrid->getBatteryWidgets();
+        QList<BatteryListForm *> batteryWidgets = ui->widget_center->getBatteryWidgets();
         for (int i = 0; i < batteryList.size() && i < batteryWidgets.size(); i++)
         {
             batteryWidgets[i]->setBatteryInfo(batteryList[i]);
@@ -418,7 +405,7 @@ void MainWindow::init_sql()
         }
 
         // 刷新布局
-        batteryGrid->refreshLayout();
+        ui->widget_center->refreshLayout();
         //xxx 暂时先不选择电池，先不更新右侧信息面板
         // 默认选中第一个电池并更新右侧信息面板（如果有电池）
         // if (!batteryWidgets.isEmpty())
@@ -572,14 +559,6 @@ void MainWindow::on_btn_max_clicked(bool checked)
         qDebug() << "Maximizing window";
         // 对于无边框窗口，需要手动设置最大化状态
         this->setWindowState(Qt::WindowMaximized);
-        // 强制更新窗口状态
-        this->show();
-
-        // 延迟更新布局，确保窗口状态已经生效
-        QTimer::singleShot(50, this, [this]()
-        {
-            updateTopMargin();
-        });
     }
     else
     {
@@ -589,16 +568,8 @@ void MainWindow::on_btn_max_clicked(bool checked)
 
         // 恢复到初始窗口大小
         this->resize(m_initialWindowSize);
-
-        // 强制更新窗口状态
-        this->show();
-
-        // 延迟更新布局，确保窗口状态已经生效
-        QTimer::singleShot(50, this, [this]()
-        {
-            updateTopMargin();
-        });
     }
+    // 注意：setWindowState() 会触发 changeEvent，布局更新在 changeEvent 中统一处理
 }
 
 
@@ -645,9 +616,13 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if (mouseEvent->button() == Qt::LeftButton)
             {
-                // 获取窗口左上角坐标与鼠标当前位置之间的偏移
-                m_lastPos = mouseEvent->globalPos() - this->frameGeometry().topLeft();
-                m_isMoving = true;
+                // 只有在非最大化状态下才允许拖拽
+                if (!this->isMaximized() && !(this->windowState() & Qt::WindowMaximized) && !ui->btn_max->isChecked())
+                {
+                    // 获取窗口左上角坐标与鼠标当前位置之间的偏移
+                    m_lastPos = mouseEvent->globalPos() - this->frameGeometry().topLeft();
+                    m_isMoving = true;
+                }
                 return true;  // 事件已处理
             }
         }
@@ -657,49 +632,8 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if (m_isMoving && (mouseEvent->buttons() & Qt::LeftButton))
             {
-                // 如果当前是最大化状态，退出最大化
-                if (this->isMaximized() || this->windowState() == Qt::WindowMaximized || ui->btn_max->isChecked())
-                {
-                    qDebug() << "Exiting maximized state due to drag";
-
-                    // 计算鼠标在窗口中的相对位置比例
-                    QPoint globalMousePos = mouseEvent->globalPos();
-                    QRect screenGeometry = this->frameGeometry();
-                    double relativeX = (double)(globalMousePos.x() - screenGeometry.left()) / screenGeometry.width();
-
-                    // 设置窗口为正常状态
-                    ui->btn_max->setChecked(false);
-                    this->setWindowState(Qt::WindowNoState);
-
-                    // 恢复到初始窗口大小
-                    this->resize(m_initialWindowSize);
-
-                    // 根据鼠标相对位置重新计算窗口位置，确保鼠标仍在标题栏区域
-                    int newX = globalMousePos.x() - (int)(m_initialWindowSize.width() * relativeX);
-                    int newY = globalMousePos.y() - m_lastPos.y();
-
-                    // 确保窗口不会移出屏幕
-                    QScreen *screen = QGuiApplication::primaryScreen();
-                    if (screen)
-                    {
-                        QRect screenRect = screen->availableGeometry();
-                        newX = qMax(0, qMin(newX, screenRect.width() - m_initialWindowSize.width()));
-                        newY = qMax(0, qMin(newY, screenRect.height() - m_initialWindowSize.height()));
-                    }
-
-                    this->move(newX, newY);
-
-                    // 更新布局
-                    updateTopMargin();
-
-                    // 更新拖拽偏移量，基于新的窗口位置
-                    m_lastPos = globalMousePos - this->frameGeometry().topLeft();
-                }
-                else
-                {
-                    // 正常拖拽移动
-                    this->move(mouseEvent->globalPos() - m_lastPos);
-                }
+                // 正常拖拽移动（只有在非最大化状态下才会进入此处）
+                this->move(mouseEvent->globalPos() - m_lastPos);
                 return true;  // 事件已处理
             }
         }
@@ -733,10 +667,7 @@ void MainWindow::changeEvent(QEvent *event)
         }
 
         // 延迟更新布局，确保窗口状态变化完成
-        QTimer::singleShot(100, this, [this]()
-        {
-            updateTopMargin();
-        });
+        // QTimer::singleShot(100, this, &MainWindow::updateTopMargin);
     }
 
     QMainWindow::changeEvent(event);
@@ -817,12 +748,7 @@ QString MainWindow::getCurrentUser() const
 
 void MainWindow::updateTopMargin()
 {
-    // 获取widget_center的布局
-    QVBoxLayout *layout = qobject_cast<QVBoxLayout *>(ui->widget_center->layout());
-    if (!layout) return;
-
-    // 根据窗口状态和大小动态调整上边距和网格大小
-    int topMargin = 20;
+    // 根据窗口状态和大小动态调整网格大小
     int gridCols = 7;  // 默认列数（与初始化时保持一致）
     int gridRows = 6;  // 默认行数（与初始化时保持一致）
 
@@ -836,10 +762,9 @@ void MainWindow::updateTopMargin()
             int height = screenSize.height();
             int width = screenSize.width();
 
-            // 分辨率越高，上边距越大
+            // 根据分辨率调整网格大小
             if (height >= 1440)
             {
-                topMargin = 40;
                 // 高分辨率屏幕，可以显示更多列
                 if (width >= 2560)  // 2K及以上
                 {
@@ -854,7 +779,6 @@ void MainWindow::updateTopMargin()
             }
             else if (height >= 1080)
             {
-                topMargin = 30;
                 // 1080p屏幕
                 if (width >= 1920)  // 宽屏
                 {
@@ -869,7 +793,6 @@ void MainWindow::updateTopMargin()
             }
             else
             {
-                topMargin = 20;
                 gridCols = 6;
                 gridRows = 5;
             }
@@ -891,19 +814,7 @@ void MainWindow::updateTopMargin()
         gridCols = qMax(3, qMin(10, availableWidth / 140));  // 最少3列，最多10列
         gridRows = qMax(3, qMin(8, availableHeight / 120));   // 最少3行，最多8行
 
-        // 根据窗口大小调整上边距
-        if (windowHeight >= 800)
-        {
-            topMargin = 30;
-        }
-        else if (windowHeight >= 600)
-        {
-            topMargin = 20;
-        }
-        else
-        {
-            topMargin = 10;
-        }
+
     }
 
     // qDebug() << "updateTopMargin - isMaximized:" << this->isMaximized()
@@ -912,13 +823,8 @@ void MainWindow::updateTopMargin()
     //          << "gridRows:" << gridRows
     //          << "windowSize:" << this->size();
 
-    // 更新布局的上边距
-    layout->setContentsMargins(20, topMargin, 20, 20);
-
     // 更新网格大小
-    if (batteryGrid)
-    {
-        batteryGrid->setGridSize(gridCols, gridRows);
-        batteryGrid->refreshLayout();
-    }
+    ui->widget_center->setGridSize(gridCols, gridRows);
+    ui->widget_center->refreshLayout();
+    ui->widget_center->updateGeometry();
 }
