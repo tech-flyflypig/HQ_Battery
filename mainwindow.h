@@ -38,7 +38,6 @@ public:
 protected:
     // 事件过滤器，可为指定控件添加自定义事件处理
     bool eventFilter(QObject *watched, QEvent *event) override;
-    
 
 private slots:
 

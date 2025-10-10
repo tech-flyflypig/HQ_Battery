@@ -13,6 +13,7 @@
 #include <QCryptographicHash>
 #include <QDateTime>
 #include <QSettings>
+#include <QMouseEvent>
 
 // 最大允许的登录失败次数
 const int MAX_LOGIN_ATTEMPTS = 5;
@@ -120,6 +121,26 @@ void LoginInForm::paintEvent(QPaintEvent *)
     opt.init(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
+}
+
+// 鼠标按下事件，记录鼠标位置用于拖动
+void LoginInForm::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton)
+    {
+        clickPos = event->globalPos() - this->frameGeometry().topLeft();
+        event->accept();
+    }
+}
+
+// 鼠标移动事件，实现窗口拖动
+void LoginInForm::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event->buttons() & Qt::LeftButton)
+    {
+        this->move(event->globalPos() - clickPos);
+        event->accept();
+    }
 }
 
 // 登录按钮点击事件处理

@@ -2,10 +2,14 @@
 #include "ui_leftstatsform.h"
 #include "BatteryStats.h"
 #include <QDebug>
+#include <QResizeEvent>
+#include <functional>
+#include <algorithm>
 
 LeftStatsForm::LeftStatsForm(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::LeftStatsForm)
+    , m_geometriesInitialized(false)
 {
     ui->setupUi(this);
 
@@ -22,6 +26,92 @@ LeftStatsForm::LeftStatsForm(QWidget *parent)
 LeftStatsForm::~LeftStatsForm()
 {
     delete ui;
+}
+
+void LeftStatsForm::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+
+    // 首次运行时保存原始 geometry
+    if (!m_geometriesInitialized) {
+        saveOriginalGeometries();
+    }
+
+    int newWidth = event->size().width();
+    int newHeight = event->size().height();
+    const double kOriginalWidth = 247.0;
+    const double kOriginalHeight = 951.0;
+
+    // 分别计算宽度和高度的缩放比例
+    double widthRatio = static_cast<double>(newWidth) / kOriginalWidth;
+    double heightRatio = static_cast<double>(newHeight) / kOriginalHeight;
+
+    // 取较小的缩放比例，确保内容不会超出容器
+    double scaleRatio = std::min(widthRatio, heightRatio);
+
+    // 限制最小和最大缩放比例
+    if (scaleRatio < 0.7) {
+        scaleRatio = 0.7;
+    }
+    if (scaleRatio > 1.2) {  // 降低最大缩放比例，避免过大
+        scaleRatio = 1.2;
+    }
+
+    // 验证缩放后不超出容器高度
+    double scaledHeight = kOriginalHeight * scaleRatio;
+    if (scaledHeight > newHeight) {
+        // 如果超出，重新计算缩放比例
+        scaleRatio = static_cast<double>(newHeight) / kOriginalHeight;
+        if (scaleRatio < 0.7) {
+            scaleRatio = 0.7;
+        }
+    }
+
+    // 递归缩放所有保存的控件
+    for (auto it = m_originalGeometries.constBegin(); it != m_originalGeometries.constEnd(); ++it) {
+        QWidget *widget = it.key();
+        const QRect &originalGeom = it.value();
+
+        widget->setGeometry(
+            static_cast<int>(originalGeom.x() * scaleRatio),
+            static_cast<int>(originalGeom.y() * scaleRatio),
+            static_cast<int>(originalGeom.width() * scaleRatio),
+            static_cast<int>(originalGeom.height() * scaleRatio)
+        );
+    }
+}
+
+void LeftStatsForm::saveOriginalGeometries()
+{
+    if (m_geometriesInitialized) return;
+
+    // 递归函数：保存控件及其所有子控件的 geometry
+    std::function<void(QWidget*)> saveRecursive = [&](QWidget *widget) {
+        // 保存当前控件的 geometry
+        m_originalGeometries[widget] = widget->geometry();
+
+        // 递归处理所有子控件
+        for (QObject *child : widget->children()) {
+            QWidget *childWidget = qobject_cast<QWidget*>(child);
+            if (childWidget) {
+                saveRecursive(childWidget);
+            }
+        }
+    };
+
+    // 保存三个主容器及其所有子控件
+    saveRecursive(ui->battery_number);
+    saveRecursive(ui->protect_status);
+    saveRecursive(ui->fault_alarm);
+
+    m_geometriesInitialized = true;
+}
+
+void LeftStatsForm::scaleWidget(QWidget *widget, double scaleRatio)
+{
+    // 此函数暂时不用，保留以备将来扩展
+    Q_UNUSED(widget);
+    Q_UNUSED(scaleRatio);
 }
 
 // 初始化RadioButton为只读状态

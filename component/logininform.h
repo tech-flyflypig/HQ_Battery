@@ -42,6 +42,9 @@ protected:
     // 事件过滤器，用于处理焦点事件
     bool eventFilter(QObject *watched, QEvent *event) override;
     void paintEvent(QPaintEvent *event) override;
+    // 鼠标事件处理，实现窗口拖动
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
 
 private slots:
     // 登录按钮点击事件

@@ -34,10 +34,14 @@ void BatteryGridWidget::setupUI()
     // 创建容器和网格布局
     containerWidget = new QWidget(this);
     gridLayout = new QGridLayout(containerWidget);
-    containerWidget->setMinimumSize(1452, 932);
+    // 移除固定最小尺寸，改为动态计算
+    // containerWidget->setMinimumSize(1452, 932);
     // 调整网格间距，使电池显示更紧凑
     gridLayout->setSpacing(10);
     gridLayout->setContentsMargins(30, 40, 30, 10);
+
+    // 初始化容器最小尺寸
+    updateContainerMinimumSize();
 
     // 设置网格布局的对齐方式为左上角对齐，而不是默认的居中对齐
     gridLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -87,6 +91,9 @@ void BatteryGridWidget::setGridSize(int rows, int cols)
     this->rows = rows;
     this->cols = cols;
     this->itemsPerPage = rows * cols;
+
+    // 更新容器最小尺寸
+    updateContainerMinimumSize();
 
     // 重新计算总页数
     if (totalItems > 0)
@@ -195,6 +202,45 @@ void BatteryGridWidget::updatePaginationVisibility()
         // 始终显示
         pageControlWidget->setVisible(true);
     }
+}
+
+void BatteryGridWidget::updateContainerMinimumSize()
+{
+    // 每个电池项的尺寸（与 setFixedSize 保持一致）
+    const int kBatteryItemWidth = 220;
+    const int kBatteryItemHeight = 110;
+
+    // 网格布局的参数（setupUI 中设置）
+    const int kSpacing = 10;  // gridLayout->setSpacing(10)
+    const int kLeftMargin = 30;
+    const int kTopMargin = 40;
+    const int kRightMargin = 30;
+    const int kBottomMargin = 10;
+
+    // 根据网格大小动态计算容器最小尺寸
+    int minWidth = kLeftMargin + (kBatteryItemWidth * cols) + (kSpacing * (cols - 1)) + kRightMargin;
+    int minHeight = kTopMargin + (kBatteryItemHeight * rows) + (kSpacing * (rows - 1)) + kBottomMargin;
+
+    // 限制最大最小尺寸，避免超出屏幕
+    const int kMaxMinWidth = 1200;   // 原来的固定宽度上限
+    const int kMaxMinHeight = 840;   // 原来的固定高度上限
+
+    if (minWidth > kMaxMinWidth)
+    {
+        minWidth = kMaxMinWidth;
+    }
+    if (minHeight > kMaxMinHeight)
+    {
+        minHeight = kMaxMinHeight;
+    }
+
+    // 设置容器的最小尺寸
+    containerWidget->setMinimumSize(minWidth, minHeight);
+
+    // qDebug() << "BatteryGridWidget::updateContainerMinimumSize - rows:" << rows
+    //          << "cols:" << cols
+    //          << "minWidth:" << minWidth
+    //          << "minHeight:" << minHeight;
 }
 
 void BatteryGridWidget::onPrevPageClicked()

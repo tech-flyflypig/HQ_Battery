@@ -61,12 +61,15 @@ private slots:
 private:
     // 更新当前页面显示
     void updatePage();
-    
+
     // 配置UI
     void setupUI();
-    
+
     // 更新分页控件显示状态
     void updatePaginationVisibility();
+
+    // 更新容器最小尺寸（根据网格大小动态计算）
+    void updateContainerMinimumSize();
 
 private:
     QWidget *containerWidget;

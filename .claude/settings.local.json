@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(where qmake)"
+      "Bash(where qmake)",
+      "Bash(sqlite3:*)"
     ],
     "deny": [],
     "ask": []

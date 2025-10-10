@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1700</width>
-    <height>1050</height>
+    <height>950</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -272,7 +272,7 @@ QPushButton:hover{
         <item>
          <widget class="LeftStatsForm" name="widget_left" native="true">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -283,16 +283,16 @@ QPushButton:hover{
             <height>0</height>
            </size>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>250</width>
-            <height>16777215</height>
-           </size>
-          </property>
          </widget>
         </item>
         <item>
          <widget class="BatteryGridWidget" name="widget_center" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="styleSheet">
            <string notr="true">#widget_center{
 border-image: url(:/image/主页_中间.png);
@@ -316,12 +316,6 @@ QLabel{
            <size>
             <width>231</width>
             <height>0</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>250</width>
-            <height>16777215</height>
            </size>
           </property>
          </widget>
