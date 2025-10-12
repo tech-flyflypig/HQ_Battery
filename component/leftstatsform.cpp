@@ -3,13 +3,14 @@
 #include "BatteryStats.h"
 #include <QDebug>
 #include <QResizeEvent>
-#include <functional>
-#include <algorithm>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
+#include <QFormLayout>
 
 LeftStatsForm::LeftStatsForm(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::LeftStatsForm)
-    , m_geometriesInitialized(false)
 {
     ui->setupUi(this);
 
@@ -20,7 +21,7 @@ LeftStatsForm::LeftStatsForm(QWidget *parent)
     connect(BatteryStats::instance(), &BatteryStats::statsChanged, this, &LeftStatsForm::updateStats);
 
     // 初始化统计显示
-    updateStats(); // 确保立即更新统计数据
+    updateStats();
 }
 
 LeftStatsForm::~LeftStatsForm()
@@ -31,87 +32,92 @@ LeftStatsForm::~LeftStatsForm()
 void LeftStatsForm::resizeEvent(QResizeEvent *event)
 {
     QWidget::resizeEvent(event);
+    adjustTopMargins();
+}
 
-    // 首次运行时保存原始 geometry
-    if (!m_geometriesInitialized) {
-        saveOriginalGeometries();
+void LeftStatsForm::adjustTopMargins()
+{
+    // 基准高度（UI 文件中定义的）
+    const double kBaseHeight = 951.0;
+    // 基准值
+    const int kBaseProtectMargin = 75;
+    const int kBaseFaultMargin = 70;
+    const int kBaseMainSpacing = 19;  // 主布局的 spacing
+    const int kBaseBatteryNumberSpacing = 23;  // 电池数量内部 VBoxLayout 的 spacing
+    const int kBaseBatteryGridTopMargin = 8;  // 电池数量内部 GridLayout 的 topMargin
+    const int kBaseFormVerticalSpacing = 6;  // FormLayout 默认竖向间距
+    const int kBaseProtectHorizontalSpacing = 26;  // 保护状态的 horizontalSpacing
+    const int kBaseFaultHorizontalSpacing = 28;  // 故障报警的 horizontalSpacing
+
+    // 当前高度
+    double currentHeight = this->height();
+
+    // 计算缩放比例
+    double ratio = currentHeight / kBaseHeight;
+
+    // 限制缩放范围，避免过小或过大
+    if (ratio < 0.8) ratio = 0.8;
+    if (ratio > 1.5) ratio = 1.5;
+
+    // 动态计算新的间距值
+    int newProtectMargin = static_cast<int>(kBaseProtectMargin * ratio);
+    int newFaultMargin = static_cast<int>(kBaseFaultMargin * ratio);
+    int newMainSpacing = static_cast<int>(kBaseMainSpacing * ratio);
+    int newBatteryNumberSpacing = static_cast<int>(kBaseBatteryNumberSpacing * ratio);
+    int newBatteryGridTopMargin = static_cast<int>(kBaseBatteryGridTopMargin * ratio);
+    int newFormVerticalSpacing = static_cast<int>(kBaseFormVerticalSpacing * ratio);
+    int newProtectHorizontalSpacing = static_cast<int>(kBaseProtectHorizontalSpacing * ratio);
+    int newFaultHorizontalSpacing = static_cast<int>(kBaseFaultHorizontalSpacing * ratio);
+
+    // 1. 调整主布局的 spacing（三个容器之间的间距）
+    if (QVBoxLayout *mainLayout = qobject_cast<QVBoxLayout*>(this->layout()))
+    {
+        mainLayout->setSpacing(newMainSpacing);
     }
 
-    int newWidth = event->size().width();
-    int newHeight = event->size().height();
-    const double kOriginalWidth = 247.0;
-    const double kOriginalHeight = 951.0;
+    // 2. 调整电池数量容器内部的布局
+    if (QVBoxLayout *batteryLayout = ui->battery_number->findChild<QVBoxLayout*>("verticalLayout"))
+    {
+        batteryLayout->setSpacing(newBatteryNumberSpacing);
 
-    // 分别计算宽度和高度的缩放比例
-    double widthRatio = static_cast<double>(newWidth) / kOriginalWidth;
-    double heightRatio = static_cast<double>(newHeight) / kOriginalHeight;
-
-    // 取较小的缩放比例，确保内容不会超出容器
-    double scaleRatio = std::min(widthRatio, heightRatio);
-
-    // 限制最小和最大缩放比例
-    if (scaleRatio < 0.7) {
-        scaleRatio = 0.7;
-    }
-    if (scaleRatio > 1.2) {  // 降低最大缩放比例，避免过大
-        scaleRatio = 1.2;
-    }
-
-    // 验证缩放后不超出容器高度
-    double scaledHeight = kOriginalHeight * scaleRatio;
-    if (scaledHeight > newHeight) {
-        // 如果超出，重新计算缩放比例
-        scaleRatio = static_cast<double>(newHeight) / kOriginalHeight;
-        if (scaleRatio < 0.7) {
-            scaleRatio = 0.7;
+        // 调整内部 GridLayout 的 topMargin
+        if (QGridLayout *gridLayout = batteryLayout->findChild<QGridLayout*>("gridLayout"))
+        {
+            QMargins margins = gridLayout->contentsMargins();
+            margins.setTop(newBatteryGridTopMargin);
+            gridLayout->setContentsMargins(margins);
         }
     }
 
-    // 递归缩放所有保存的控件
-    for (auto it = m_originalGeometries.constBegin(); it != m_originalGeometries.constEnd(); ++it) {
-        QWidget *widget = it.key();
-        const QRect &originalGeom = it.value();
+    // 3. 调整保护状态容器的布局
+    if (QGridLayout *gridLayout = qobject_cast<QGridLayout*>(ui->protect_status->layout()))
+    {
+        QMargins margins = gridLayout->contentsMargins();
+        margins.setTop(newProtectMargin);
+        gridLayout->setContentsMargins(margins);
 
-        widget->setGeometry(
-            static_cast<int>(originalGeom.x() * scaleRatio),
-            static_cast<int>(originalGeom.y() * scaleRatio),
-            static_cast<int>(originalGeom.width() * scaleRatio),
-            static_cast<int>(originalGeom.height() * scaleRatio)
-        );
-    }
-}
-
-void LeftStatsForm::saveOriginalGeometries()
-{
-    if (m_geometriesInitialized) return;
-
-    // 递归函数：保存控件及其所有子控件的 geometry
-    std::function<void(QWidget*)> saveRecursive = [&](QWidget *widget) {
-        // 保存当前控件的 geometry
-        m_originalGeometries[widget] = widget->geometry();
-
-        // 递归处理所有子控件
-        for (QObject *child : widget->children()) {
-            QWidget *childWidget = qobject_cast<QWidget*>(child);
-            if (childWidget) {
-                saveRecursive(childWidget);
-            }
+        // 获取内部的 FormLayout 并调整间距
+        if (QFormLayout *formLayout = ui->protect_status->findChild<QFormLayout*>("formLayout"))
+        {
+            formLayout->setVerticalSpacing(newFormVerticalSpacing);
+            formLayout->setHorizontalSpacing(newProtectHorizontalSpacing);
         }
-    };
+    }
 
-    // 保存三个主容器及其所有子控件
-    saveRecursive(ui->battery_number);
-    saveRecursive(ui->protect_status);
-    saveRecursive(ui->fault_alarm);
+    // 4. 调整故障报警容器的布局
+    if (QGridLayout *gridLayout = qobject_cast<QGridLayout*>(ui->fault_alarm->layout()))
+    {
+        QMargins margins = gridLayout->contentsMargins();
+        margins.setTop(newFaultMargin);
+        gridLayout->setContentsMargins(margins);
 
-    m_geometriesInitialized = true;
-}
-
-void LeftStatsForm::scaleWidget(QWidget *widget, double scaleRatio)
-{
-    // 此函数暂时不用，保留以备将来扩展
-    Q_UNUSED(widget);
-    Q_UNUSED(scaleRatio);
+        // 获取内部的 FormLayout 并调整间距
+        if (QFormLayout *formLayout = ui->fault_alarm->findChild<QFormLayout*>("formLayout_2"))
+        {
+            formLayout->setVerticalSpacing(newFormVerticalSpacing);
+            formLayout->setHorizontalSpacing(newFaultHorizontalSpacing);
+        }
+    }
 }
 
 // 初始化RadioButton为只读状态

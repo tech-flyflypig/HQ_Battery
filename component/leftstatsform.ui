@@ -43,9 +43,9 @@ QLabel{
 	font: 11pt &quot;Microsoft YaHei UI&quot;;
 }</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_2" stretch="2,2,2">
    <property name="spacing">
-    <number>30</number>
+    <number>19</number>
    </property>
    <item>
     <widget class="QWidget" name="battery_number" native="true">
@@ -241,6 +241,9 @@ background:transparent;
       </property>
       <item row="0" column="0">
        <layout class="QFormLayout" name="formLayout">
+        <property name="labelAlignment">
+         <set>Qt::AlignVCenter</set>
+        </property>
         <property name="horizontalSpacing">
          <number>26</number>
         </property>
@@ -249,6 +252,12 @@ background:transparent;
         </property>
         <item row="0" column="0">
          <widget class="QRadioButton" name="rbtn_over_voltage_and_discharge">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
           <property name="text">
            <string>过压过放</string>
           </property>
@@ -303,6 +312,12 @@ background:transparent;
         </item>
         <item row="2" column="0">
          <widget class="QRadioButton" name="rbtn_tempeture_protect">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
           <property name="text">
            <string>温度保护</string>
           </property>
@@ -357,6 +372,12 @@ background:transparent;
         </item>
         <item row="4" column="0">
          <widget class="QRadioButton" name="rbtn_short_circuit">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
           <property name="text">
            <string>输出短路</string>
           </property>
@@ -438,6 +459,12 @@ background:transparent;
         </property>
         <item row="0" column="0">
          <widget class="QRadioButton" name="rbtn_voltage_alarm">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
           <property name="text">
            <string>电压报警</string>
           </property>
@@ -483,6 +510,12 @@ background:transparent;
         </item>
         <item row="2" column="0">
          <widget class="QRadioButton" name="rbtn_current_alarm">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
           <property name="text">
            <string>电流报警</string>
           </property>
@@ -531,6 +564,12 @@ background:transparent;
         </item>
         <item row="4" column="0">
          <widget class="QRadioButton" name="rbtn_temperature_alarm">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
           <property name="text">
            <string>温度告警</string>
           </property>

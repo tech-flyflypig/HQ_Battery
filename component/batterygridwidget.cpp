@@ -223,7 +223,7 @@ void BatteryGridWidget::updateContainerMinimumSize()
 
     // 限制最大最小尺寸，避免超出屏幕
     const int kMaxMinWidth = 1200;   // 原来的固定宽度上限
-    const int kMaxMinHeight = 840;   // 原来的固定高度上限
+    const int kMaxMinHeight = 848;   // 原来的固定高度上限
 
     if (minWidth > kMaxMinWidth)
     {

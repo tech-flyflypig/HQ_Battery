@@ -1,6 +1,7 @@
 ﻿#include "rightstatsform.h"
 #include "ui_rightstatsform.h"
 #include <QDebug>
+#include <QResizeEvent>
 
 RightStatsForm::RightStatsForm(QWidget *parent)
     : QWidget(parent)
@@ -15,6 +16,59 @@ RightStatsForm::~RightStatsForm()
     // 不需要手动断开连接，m_currentBattery 作为弱引用
     // 不会影响对象的生命周期
     delete ui;
+}
+
+void RightStatsForm::resizeEvent(QResizeEvent *event)
+{
+    QWidget::resizeEvent(event);
+    adjustTopMargins();
+}
+
+void RightStatsForm::adjustTopMargins()
+{
+    // 基准高度（UI 文件中定义的）
+    const double kBaseHeight = 951.0;
+    // 基准 topMargin 值
+    const int kBaseBatteryStatusMargin = 51;
+    const int kBaseRunParamMargin = 69;
+    const int kBaseDeviceInfoMargin = 52;
+
+    // 当前高度
+    double currentHeight = this->height();
+
+    // 计算缩放比例
+    double ratio = currentHeight / kBaseHeight;
+
+    // 限制缩放范围，避免过小或过大
+    if (ratio < 0.8) ratio = 0.8;
+    if (ratio > 1.5) ratio = 1.5;
+
+    // 动态计算新的 topMargin
+    int newBatteryStatusMargin = static_cast<int>(kBaseBatteryStatusMargin * ratio);
+    int newRunParamMargin = static_cast<int>(kBaseRunParamMargin * ratio);
+    int newDeviceInfoMargin = static_cast<int>(kBaseDeviceInfoMargin * ratio);
+
+    // 获取三个容器的主布局并调整 topMargin
+    if (QLayout *layout = ui->widget_battery_status->layout())
+    {
+        QMargins margins = layout->contentsMargins();
+        margins.setTop(newBatteryStatusMargin);
+        layout->setContentsMargins(margins);
+    }
+
+    if (QLayout *layout = ui->run_param->layout())
+    {
+        QMargins margins = layout->contentsMargins();
+        margins.setTop(newRunParamMargin);
+        layout->setContentsMargins(margins);
+    }
+
+    if (QLayout *layout = ui->device_info->layout())
+    {
+        QMargins margins = layout->contentsMargins();
+        margins.setTop(newDeviceInfoMargin);
+        layout->setContentsMargins(margins);
+    }
 }
 
 void RightStatsForm::setBatteryInfo(BatteryListForm *battery)

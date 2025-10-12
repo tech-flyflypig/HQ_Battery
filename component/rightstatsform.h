@@ -16,9 +16,12 @@ class RightStatsForm : public QWidget
 public:
     explicit RightStatsForm(QWidget *parent = nullptr);
     ~RightStatsForm();
-    
+
     // 设置当前选中的电池，并更新显示
     void setBatteryInfo(BatteryListForm *battery);
+
+protected:
+    void resizeEvent(QResizeEvent *event) override;
 
 private slots:
     // 更新电池数据显示
@@ -34,6 +37,9 @@ private slots:
     void handleMonitoringStatusChanged(BatteryListForm *battery, BatteryListForm::MonitoringStatus status);
 
 private:
+    // 动态调整内部布局的上边距
+    void adjustTopMargins();
+
     Ui::RightStatsForm *ui;
     std::weak_ptr<BatteryListForm> m_currentBattery; // 使用弱引用避免所有权问题
 };

@@ -126,7 +126,7 @@ void MainWindow::initUI()
 
     // widget_center 已是 BatteryGridWidget 类型，直接配置即可
     ui->widget_center->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->widget_center->setGridSize(5, 5); // 设置为3行4列，可容纳12个电池
+    ui->widget_center->setGridSize(5, 5); // 设置为5行5列，可容纳25个电池
     ui->widget_center->setBottomMargin(30);  // 设置30像素的底部间距
     ui->widget_center->setAutoHidePagination(true);  // 当电池数量不足一页时自动隐藏分页控件
 
