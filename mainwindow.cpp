@@ -209,9 +209,6 @@ void MainWindow::initUI()
 
     // 初始化上边距
     //updateTopMargin();
-
-    m_initialWindowSize = this->size();
-    qDebug() << "m_initialWindowSize" << m_initialWindowSize;
 }
 
 void MainWindow::connectBatterySignals(BatteryListForm *battery)
@@ -556,18 +553,57 @@ void MainWindow::on_btn_max_clicked(bool checked)
 {
     if(checked)
     {
-        qDebug() << "Maximizing window";
         // 对于无边框窗口，需要手动设置最大化状态
         this->setWindowState(Qt::WindowMaximized);
     }
     else
     {
-        qDebug() << "Restoring window to normal state";
         // 对于无边框窗口，需要手动设置正常状态
         this->setWindowState(Qt::WindowNoState);
+        
+        // 清除所有尺寸约束
+        this->setMinimumSize(0, 0);
+        this->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+        if (ui->centralwidget) {
+            ui->centralwidget->setMinimumSize(0, 0);
+            ui->centralwidget->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+        }
+        if (ui->widget_center) {
+            ui->widget_center->setMinimumSize(0, 0);
+            ui->widget_center->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+        }
+        if (ui->widget_left) {
+            ui->widget_left->setMinimumSize(0, 0);
+            ui->widget_left->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+        }
+        if (ui->widget_right) {
+            ui->widget_right->setMinimumSize(0, 0);
+            ui->widget_right->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+        }
 
-        // 恢复到初始窗口大小
-        this->resize(m_initialWindowSize);
+        // 恢复到初始窗口大小（使用setGeometry更强制）
+        QRect currentGeo = this->geometry();
+        currentGeo.setSize(m_initialWindowSize);
+        this->setGeometry(currentGeo);
+        
+        // 多次延迟强制设置尺寸，对抗布局系统的自动调整
+        QTimer::singleShot(150, this, [this]() {
+            QRect geo = this->geometry();
+            geo.setSize(m_initialWindowSize);
+            this->setGeometry(geo);
+        });
+        
+        QTimer::singleShot(300, this, [this]() {
+            QRect geo = this->geometry();
+            geo.setSize(m_initialWindowSize);
+            this->setGeometry(geo);
+        });
+        
+        QTimer::singleShot(500, this, [this]() {
+            QRect geo = this->geometry();
+            geo.setSize(m_initialWindowSize);
+            this->setGeometry(geo);
+        });
     }
     // 注意：setWindowState() 会触发 changeEvent，布局更新在 changeEvent 中统一处理
 }
@@ -656,8 +692,6 @@ void MainWindow::changeEvent(QEvent *event)
         QWindowStateChangeEvent *stateChangeEvent = static_cast<QWindowStateChangeEvent *>(event);
         Qt::WindowStates oldState = stateChangeEvent->oldState();
         Qt::WindowStates newState = this->windowState();
-
-        qDebug() << "Window state changed from" << oldState << "to" << newState;
 
         // 确保按钮状态与窗口状态同步
         bool isMaximized = (newState & Qt::WindowMaximized) != 0;
@@ -809,6 +843,9 @@ void MainWindow::updateTopMargin()
         {
             mainLayout->setContentsMargins(9, 9, 9, 9);
         }
+        // 恢复默认网格大小
+        gridCols = 5;
+        gridRows = 5;
     }
     // else
     // {
@@ -828,12 +865,6 @@ void MainWindow::updateTopMargin()
 
 
     // }
-
-    // qDebug() << "updateTopMargin - isMaximized:" << this->isMaximized()
-    //          << "topMargin:" << topMargin
-    //          << "gridCols:" << gridCols
-    //          << "gridRows:" << gridRows
-    //          << "windowSize:" << this->size();
 
     // 更新网格大小
     ui->widget_center->setGridSize(gridCols, gridRows);
