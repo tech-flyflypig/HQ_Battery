@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>247</width>
+    <width>230</width>
     <height>951</height>
    </rect>
   </property>
@@ -45,7 +45,19 @@ QLabel{
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2" stretch="2,2,2">
    <property name="spacing">
-    <number>19</number>
+    <number>13</number>
+   </property>
+   <property name="leftMargin">
+    <number>6</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>6</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
    </property>
    <item>
     <widget class="QWidget" name="battery_number" native="true">
@@ -116,9 +128,15 @@ QSlider::handle:vertical {
        </layout>
       </item>
       <item>
-       <layout class="QGridLayout" name="gridLayout">
+       <layout class="QGridLayout" name="gridLayout" rowminimumheight="1,4,1">
         <property name="topMargin">
-         <number>8</number>
+         <number>0</number>
+        </property>
+        <property name="horizontalSpacing">
+         <number>7</number>
+        </property>
+        <property name="verticalSpacing">
+         <number>0</number>
         </property>
         <item row="0" column="0">
          <widget class="QLabel" name="label_runing_num">

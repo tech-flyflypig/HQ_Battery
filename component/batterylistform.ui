@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>193</width>
-    <height>124</height>
+    <width>210</width>
+    <height>150</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,7 +50,7 @@ QLabel{
    <item>
     <layout class="QVBoxLayout" name="verticalLayout" stretch="1,5">
      <property name="spacing">
-      <number>6</number>
+      <number>0</number>
      </property>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout" stretch="3,1">
@@ -112,6 +112,9 @@ QLabel{
         <number>6</number>
        </property>
        <property name="verticalSpacing">
+        <number>4</number>
+       </property>
+       <property name="rightMargin">
         <number>6</number>
        </property>
        <property name="bottomMargin">
@@ -129,6 +132,9 @@ QLabel{
          <property name="text">
           <string>192.168</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item row="1" column="0">
@@ -143,19 +149,42 @@ QLabel{
          <property name="text">
           <string>8000AH</string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item row="2" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>状态</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLabel" name="label_chargeState">
+         <property name="text">
+          <string>空闲</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>温度</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
+       <item row="3" column="1">
         <widget class="QLabel" name="label_tempMax">
          <property name="text">
           <string>38℃</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>

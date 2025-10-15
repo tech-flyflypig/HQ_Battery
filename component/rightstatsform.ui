@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>247</width>
+    <width>270</width>
     <height>951</height>
    </rect>
   </property>
@@ -14,17 +14,32 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#label_current_in,#label_current_out,#label_pcbtemp,#label_ratedCapacity,#label_remainCapacity,#label_tempMax,#label_voltage,#label_ip,#label_sitecom,#label_port{	
+   <string notr="true">QLabel{
+	font: 700 9pt &quot;Microsoft YaHei UI&quot;;
+}
+#label_current_in,#label_current_out,#label_pcbtemp,#label_ratedCapacity,#label_remainCapacity,#label_tempMax,#label_voltage,#label_ip,#label_sitecom,#label_port{	
 	color: rgb(255, 255, 0);
 }
+
 #label_upload_time{
 color: rgb(85, 170, 255);
-}
-</string>
+}</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="2,3,2">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="3,4,2">
    <property name="spacing">
-    <number>19</number>
+    <number>13</number>
+   </property>
+   <property name="leftMargin">
+    <number>6</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>6</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
    </property>
    <item>
     <widget class="QWidget" name="widget_battery_status" native="true">
@@ -38,7 +53,7 @@ border-image: url(:/image/主页_电源.png);
        <number>20</number>
       </property>
       <property name="topMargin">
-       <number>51</number>
+       <number>45</number>
       </property>
       <property name="rightMargin">
        <number>20</number>
@@ -194,9 +209,7 @@ border-image: url(:/image/主页_电源.png);
       <string notr="true">#run_param{
 border-image: url(:/image/主页_运行参数.png);
 }
-QLabel{
-	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
-}
+
 </string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
@@ -389,9 +402,7 @@ QLabel{
       <string notr="true">#device_info{
 border-image: url(:/image/主页_设备信息.png);
 }
-QLabel{
-	font: 700 10pt &quot;Microsoft YaHei UI&quot;;
-}
+
 </string>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">

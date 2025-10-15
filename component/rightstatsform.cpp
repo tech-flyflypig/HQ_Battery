@@ -170,6 +170,22 @@ void RightStatsForm::updateBatteryData(BatteryListForm *battery, const BMS_1 &da
     // ui->label_sitecom->setText(data.battery_info.site);
     // ui->label_port->setText(data.battery_info.port_name);
     ui->label_upload_time->setText(data.battery_info.last_time.toString("yyyy-MM-dd HH:mm:ss"));
+
+    // 更新电源状态（开启/关闭）
+    // 根据 systemStatus 位标志判断：bit0=放电(0x0001), bit1=充电(0x0002)
+    const uint16_t kDischargingBit = 0x0001;  // bit0
+    const uint16_t kChargingBit = 0x0002;     // bit1
+
+    bool isPowerOn = (data.systemStatus & kDischargingBit) || (data.systemStatus & kChargingBit);
+    ui->label_battery_open->setText(isPowerOn ? "开启" : "关闭");
+
+    // 更新供电方式（交流/直流）
+    // 充电时（电流>0）为交流，放电或空闲时为直流
+    if (data.current > 0) {
+        ui->label_power->setText("交流");
+    } else {
+        ui->label_power->setText("直流");
+    }
     try
     {
         battery_info info = battery->getBatteryInfo();

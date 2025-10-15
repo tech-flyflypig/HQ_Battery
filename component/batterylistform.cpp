@@ -257,6 +257,19 @@ void BatteryListForm::updateDisplay(const BMS_1 &data)
     ui->label_remainCapacity->setText(capacityStr);
     ui->label_tempMax->setText(tempStr);
 
+    // 更新充放电状态显示
+    // 根据 systemStatus 位标志判断：bit0=放电(0x0001), bit1=充电(0x0002)
+    const uint16_t kDischargingBit = 0x0001;  // bit0
+    const uint16_t kChargingBit = 0x0002;     // bit1
+
+    if (data.systemStatus & kChargingBit) {
+        ui->label_chargeState->setText("充电");
+    } else if (data.systemStatus & kDischargingBit) {
+        ui->label_chargeState->setText("放电");
+    } else {
+        ui->label_chargeState->setText("空闲");
+    }
+
     //ui->label_battery_status->setStyleSheet("border-image: url(:/image/运行.png);");
     // 根据状态更新图标
     // if (data.alarmStatus > 0)

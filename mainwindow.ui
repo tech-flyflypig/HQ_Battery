@@ -144,8 +144,14 @@ border-image: url(:/image/top_title.png);
              <height>51</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>历史数据</string>
+           </property>
+           <property name="whatsThis">
+            <string/>
+           </property>
            <property name="styleSheet">
-            <string notr="true">border-image: url(:/image/btn_history.png);</string>
+            <string notr="true">QPushButton{border-image: url(:/image/btn_history.png);}</string>
            </property>
            <property name="text">
             <string/>
@@ -160,8 +166,20 @@ border-image: url(:/image/top_title.png);
              <height>51</height>
             </size>
            </property>
+           <property name="toolTip">
+            <string>设置界面</string>
+           </property>
+           <property name="toolTipDuration">
+            <number>-1</number>
+           </property>
+           <property name="statusTip">
+            <string/>
+           </property>
+           <property name="whatsThis">
+            <string/>
+           </property>
            <property name="styleSheet">
-            <string notr="true">border-image: url(:/image/设置.png);</string>
+            <string notr="true">QPushButton{border-image: url(:/image/设置.png);}</string>
            </property>
            <property name="text">
             <string/>
